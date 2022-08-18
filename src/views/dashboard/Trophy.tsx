@@ -34,7 +34,7 @@ const Trophy = () => {
         <Typography variant='body2' sx={{ letterSpacing: '0.25px' }}>
           Best seller of the month
         </Typography>
-        <Typography variant='h5' sx={{ my: 4, color: 'primary.main' }}>
+        <Typography variant='h5' sx={{ my: 4, color: 'success.main' }}>
           $42.8k
         </Typography>
         <Button size='small' variant='contained'>

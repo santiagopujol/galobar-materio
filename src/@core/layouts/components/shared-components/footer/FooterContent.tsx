@@ -12,13 +12,13 @@ const FooterContent = () => {
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
       <Typography sx={{ mr: 2 }}>
-        {`© ${new Date().getFullYear()}, Made with `}
+        {`© ${new Date().getFullYear()}, Made `}
         <Box component='span' sx={{ color: 'error.main' }}>
-          ❤️
+          {/* ❤️ */}
         </Box>
         {` by `}
-        <Link target='_blank' href='https://themeselection.com/'>
-          ThemeSelection
+        <Link target='_blank' sx={{ color: 'info.main' }} href='https://spujolsoft.000webhostapp.com/'>
+          SPSoft
         </Link>
       </Typography>
       {hidden ? null : (

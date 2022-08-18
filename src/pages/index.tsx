@@ -22,11 +22,25 @@ import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 import SalesByCountries from 'src/views/dashboard/SalesByCountries'
 
+import { useEffect } from 'react'
+import { UserService } from 'src/services'
+import { useSettings } from 'src/@core/hooks/useSettings'
+
 const Dashboard = () => {
+
+  const setting = useSettings();
+  const { settings, saveSettings } = setting
+
+  useEffect(() => {
+    UserService.checkUser(settings, saveSettings);  
+  }, [])
+
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
-
+        {/* <Grid item xs={12} md={4}>
+          <Trophy />
+        </Grid>
         <Grid item xs={12} md={8}>
           <StatisticsCard />
         </Grid>
@@ -90,7 +104,7 @@ const Dashboard = () => {
         </Grid>
         <Grid item xs={12}>
           <Table />
-        </Grid>
+        </Grid> */}
       </Grid>
     </ApexChartWrapper>
   )

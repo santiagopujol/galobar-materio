@@ -91,7 +91,7 @@ const FormLayoutsAlignment = () => {
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                label='Remember me'
+                label='Recordarme'
                 control={<Checkbox name='form-layouts-alignment-checkbox' />}
                 sx={{ '& .MuiButtonBase-root': { paddingTop: 0, paddingBottom: 0 } }}
               />

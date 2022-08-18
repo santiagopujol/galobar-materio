@@ -29,6 +29,8 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import NotificationToast from 'src/@core/layouts/components/shared-components/NotificationToast'
+import Loading from 'src/@core/layouts/components/shared-components/Loading'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -73,7 +75,16 @@ const App = (props: ExtendedAppProps) => {
       <SettingsProvider>
         <SettingsConsumer>
           {({ settings }) => {
-            return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
+            return (
+              <ThemeComponent settings={settings}>{getLayout(
+                  <>
+                    <Loading/>
+                    <NotificationToast/>
+                    <Component {...pageProps} />
+                  </>
+                )}
+              </ThemeComponent>
+            )
           }}
         </SettingsConsumer>
       </SettingsProvider>

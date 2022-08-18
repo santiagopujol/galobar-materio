@@ -1,5 +1,5 @@
 // ** React Imports
-import { ChangeEvent, MouseEvent, ReactNode, useState, useEffect } from 'react';
+import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react';
 
 // ** Next Imports
 import Link from 'next/link'
@@ -42,6 +42,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 import { UserService } from 'src/services'
 import { useSettings } from 'src/@core/hooks/useSettings'
+import { updateStateLoading } from 'src/@core/utils/common';
 
 interface State {
   email: string,
@@ -94,34 +95,37 @@ const LoginPage = () => {
   }
 
   const login = () => {
+    updateStateLoading(setting, true)
+
     const user = UserService.login(
-      values, 
+      values,
       settings.adminUsersAccessTemp
     )
 
-    console.log(settings)
     if(user != null) {
       saveSettings({ ...settings, userState: user })
       router.push('/');
     }
     else {
-       console.log("mensaje contraseña incorrrecta")
-      
-      // setNotificationState({
-      //     open: true,
-      //     type: "error",
-      //     message: "Usuario y/o contraseña incorrecta, intente nuevamente",
-      //     timeOut: 2000
-      // })
-      // setLoadingState(false)
+      updateStateLoading(setting, false, 1000)
+      saveSettings({
+        ...settings,
+        notificationState: {
+          open: true,
+          type: "warning",
+          message: "Usuario y/o contraseña incorrecta, intente nuevamente",
+          timeOut: 2000
+        },
+      })
     }
+    console.log("States Post Login Action", settings)
 }
 
   return (
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
-          <Box sx={{ mb: 8, mr: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
             <img
               src={theme.palette.mode === 'light' ? '/images/logos/logo_galo2.png' : '/images/logos/logo_galo.png'}
               alt="Club Galo"
@@ -141,18 +145,18 @@ const LoginPage = () => {
               {themeConfig.templateName}
             </Typography>
           </Box>
-          <Box sx={{ mb: 6 }}>
-            <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
+          <Box sx={{ mb: 6}}>
+            <Typography variant='h6' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
               Bienvenidos a {themeConfig.templateName}! 👋🏻
             </Typography>
             <Typography variant='body2'>Por favor, iniciar sesión con tu cuenta MiClub</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth 
-              id='email' 
-              label='Email' 
+            <TextField autoFocus fullWidth
+              id='email'
+              label='Email'
               value={values.email}
-              sx={{ marginBottom: 4 }} 
+              sx={{ marginBottom: 4 }}
               onChange={handleChange('email')}
             />
             <FormControl fullWidth>
@@ -180,7 +184,7 @@ const LoginPage = () => {
             <Box
               sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
             >
-              <FormControlLabel control={<Checkbox />} label='Remember Me' />
+              <FormControlLabel control={<Checkbox />} label='Recordarme' />
               <Link passHref href='/'>
                 <LinkStyled sx={{ color: '#1da1f2' }} onClick={e => e.preventDefault()}>Olvidó su contraseña?</LinkStyled>
               </Link>
@@ -199,7 +203,7 @@ const LoginPage = () => {
                 Nuevo en nuestra plataforma?
               </Typography>
               <Typography variant='body2'>
-                <Link passHref href='/pages/register'>
+                <Link passHref href='/register'>
                   <LinkStyled sx={{ color: '#1da1f2' }}>Solicitar cuenta</LinkStyled>
                 </Link>
               </Typography>

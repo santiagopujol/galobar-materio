@@ -15,7 +15,7 @@ export const UserService = {
 function checkUser(settings: any, saveSettings: any) {
 	const value = localStorage.getItem("user");
 	const user = !!value ? JSON.parse(value) : undefined;
-  console.log(user)
+
 	if (user == undefined) {
 		logout();
 	} else {
@@ -27,7 +27,7 @@ function checkUser(settings: any, saveSettings: any) {
 };
 
 function login(values: any, adminUsersAccessTemp: any) {
-  
+
 	//Buscar en firebase
   console.log(adminUsersAccessTemp)
   const user = adminUsersAccessTemp.find(
@@ -38,7 +38,7 @@ function login(values: any, adminUsersAccessTemp: any) {
 	// publish user to subscribers and store in local storage to stay logged in between page refreshes
 	if (user != null) {
 		localStorage.setItem('user', JSON.stringify(user));
-    
+
 		return user;
 	} else {
 		return null;

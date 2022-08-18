@@ -14,9 +14,12 @@ export type Settings = {
   mode: PaletteMode
   themeColor: ThemeColor
   contentWidth: ContentWidth
+
+  // My Hooks
   adminUsersAccessTemp: any, // User
   userState: any, // User
-  notificationState: any // Notification
+  notificationState: any, // Notification
+  loadingState: boolean, // Loading
 }
 
 export type SettingsContextValue = {
@@ -29,6 +32,7 @@ const initialSettings: Settings = {
   themeColor: 'primary',
   mode: themeConfig.mode,
   contentWidth: themeConfig.contentWidth,
+
   adminUsersAccessTemp: [
     {
       email: 'hola@galowines.com.ar',
@@ -49,8 +53,10 @@ const initialSettings: Settings = {
     type: "",
     message: "",
     timeOut: 2000,
-  }
+  },
 
+  //Loading
+  loadingState: false
 }
 
 // ** Create Context

@@ -1,15 +1,13 @@
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAppContext } from '../../utils/context';
 import { useEffect } from 'react';
+import { useSettings } from 'src/@core/hooks/useSettings';
 
-const Notification = () => {
+const NotificationToast = () => {
 
-	const {
-		notificationState,
-		setNotificationState
-	} = useAppContext()
-
+  const setting = useSettings();
+  const { settings, saveSettings } = setting
+  const { notificationState } = settings
 	const { type, open, message, timeOut } = notificationState
 
 	useEffect(() => {
@@ -41,7 +39,7 @@ const Notification = () => {
 				break;
 		}
 		notificationState.open = false;
-		setNotificationState(notificationState);
+    saveSettings({ ...settings, notificationState })
 	}
 
 	return (
@@ -59,4 +57,4 @@ const Notification = () => {
 	)
 }
 
-export default Notification
+export default NotificationToast

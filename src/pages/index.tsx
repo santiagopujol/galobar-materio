@@ -25,6 +25,7 @@ import SalesByCountries from 'src/views/dashboard/SalesByCountries'
 import { useEffect } from 'react'
 import { UserService } from 'src/services'
 import { useSettings } from 'src/@core/hooks/useSettings'
+import { updateStateLoading } from 'src/@core/utils/common'
 
 const Dashboard = () => {
 
@@ -32,13 +33,16 @@ const Dashboard = () => {
   const { settings, saveSettings } = setting
 
   useEffect(() => {
-    UserService.checkUser(settings, saveSettings);  
+    UserService.checkUser(settings, saveSettings);
+    updateStateLoading(setting, false)
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
-        {/* <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={4}>
           <Trophy />
         </Grid>
         <Grid item xs={12} md={8}>
@@ -104,7 +108,7 @@ const Dashboard = () => {
         </Grid>
         <Grid item xs={12}>
           <Table />
-        </Grid> */}
+        </Grid>
       </Grid>
     </ApexChartWrapper>
   )

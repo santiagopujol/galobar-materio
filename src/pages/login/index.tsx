@@ -71,8 +71,8 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 const LoginPage = () => {
   // ** State
   const [values, setValues] = useState<State>({
-    email: 'hola@galowines.com.ar',
-    password: 'miclub_galowines',
+    email: 'hola@galowines.com.ar', // TEST TEMP ''
+    password: 'miclub_galowines', // TEST TEMP ''
     showPassword: false
   })
 
@@ -127,7 +127,7 @@ const LoginPage = () => {
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
             <img
-              src={theme.palette.mode === 'light' ? '/images/logos/logo_galo2.png' : '/images/logos/logo_galo.png'}
+              src={theme.palette.mode === 'light' ? '/images/logos/logo_galo.png' : '/images/logos/logo_galo.png'}
               alt="Club Galo"
               width={70}
               height={65}

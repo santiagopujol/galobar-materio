@@ -20,6 +20,7 @@ export type Settings = {
   userState: any, // User
   notificationState: any, // Notification
   loadingState: boolean, // Loading
+  headerState: any, // Header
 }
 
 export type SettingsContextValue = {
@@ -56,7 +57,14 @@ const initialSettings: Settings = {
   },
 
   //Loading
-  loadingState: false
+  loadingState: false,
+
+  //Header State
+  headerState: {
+    activeIconArrow: false,
+    currentPageTitle: 'Home',
+    prevComponentUrl: '/',
+  }
 }
 
 // ** Create Context

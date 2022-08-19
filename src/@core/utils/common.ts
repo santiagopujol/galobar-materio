@@ -1,7 +1,7 @@
 export const Common = {
   getBase64,
   updateStateLoading
-} 
+}
 
 // Obtener base 64 de archivo para guardar en firebase
 export function getBase64(file: Blob) {

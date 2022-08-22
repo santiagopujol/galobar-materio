@@ -62,6 +62,7 @@ const initialSettings: Settings = {
   //Header State
   headerState: {
     activeIconArrow: false,
+    methodSearch: () => { return false },
     currentPageTitle: 'Home',
     prevComponentUrl: '/',
   }

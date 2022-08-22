@@ -32,6 +32,7 @@ const AppBarContent = (props: Props) => {
   const { hidden, settings, saveSettings, toggleNavVisibility } = props
   const {
     activeIconArrow,
+    methodSearch,
     currentPageTitle,
     prevComponentUrl,
   } = settings.headerState;
@@ -41,6 +42,7 @@ const AppBarContent = (props: Props) => {
 
   useEffect(() => {
     console.log(props)
+    console.log(methodSearch())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.headerState])
 
@@ -50,6 +52,7 @@ const AppBarContent = (props: Props) => {
       ...settings,
       headerState: {
         activeIconArrow: false,
+        methodSearch: () => { return false },
         currentPageTitle: 'Home',
         prevComponentUrl: '/',
       }
@@ -70,17 +73,20 @@ const AppBarContent = (props: Props) => {
               <Menu />
             </IconButton>
           ) : null}
-          <TextField
-            size='small'
-            sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <Magnify fontSize='small' />
-                </InputAdornment>
-              )
-            }}
-          />
+          <form onSubmit={e => {e.preventDefault(); console.log("buscar, metodo"); methodSearch()}}>
+            <TextField
+              size='small'
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Magnify fontSize='small' />
+                  </InputAdornment>
+                )
+              }}
+            />
+          </form>
+
         </Box>
         <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
           {/* {hiddenSm ? null : (
@@ -107,12 +113,11 @@ const AppBarContent = (props: Props) => {
   } else {
 
     // Button Arrow Back
-    return <IconButton
-      color='inherit'
-      onClick={backArrowButton}
-    >
-      {"< " + currentPageTitle}
-    </IconButton>
+    return (
+      <IconButton color='inherit' onClick={backArrowButton} >
+        {"< " + currentPageTitle}
+      </IconButton>
+    )
   }
 }
 

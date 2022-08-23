@@ -62,26 +62,11 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
   const [currentPageClientes, setCurrentPageClientes] = useState(page ? page : 1);
 	const [showResultPagination, setShowResultPagination] = useState(true);
 
-  const SearchComponent = () => {
-    return (
-    <form onSubmit={e => SearchClientes(e)}>
-      <TextField
-        size='small'
-        
-        sx={{                 
-          width: '100%',
-          '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position='start'>
-              <Magnify fontSize='small' />
-            </InputAdornment>
-          )
-        }}
-      />
-    </form>
-    )
-  }
+  // const SearchComponent = () => {
+  //   return (
+
+  //   )
+  // }
 
   useEffect(() => {
     // Header State
@@ -99,6 +84,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
   }, [])
 
   const SearchClientes = (e: any) => {
+    console.log("buscando", searchValue)
     e.preventDefault();
     updateStateLoading(setting, true)
 
@@ -194,10 +180,27 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
                 position: 'fixed',
                 width: '35%',
                 zIndex: 3,
-                top: 10,
+                top: 9,
                 left: 55,
               }}>
-              <SearchComponent />
+              {/* <SearchComponent /> */}
+              <form onSubmit={e => SearchClientes(e)}>
+                <TextField
+                  size='small'
+                  id='filter'
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  sx={{                 
+                    width: '100%',
+                    '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <Magnify fontSize='small' />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </form>
             </Box>
             <ClientesList dataClientsState={dataClientes} />
           </Card>

@@ -73,7 +73,7 @@ const AppBarContent = (props: Props) => {
         position: 'fixed',
         zIndex: 3,
         pt: 2,
-        pb: 3,
+        pb: 2,
         pl: 4,
         top: 0,
         left:0,

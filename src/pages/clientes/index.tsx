@@ -7,7 +7,7 @@ import CardHeader from '@mui/material/CardHeader'
 
 // ** Demo Components Imports
 import TableBasic from 'src/views/tables/TableBasic'
-import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
+import { Avatar, Divider, Box, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, TextField } from '@mui/material'
 import React from 'react'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
@@ -20,6 +20,8 @@ import { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next'
 import { updateStateLoading } from 'src/@core/utils/common';
 import { useRouter } from 'next/router'
+import ClientesList from 'src/components/Clientes/ClientesList'
+import { Magnify } from 'mdi-material-ui'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	const { query } = context;
@@ -60,13 +62,33 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
   const [currentPageClientes, setCurrentPageClientes] = useState(page ? page : 1);
 	const [showResultPagination, setShowResultPagination] = useState(true);
 
+  const SearchComponent = () => {
+    return (
+    <form onSubmit={e => SearchClientes(e)}>
+      <TextField
+        size='small'
+        
+        sx={{                 
+          width: '100%',
+          '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position='start'>
+              <Magnify fontSize='small' />
+            </InputAdornment>
+          )
+        }}
+      />
+    </form>
+    )
+  }
+
   useEffect(() => {
     // Header State
     setting.saveSettings({
       ...setting.settings,
       headerState: {
         activeIconArrow: false,
-        methodSearch: SearchClientes,
         currentPageTitle: 'Cliente',
         prevComponentUrl: '/clientes',
       }
@@ -75,6 +97,24 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const SearchClientes = (e: any) => {
+    e.preventDefault();
+    updateStateLoading(setting, true)
+
+    // Buscando por filtro
+    if (validateFormSearch()) {
+      router.push(`/clientes?filter=${searchValue}`);
+      setShowResultPagination(false);
+      setCurrentPageClientes(1);
+
+      // Buscando pagina 1
+    } else {
+      router.push(`/clientes?page=1`);
+      setCurrentPageClientes(1);
+      setShowResultPagination(true);
+    }
+  }
 
   useEffect(() => {
 		setDataClientes(newDataMembers);
@@ -103,23 +143,6 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
     router.push(`/clientes?page=1&all=1`);
     setShowResultPagination(false);
     setCurrentPageClientes(1);
-  }
-
-  function SearchClientes() {
-    updateStateLoading(setting, true)
-
-    // Buscando por filtro
-    if (validateFormSearch()) {
-      router.push(`/clientes?filter=${searchValue}`);
-      setShowResultPagination(false);
-      setCurrentPageClientes(1);
-
-      // Buscando pagina 1
-    } else {
-      router.push(`/clientes?page=1`);
-      setCurrentPageClientes(1);
-      setShowResultPagination(true);
-    }
   }
 
   function clearSearch() {
@@ -163,86 +186,20 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
   return (
     <>
       <Grid container spacing={6}>
-        {/* <Grid item xs={12}>
-          <Typography variant='h5'>
-            <Link href='https://mui.com/components/tables/' target='_blank'>
-              Clientes
-            </Link>
-          </Typography>
-          <Typography variant='body2'></Typography>
-        </Grid> */}
         <Grid item xs={12}>
           <Card>
             <CardHeader title='Clientes' titleTypographyProps={{ variant: 'h6' }} />
-          {/* <TableBasic /> */}
-
-            <List sx={{ width: '100%', maxWidth: "100%", bgcolor: 'background.paper' }}>
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar alt="R" src="/static/images/avatar/1.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Brunch this weekend?"
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        sx={{ display: 'inline' }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                      >
-                        Ali Connors
-                      </Typography>
-                      {" — I'll be in your neighborhood doing errands this…"}
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Summer BBQ"
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        sx={{ display: 'inline' }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                      >
-                        to Scott, Alex, Jennifer
-                      </Typography>
-                      {" — Wish I could come, but I'm out of town this…"}
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Oui Oui"
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        sx={{ display: 'inline' }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                      >
-                        Sandra Adams
-                      </Typography>
-                      {' — Do you have Paris recommendations? Have you ever…'}
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-            </List>
+            <Box sx={{ 
+                height: '20px',
+                position: 'fixed',
+                width: '35%',
+                zIndex: 3,
+                top: 10,
+                left: 55,
+              }}>
+              <SearchComponent />
+            </Box>
+            <ClientesList dataClientsState={dataClientes} />
           </Card>
         </Grid>
       </Grid>

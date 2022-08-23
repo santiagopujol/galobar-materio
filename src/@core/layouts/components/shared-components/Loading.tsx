@@ -17,7 +17,7 @@ const Loading = () => {
             position: 'fixed',
             width: '100%',
             bgcolor: '#9C9FA4',
-            zIndex: 2,
+            zIndex: 4,
             top: 0,
             left:0,
             opacity:'0.30',
@@ -31,7 +31,7 @@ const Loading = () => {
           top: 0,
           left:0,
           width: '100%',
-          zIndex: 2,
+          zIndex: 4,
         }}>
           <LinearProgress />
         </Box>

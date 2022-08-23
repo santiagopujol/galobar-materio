@@ -1,6 +1,8 @@
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import { Theme } from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles'
+
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -32,17 +34,19 @@ const AppBarContent = (props: Props) => {
   const { hidden, settings, saveSettings, toggleNavVisibility } = props
   const {
     activeIconArrow,
-    methodSearch,
+    searchComponent,
     currentPageTitle,
     prevComponentUrl,
   } = settings.headerState;
 
   // ** Hook
   const hiddenSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
+  const theme = useTheme()
 
   useEffect(() => {
     console.log(props)
-    console.log(methodSearch())
+    console.log(searchComponent)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.headerState])
 
@@ -52,7 +56,7 @@ const AppBarContent = (props: Props) => {
       ...settings,
       headerState: {
         activeIconArrow: false,
-        methodSearch: () => { return false },
+        searchComponent: null,
         currentPageTitle: 'Home',
         prevComponentUrl: '/',
       }
@@ -60,9 +64,24 @@ const AppBarContent = (props: Props) => {
 
   }
 
+
   if (!activeIconArrow) {
     return (
-      <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Box sx={{ 
+        width: '100%', 
+        display: 'flex', 
+        position: 'fixed',
+        zIndex: 3,
+        pt: 2,
+        pb: 3,
+        pl: 4,
+        top: 0,
+        left:0,
+        boxShadow: theme.shadows[5],
+
+        bgcolor: theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.background.default,
+        alignItems: 'center', 
+        justifyContent: 'space-between' }}>
         <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
           {hidden ? (
             <IconButton
@@ -73,22 +92,19 @@ const AppBarContent = (props: Props) => {
               <Menu />
             </IconButton>
           ) : null}
-          <form onSubmit={e => {e.preventDefault(); console.log("buscar, metodo"); methodSearch()}}>
-            <TextField
-              size='small'
-              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Magnify fontSize='small' />
-                  </InputAdornment>
-                )
-              }}
-            />
-          </form>
-
         </Box>
-        <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+        {/* <TextField
+          size='small'
+          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position='start'>
+                <Magnify fontSize='small' />
+              </InputAdornment>
+            )
+          }}
+        /> */}
+        <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
           {/* {hiddenSm ? null : (
             <Box
               component='a'

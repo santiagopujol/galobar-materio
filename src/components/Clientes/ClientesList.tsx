@@ -1,20 +1,16 @@
+import { List } from '@mui/material';
 import React from 'react';
-import ClientesTableItem from './ClientesListItem';
+import ClientesListItem from './ClientesListItem';
 
-const ClientesList = ({ dataClientsState }) => {
+const ClientesList = ({ dataClientsState }: any) => {
   return (
     <>
-      <div className="shadow-md shadow-slate-600/50 rounded bg-gray-100">
-        <table className="responsive w-full text-left bg-white">
-          <thead></thead>
-          <tbody>
-            {dataClientsState != null && dataClientsState.members &&
-              dataClientsState.members.map((element) => (
-                <ClientesTableItem key={element.id} element={element} />
-              ))}
-          </tbody>
-        </table>
-      </div>
+      <List sx={{ width: '100%', maxWidth: "100%", bgcolor: 'background.paper' }}>
+        {dataClientsState != null && dataClientsState.members &&
+          dataClientsState.members.map((element: any) => (
+            <ClientesListItem key={element.id} element={element}></ClientesListItem>
+          ))}
+      </List>
     </>
   );
 };

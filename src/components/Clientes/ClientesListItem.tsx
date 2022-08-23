@@ -1,14 +1,31 @@
 import React from 'react';
-import Link from 'next/link';
-import customStyles from '../../styles/custom.module.css';
-import { useAppContext } from '../../utils/context';
+import { Avatar, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 
-const ClientesListItem = ({ element }) => {
-  const { setLoadingState } = useAppContext();
+const ClientesListItem = ({ element }: any) => {
 
   return (
     <>
-      <tr key={element.id} className=" hover:bg-gray-200 opacity-90 hover:opacity-100 shadow-sm shadow-slate-300/50"
+      <ListItem key={element.id} alignItems="flex-start">
+        <ListItemAvatar>
+          <Avatar alt={`${element.merge_fields.FNAME.toUpperCase()}`} src="/static/images/avatar/1.jpg" />
+        </ListItemAvatar>
+        <ListItemText
+          primary={`${element.merge_fields.FNAME.toUpperCase()} ${element.merge_fields.LNAME.toUpperCase()}`}
+          secondary={
+            <React.Fragment>
+              <Typography
+                sx={{ display: 'inline' }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+              </Typography>
+              {element.email_address}
+            </React.Fragment>
+          }
+        />
+      </ListItem>
+      {/* <tr key={element.id} className=" hover:bg-gray-200 opacity-90 hover:opacity-100 shadow-sm shadow-slate-300/50"
         onClick={() => {
           setLoadingState(true);
         }}>
@@ -54,7 +71,7 @@ const ClientesListItem = ({ element }) => {
             </button>
           </td>
         </Link>
-      </tr>
+      </tr> */}
     </>
   );
 };

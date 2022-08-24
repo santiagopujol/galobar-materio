@@ -1,11 +1,11 @@
 import React from 'react';
-import { Avatar, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
+import { Avatar, ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography } from '@mui/material';
 
 const ClientesListItem = ({ element }: any) => {
 
   return (
     <>
-      <ListItem key={element.id} alignItems="flex-start">
+      <ListItemButton key={element.id} alignItems="flex-start">
         <ListItemAvatar>
           <Avatar alt={`${element.merge_fields.FNAME.toUpperCase()}`} src="/static/images/avatar/1.jpg" />
         </ListItemAvatar>
@@ -24,7 +24,7 @@ const ClientesListItem = ({ element }: any) => {
             </React.Fragment>
           }
         />
-      </ListItem>
+      </ListItemButton>
       {/* <tr key={element.id} className=" hover:bg-gray-200 opacity-90 hover:opacity-100 shadow-sm shadow-slate-300/50"
         onClick={() => {
           setLoadingState(true);

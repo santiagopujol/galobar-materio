@@ -51,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	};
 };
 
-const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
+const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
 
   const setting = useSettings();
   const router = useRouter();
@@ -64,37 +64,6 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
-
-  // const SearchComponentFixed = () => {
-  //   return (
-  //     <Box sx={{
-  //       height: '20px',
-  //       position: 'fixed',
-  //       width: '35%',
-  //       zIndex: 3,
-  //       top: 9,
-  //       left: 55,
-  //     }}>
-  //       <form onSubmit={e => SearchClientes(e)}>
-  //         <TextField
-  //           size='small'
-  //           id='filter'
-  //           onChange={(e) => setSearchValue(e.target.value)}
-  //           sx={{
-  //             width: '100%',
-  //             '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
-  //           InputProps={{
-  //             startAdornment: (
-  //               <InputAdornment position='start'>
-  //                 <Magnify fontSize='small' />
-  //               </InputAdornment>
-  //             )
-  //           }}
-  //         />
-  //       </form>
-  //     </Box>
-  //   )
-  // }
 
   useEffect(() => {
     // Header State
@@ -112,7 +81,6 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
   }, [])
 
   const SearchClientes = (e: any) => {
-    console.log("buscando", e, searchValue)
     e.preventDefault();
     updateStateLoading(setting, true)
 
@@ -218,7 +186,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
               id='filter'
               value={searchValue}
               onChange={handleChange}
-              type="text"
+              type="search"
               placeholder='Buscar'
               sx={{ width: '100%',
                 '& .MuiOutlinedInput-root': { borderRadius: 4 } }}

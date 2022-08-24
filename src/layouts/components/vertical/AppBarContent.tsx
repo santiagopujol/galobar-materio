@@ -78,7 +78,6 @@ const AppBarContent = (props: Props) => {
         top: 0,
         left:0,
         boxShadow: theme.shadows[5],
-
         bgcolor: theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.background.default,
         alignItems: 'center', 
         justifyContent: 'space-between' }}>

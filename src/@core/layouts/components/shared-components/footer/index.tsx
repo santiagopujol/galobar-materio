@@ -38,7 +38,7 @@ const Footer = (props: Props) => {
         justifyContent: 'center'
       }}
     >
-      <Box
+      {/* <Box
         className='footer-content-container'
         sx={{
           width: '100%',
@@ -49,7 +49,7 @@ const Footer = (props: Props) => {
         }}
       >
         {userFooterContent ? userFooterContent(props) : <FooterContent />}
-      </Box>
+      </Box> */}
     </Box>
   )
 }

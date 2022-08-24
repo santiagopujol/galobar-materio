@@ -1,8 +1,6 @@
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
-import Link from '@mui/material/Link'
 import Card from '@mui/material/Card'
-import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 
 // ** Demo Components Imports
@@ -10,6 +8,7 @@ import TableBasic from 'src/views/tables/TableBasic'
 import { Avatar, Divider, Box, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, TextField } from '@mui/material'
 import React from 'react'
 import { useSettings } from 'src/@core/hooks/useSettings'
+import FormControl from '@mui/material/FormControl'
 
 // import TableDense from 'src/views/tables/TableDense'
 // import TableSpanning from 'src/views/tables/TableSpanning'
@@ -62,9 +61,38 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
   const [currentPageClientes, setCurrentPageClientes] = useState(page ? page : 1);
 	const [showResultPagination, setShowResultPagination] = useState(true);
 
-  // const SearchComponent = () => {
-  //   return (
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
 
+  // const SearchComponentFixed = () => {
+  //   return (
+  //     <Box sx={{
+  //       height: '20px',
+  //       position: 'fixed',
+  //       width: '35%',
+  //       zIndex: 3,
+  //       top: 9,
+  //       left: 55,
+  //     }}>
+  //       <form onSubmit={e => SearchClientes(e)}>
+  //         <TextField
+  //           size='small'
+  //           id='filter'
+  //           onChange={(e) => setSearchValue(e.target.value)}
+  //           sx={{
+  //             width: '100%',
+  //             '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
+  //           InputProps={{
+  //             startAdornment: (
+  //               <InputAdornment position='start'>
+  //                 <Magnify fontSize='small' />
+  //               </InputAdornment>
+  //             )
+  //           }}
+  //         />
+  //       </form>
+  //     </Box>
   //   )
   // }
 
@@ -84,7 +112,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
   }, [])
 
   const SearchClientes = (e: any) => {
-    console.log("buscando", searchValue)
+    console.log("buscando", e, searchValue)
     e.preventDefault();
     updateStateLoading(setting, true)
 
@@ -172,36 +200,41 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }) => {
   return (
     <>
       <Grid container spacing={6}>
+        <Box sx={{
+          height: '20px',
+          width: '100%',
+          pl: 6,
+          my: 2,
+          // position: 'fixed',
+          // width: '35%',
+          // zIndex: 3,
+          // top: 9,
+          // left: 55,
+        }} 
+        >
+          <form onSubmit={e => SearchClientes(e)}>
+            <TextField
+              size='small'
+              id='filter'
+              value={searchValue}
+              onChange={handleChange}
+              type="text"
+              placeholder='Buscar'
+              sx={{ width: '100%',
+                '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Magnify fontSize='small' />
+                  </InputAdornment>
+                )
+              }}
+            />
+          </form>
+        </Box>
         <Grid item xs={12}>
           <Card>
             <CardHeader title='Clientes' titleTypographyProps={{ variant: 'h6' }} />
-            <Box sx={{ 
-                height: '20px',
-                position: 'fixed',
-                width: '35%',
-                zIndex: 3,
-                top: 9,
-                left: 55,
-              }}>
-              {/* <SearchComponent /> */}
-              <form onSubmit={e => SearchClientes(e)}>
-                <TextField
-                  size='small'
-                  id='filter'
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  sx={{                 
-                    width: '100%',
-                    '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position='start'>
-                        <Magnify fontSize='small' />
-                      </InputAdornment>
-                    )
-                  }}
-                />
-              </form>
-            </Box>
             <ClientesList dataClientsState={dataClientes} />
           </Card>
         </Grid>

@@ -19,6 +19,8 @@ import VerticalAppBarContent from './components/vertical/AppBarContent'
 
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
+import { Link } from '@mui/material'
+import { Typography } from '@mui/material';
 
 interface Props {
   children: ReactNode
@@ -48,6 +50,15 @@ const UserLayout = ({ children }: Props) => {
         >
           <img width={230} alt='upgrade to premium' src={`/images/misc/upgrade-banner-${settings.mode}.png`} />
         </a> */}
+
+        <Typography sx={{ mr: 2, mb:2 }}>
+           {`© ${new Date().getFullYear()}, Made `}
+
+           {` by `}
+           <Link target='_blank' sx={{ color: 'info.main' }} href='https://spujolsoft.000webhostapp.com/'>
+             SPSoft
+           </Link>
+         </Typography>
       </Box>
     )
   }

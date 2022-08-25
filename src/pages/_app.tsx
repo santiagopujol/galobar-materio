@@ -31,6 +31,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 import '../../styles/globals.css'
 import NotificationToast from 'src/@core/layouts/components/shared-components/NotificationToast'
 import Loading from 'src/@core/layouts/components/shared-components/Loading'
+import ModalConfirm from 'src/@core/layouts/components/shared-components/ModalConfirm'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -79,6 +80,7 @@ const App = (props: ExtendedAppProps) => {
               <ThemeComponent settings={settings}>{getLayout(
                   <>
                     <Loading/>
+                    <ModalConfirm/>
                     <NotificationToast/>
                     <Component {...pageProps} />
                   </>

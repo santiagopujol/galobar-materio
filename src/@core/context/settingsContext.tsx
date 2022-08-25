@@ -21,6 +21,7 @@ export type Settings = {
   notificationState: any, // Notification
   loadingState: boolean, // Loading
   headerState: any, // Header
+  modalConfirmState: any // ModalConfirm
 }
 
 export type SettingsContextValue = {
@@ -64,6 +65,16 @@ const initialSettings: Settings = {
     activeIconArrow: false,
     currentPageTitle: 'Home',
     prevComponentUrl: '/',
+  },
+
+  modalConfirmState: {
+    title: "¿Desea confirmar la operación?",
+    message: "",
+    buttonTrue: "CONFIRMAR",
+    buttonFalse: "CANCELAR",
+    open: false,
+    method: "", // nombre metodo en string para condicionar
+    successResult: false, // true o false (apreto si o no)
   }
 }
 

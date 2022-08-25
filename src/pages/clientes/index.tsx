@@ -17,7 +17,7 @@ import FormControl from '@mui/material/FormControl'
 // import TableStickyHeader from 'src/views/tables/TableStickyHeader'
 import { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next'
-import { updateStateLoading } from 'src/@core/utils/common';
+import { updateStateLoading, updateStateModalConfirm, updateStateHeader } from 'src/@core/utils/common';
 import { useRouter } from 'next/router'
 import ClientesList from 'src/components/Clientes/ClientesList'
 import { Magnify } from 'mdi-material-ui'
@@ -61,26 +61,16 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
   const [currentPageClientes, setCurrentPageClientes] = useState(page ? page : 1);
 	const [showResultPagination, setShowResultPagination] = useState(true);
 
+  const { modalConfirmState } = setting.settings
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
 
-  useEffect(() => {
-    // Header State
-    setting.saveSettings({
-      ...setting.settings,
-      headerState: {
-        activeIconArrow: false,
-        currentPageTitle: 'Cliente',
-        prevComponentUrl: '/clientes',
-      }
-    })
-    setCurrentPageClientes(1);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const SearchClientes = (e: any) => {
+    updateStateModalConfirm(setting, true, "actualizar_clientes")
+
     e.preventDefault();
     updateStateLoading(setting, true)
 
@@ -102,25 +92,11 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
 		setDataClientes(newDataMembers);
     updateStateLoading(setting, false)
 
-		// Confirmar si desea actualizar la informacion de mailchimp
-		// if (newDataMembers.members && newDataMembers.members.length == 0) {
-		// 	setModalConfirmState({
-		// 		open: true,
-		// 		method: "acualizar_clientes",
-		// 		title: "¿Desea actualizar todos los datos de los clientes?",
-		// 		message: "Se recomienda actualizar al realizar la primer búsqueda.",
-		// 		buttonTrue: "SI",
-		// 		buttonFalse: "NO",
-		// 	})
-		// } else {
-    //   setModalConfirmState({})
-		// }
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [newDataMembers]);
 
   // Buscando todos los datos
-  function SearchAll() {
+  function UpdateAllMembersAndGet10() {
     updateStateLoading(setting, true)
     router.push(`/clientes?page=1&all=1`);
     setShowResultPagination(false);
@@ -153,17 +129,40 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
   async function getAndSetDataClientes(
     page = 1,
     count = 10,
-    all = 0,
+    update = 0,
     filter = ''
   ) {
     updateStateLoading(setting, true)
     const res = await fetch(
-      `${baseUrl}/getListMembers?page${page}&count=${count}&filter=${filter}&all=${all}`
+      `${baseUrl}/getListMembers?page${page}&count=${count}&filter=${filter}&all=${update}`
     );
     const data = await res.json();
     setDataClientes(data);
     updateStateLoading(setting, false)
   }
+
+  const openModalUpdateClientes = () => {
+    updateStateModalConfirm(setting, true, "actualizar_clientes", false, "¿Desea actualizar los datos de los clientes?")
+  }
+
+  // Efecto Respuesta Modal
+  useEffect(() => {
+    console.log(modalConfirmState)
+    if (modalConfirmState.method === "actualizar_clientes" && modalConfirmState.successResult === true) {
+      console.log("actualizar clientes") // Acualizar
+
+      // Al pasar 1 en el tecer parametro hago un update a firebase y traigo los 10
+      getAndSetDataClientes(1, 10, 1, '');
+			// setModalConfirmState({})
+		}
+  }, [modalConfirmState.successResult == true])
+
+  // Efecto Secundario Component DidMount va al final
+  useEffect(() => {
+    openModalUpdateClientes()
+    setCurrentPageClientes(1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>

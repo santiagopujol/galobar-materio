@@ -42,7 +42,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 import { UserService } from 'src/services'
 import { useSettings } from 'src/@core/hooks/useSettings'
-import { updateStateLoading } from 'src/@core/utils/common';
+import { updateStateLoading, updateStateNotificationToast } from 'src/@core/utils/common';
 
 interface State {
   email: string,
@@ -108,15 +108,7 @@ const LoginPage = () => {
     }
     else {
       updateStateLoading(setting, false, 1000)
-      saveSettings({
-        ...settings,
-        notificationState: {
-          open: true,
-          type: "warning",
-          message: "Usuario y/o contraseña incorrecta, intente nuevamente",
-          timeOut: 2000
-        },
-      })
+      updateStateNotificationToast(setting, true, "warning", "Usuario y/o contraseña incorrecta, intente nuevamente")
     }
     console.log("States Post Login Action", settings)
 }

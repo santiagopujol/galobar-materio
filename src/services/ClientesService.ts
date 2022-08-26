@@ -19,31 +19,33 @@ async function getClienteById(id: any) {
 }
 
 async function getClientesByFilter(filters: any) {
-  const totalData = [];
+  const totalData: any = [];
   const filtersSplitted = filters?.split(" ") || [filters];
+  const filtersSplittedCap = filtersSplitted.map(item => item.substring(0, 1).toUpperCase() + item.substring(1))
+
   console.log(filtersSplitted)
-  const dataFilterByFullName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "full_name", "in", filtersSplitted)
+  const dataFilterByFullName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "full_name", "in", filtersSplittedCap)
   dataFilterByFullName?.map((item) => totalData.push(item))
 
-  const dataFilterByEmailAdress = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "email_address", "in", filtersSplitted)
+  const dataFilterByEmailAdress = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "email_address", "in", filtersSplittedCap)
   dataFilterByEmailAdress?.map((item) => {
     if (totalData.find((el) => item.id === el.id) == null)
       totalData.push(item)
   })
 
-  const dataFilterByFName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.FNAME", "in", filtersSplitted)
+  const dataFilterByFName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.FNAME", "in", filtersSplittedCap)
   dataFilterByFName?.map((item) => {
     if (totalData.find((el) => item.id === el.id) == null)
       totalData.push(item)
   })
 
-  const dataFilterByLName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.LNAME", "in",  filtersSplitted)
+  const dataFilterByLName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.LNAME", "in",  filtersSplittedCap)
   dataFilterByLName?.map((item) => {
     if (totalData.find((el) => item.id === el.id) == null)
       totalData.push(item)
   })
 
-  const dataFilterByPhone = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.PHONE", "in", filtersSplitted)
+  const dataFilterByPhone = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.PHONE", "in", filtersSplittedCap)
   dataFilterByPhone?.map((item) => {
     if (totalData.find((el) => item.id === el.id) == null)
       totalData.push(item)

@@ -25,7 +25,7 @@ import { useRouter } from 'next/router'
 import ClientesList from 'src/components/Clientes/ClientesList'
 import { Magnify } from 'mdi-material-ui'
 import IconButton from '@mui/material/IconButton'
-import WeatherSunny from 'mdi-material-ui/WeatherSunny'
+import Cached  from 'mdi-material-ui/Cached'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	const { query } = context;
@@ -216,19 +216,7 @@ const ClientesPage = ({ newDataMembers, dataDiffBetweenDatabases, page, filter, 
                 }}>
                 <IconButton 
                   color='inherit' aria-haspopup='true'>
-                  <WeatherSunny />
-                </IconButton>
-              </Box>
-              <Box onClick={openModalUpdateClientes}
-                sx={{
-                  height: '20px',
-                  top: "135px",
-                  right: "75px",
-                  position: 'absolute',
-                }}>
-                <IconButton 
-                  color='inherit' aria-haspopup='true'>
-                  <WeatherSunny />
+                  <Cached />
                 </IconButton>
               </Box>
             <ClientesList dataClientsState={dataClientes} />

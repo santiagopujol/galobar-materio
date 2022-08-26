@@ -74,7 +74,7 @@ async function getListMembersMailchimpWithParams(page: any, count: any, update: 
 }
 
 // Private Functions
-async function getAllDataMembersMailchimp(dataMembersJson: any) {
+async function getAllDataMembersMailchimp() {
   console.log("Obteniendo string de todos los miembros de mailchimp")
   const resultDataAllMembers = await getListMembersMailchimp(9999999)
   return JSON.parse(resultDataAllMembers);

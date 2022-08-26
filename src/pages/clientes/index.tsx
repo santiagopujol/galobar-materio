@@ -26,6 +26,7 @@ import ClientesList from 'src/components/Clientes/ClientesList'
 import { Magnify } from 'mdi-material-ui'
 import IconButton from '@mui/material/IconButton'
 import Cached  from 'mdi-material-ui/Cached'
+import AccountOutline from 'mdi-material-ui/AccountOutline'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	const { query } = context;
@@ -46,13 +47,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	);
   const newDataMembers = await res.json();
   
-  //Traer bandera de diferencia Revisar si hay misma cantidad en firebase y en mailchimp
-  const dataDiffBetweenDatabases = true;
-  
 	return {
 		props: {
       newDataMembers,
-      dataDiffBetweenDatabases,
       page,
 			filter,
 			baseUrl,
@@ -60,7 +57,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	};
 };
 
-const ClientesPage = ({ newDataMembers, dataDiffBetweenDatabases, page, filter, baseUrl }: any) => {
+const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
 
   const setting = useSettings();
   const router = useRouter();
@@ -206,7 +203,20 @@ const ClientesPage = ({ newDataMembers, dataDiffBetweenDatabases, page, filter, 
         </Box>
         <Grid item xs={12}>
           <Card>
-            <CardHeader title='Clientes' titleTypographyProps={{ variant: 'h6' }} />
+            {/* <Avatar
+              variant='rounded'
+              sx={{
+                mr: 3,
+                width: 44,
+                height: 44,
+                boxShadow: 3,
+                color: 'common.white',
+                backgroundColor: `success.main`
+              }}
+            >
+              <AccountOutline color="common.white" sx={{ backgroundColor: `success.main`, fontSize: '1.75rem' }} />
+            </Avatar> */}
+            <CardHeader title='Clientes' TypographyProps={{ variant: 'h6' }} />
               <Box onClick={openModalUpdateClientes}
                 sx={{
                   height: '20px',

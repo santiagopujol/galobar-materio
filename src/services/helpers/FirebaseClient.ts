@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, addDoc, setDoc,
-    deleteDoc, doc, where, query, getDoc 
+    deleteDoc, doc, where, query, getDoc, startAt, endAt, orderBy
 } from 'firebase/firestore';
  
 const firebaseConfig = {
@@ -24,6 +24,7 @@ export const FirebaseClient = {
     getDocByRefAndId,
     getDocByRefAndDocId,
     updateDocByRefAndId,
+    getDocsByRefAndFilter,
     getUserCliente,
     getPuntosByClienteFirestore,
     getOperacionesByClienteFirestore
@@ -69,6 +70,17 @@ async function getDocByRefAndDocId(colRef: string, docId: any) {
     }
 }
 
+// Get doc by ref and filter
+async function getDocsByRefAndFilter(colRef: string, filterField: string, operator: string, filterValues: string[]) {
+    const querys = [];
+    const col = collection(db, colRef);
+    const q = query(col, where(filterField, operator, filterValues));
+    const snapshot = await getDocs(q);
+    if (snapshot.docs.length > 0) {
+        return snapshot.docs.map(doc => doc.data());
+    }
+}
+
 // Add doc by ref to firebase
 async function addDocByRef(colRef: string, data: any) {
     try {
@@ -110,7 +122,7 @@ async function deleteDocByRef(colRef: string, id: string) {
     })
 }
 
-// ---------- pasar a user service lo de abajo ---------- ----------
+// ---------- pasar a service correspondiente lo de abajo ---------- ----------
 
 // Get Usuario Cliente
 async function getUserCliente(email: string, password: string) {

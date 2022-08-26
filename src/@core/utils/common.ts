@@ -61,8 +61,8 @@ export function updateStateModalConfirm(setting: any, status: boolean, method = 
     setting.saveSettings({
       ...setting.settings,
       modalConfirmState: {
-        title: title != "" ? title : "¿Desea confirmar la operación?",
-        message: message,
+        title: title != "" ? title : "Confirmación",
+        message: message != "" ? message : "¿Desea confirmar la operación?",
         buttonTrue: "CONFIRMAR",
         buttonFalse: "CANCELAR",
         open: status,

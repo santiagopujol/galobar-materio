@@ -17,17 +17,22 @@ import FormControl from '@mui/material/FormControl'
 // import TableStickyHeader from 'src/views/tables/TableStickyHeader'
 import { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next'
-import { updateStateLoading, updateStateModalConfirm, updateStateHeader } from 'src/@core/utils/common';
+import { updateStateLoading, 
+  updateStateModalConfirm, 
+  updateStateHeader, 
+  updateStateNotificationToast } from 'src/@core/utils/common';
 import { useRouter } from 'next/router'
 import ClientesList from 'src/components/Clientes/ClientesList'
 import { Magnify } from 'mdi-material-ui'
+import IconButton from '@mui/material/IconButton'
+import WeatherSunny from 'mdi-material-ui/WeatherSunny'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	const { query } = context;
 	const {
 		page = 1,
 		count = 10,
-		all = '0',
+		update = '0',
 		filter = '',
 	} = query != null && query;
 
@@ -37,13 +42,17 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 			: 'http://localhost:3000/api';
 
 	const res = await fetch(
-		`${baseUrl}/getListMembers?page${page}&count=${count}&all=${all}&filter=${filter}`
+		`${baseUrl}/getListMembers?page${page}&count=${count}&update=${update}&filter=${filter}`
 	);
-	const newDataMembers = await res.json();
-
+  const newDataMembers = await res.json();
+  
+  //Traer bandera de diferencia Revisar si hay misma cantidad en firebase y en mailchimp
+  const dataDiffBetweenDatabases = true;
+  
 	return {
 		props: {
       newDataMembers,
+      dataDiffBetweenDatabases,
       page,
 			filter,
 			baseUrl,
@@ -51,7 +60,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	};
 };
 
-const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
+const ClientesPage = ({ newDataMembers, dataDiffBetweenDatabases, page, filter, baseUrl }: any) => {
 
   const setting = useSettings();
   const router = useRouter();
@@ -67,10 +76,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
     setSearchValue(event.target.value);
   };
 
-
   const SearchClientes = (e: any) => {
-    updateStateModalConfirm(setting, true, "actualizar_clientes")
-
     e.preventDefault();
     updateStateLoading(setting, true)
 
@@ -89,16 +95,17 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
   }
 
   useEffect(() => {
+    console.log(newDataMembers)
 		setDataClientes(newDataMembers);
     updateStateLoading(setting, false)
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [newDataMembers]);
+  }, [newDataMembers]);
 
   // Buscando todos los datos
   function UpdateAllMembersAndGet10() {
     updateStateLoading(setting, true)
-    router.push(`/clientes?page=1&all=1`);
+    router.push(`/clientes?page=1&update=1`);
     setShowResultPagination(false);
     setCurrentPageClientes(1);
   }
@@ -134,18 +141,24 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
   ) {
     updateStateLoading(setting, true)
     const res = await fetch(
-      `${baseUrl}/getListMembers?page${page}&count=${count}&filter=${filter}&all=${update}`
+      `${baseUrl}/getListMembers?page${page}&count=${count}&filter=${filter}&update=${update}`
     );
     const data = await res.json();
+
     setDataClientes(data);
     updateStateLoading(setting, false)
+    
+    if (update == 1) {
+      updateStateNotificationToast(setting, true, "success", "Clientes actualizados con éxito")
+      // clearSearch();
+    }
   }
 
   const openModalUpdateClientes = () => {
-    updateStateModalConfirm(setting, true, "actualizar_clientes", false, "¿Desea actualizar los datos de los clientes?")
+    updateStateModalConfirm(setting, true, "actualizar_clientes", false, "Actualización de Clientes", "¿Confirma actualizar los datos de los clientes?")
   }
 
-  // Efecto Respuesta Modal
+  // Efecto Respuesta Confirmacion Modal
   useEffect(() => {
     console.log(modalConfirmState)
     if (modalConfirmState.method === "actualizar_clientes" && modalConfirmState.successResult === true) {
@@ -153,16 +166,8 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
 
       // Al pasar 1 en el tecer parametro hago un update a firebase y traigo los 10
       getAndSetDataClientes(1, 10, 1, '');
-			// setModalConfirmState({})
 		}
   }, [modalConfirmState.successResult == true])
-
-  // Efecto Secundario Component DidMount va al final
-  useEffect(() => {
-    openModalUpdateClientes()
-    setCurrentPageClientes(1);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <>
@@ -202,6 +207,30 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
         <Grid item xs={12}>
           <Card>
             <CardHeader title='Clientes' titleTypographyProps={{ variant: 'h6' }} />
+              <Box onClick={openModalUpdateClientes}
+                sx={{
+                  height: '20px',
+                  top: "135px",
+                  right: "30px",
+                  position: 'absolute',
+                }}>
+                <IconButton 
+                  color='inherit' aria-haspopup='true'>
+                  <WeatherSunny />
+                </IconButton>
+              </Box>
+              <Box onClick={openModalUpdateClientes}
+                sx={{
+                  height: '20px',
+                  top: "135px",
+                  right: "75px",
+                  position: 'absolute',
+                }}>
+                <IconButton 
+                  color='inherit' aria-haspopup='true'>
+                  <WeatherSunny />
+                </IconButton>
+              </Box>
             <ClientesList dataClientsState={dataClientes} />
           </Card>
         </Grid>

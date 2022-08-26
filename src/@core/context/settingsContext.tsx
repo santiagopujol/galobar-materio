@@ -68,8 +68,8 @@ const initialSettings: Settings = {
   },
 
   modalConfirmState: {
-    title: "¿Desea confirmar la operación?",
-    message: "",
+    title: "Confirmación",
+    message: "¿Desea confirmar la operación?",
     buttonTrue: "CONFIRMAR",
     buttonFalse: "CANCELAR",
     open: false,

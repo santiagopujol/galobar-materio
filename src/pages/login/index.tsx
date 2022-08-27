@@ -42,7 +42,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 import { UserService } from 'src/services'
 import { useSettings } from 'src/@core/hooks/useSettings'
-import { updateStateLoading, updateStateNotificationToast } from 'src/@core/utils/common';
+import { updateStateLoading, updateStateNotificationToast, updateStateUser } from 'src/@core/utils/common';
 
 interface State {
   email: string,
@@ -103,7 +103,7 @@ const LoginPage = () => {
     )
 
     if(user != null) {
-      saveSettings({ ...settings, userState: user })
+      updateStateUser(setting, user)
       router.push('/');
     }
     else {

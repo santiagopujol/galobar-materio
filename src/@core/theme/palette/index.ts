@@ -4,8 +4,8 @@ import { ThemeColor } from 'src/@core/layouts/types'
 
 const DefaultPalette = (mode: PaletteMode, themeColor: ThemeColor) => {
   // ** Vars
-  const lightColor = '58, 53, 65'
-  const darkColor = '231, 227, 252'
+  const lightColor = '58, 53, 65' // letras
+  const darkColor = '231, 227, 252' // letras
   const mainColor = mode === 'light' ? lightColor : darkColor
 
   const primaryGradient = () => {
@@ -95,12 +95,12 @@ const DefaultPalette = (mode: PaletteMode, themeColor: ThemeColor) => {
     divider: `rgba(${mainColor}, 0.12)`,
     background: {
       paper: mode === 'light' ? '#FFF' : '#312D4B',
-      default: mode === 'light' ? '#F4F5FA' : '#28243D'
+      default: mode === 'light' ? '#E6E6E6' : '#28243D'
     },
     action: {
       active: `rgba(${mainColor}, 0.54)`,
-      hover: `rgba(${mainColor}, 0.04)`,
-      selected: `rgba(${mainColor}, 0.08)`,
+      hover: `rgba(${mainColor}, 0.09)`,
+      selected: `rgba(${mainColor}, 0.11)`,
       disabled: `rgba(${mainColor}, 0.3)`,
       disabledBackground: `rgba(${mainColor}, 0.18)`,
       focus: `rgba(${mainColor}, 0.12)`

@@ -16,6 +16,16 @@ export function getBase64(file: Blob) {
   });
 }
 
+// Actualizar estado Usuario
+export function updateStateUser(setting: any, user: boolean, timeOut = 1) {
+  setTimeout(() => {
+    setting.saveSettings({
+      ...setting.settings,
+      userState: user
+    })
+  }, timeOut)
+}
+
 // Actualizar estado Header
 export function updateStateHeader(setting: any, activeIconArrow: boolean, currentPageTitle: "Home", prevComponentUrl: "/", timeOut = 1) {
   setTimeout(() => {

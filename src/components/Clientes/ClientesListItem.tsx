@@ -8,7 +8,7 @@ const ClientesListItem = ({ element }: any) => {
     <>
       <ListItemButton sx={{boxShadow: theme.shadows[99] }} key={element.id} alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar alt={`${element.merge_fields.FNAME.toUpperCase()}`} src="/static/images/avatar/1.jpg" />
+          <Avatar sx={{color:"white", bgcolor: theme.palette.mode === 'light' ? theme.palette.grey[600] : theme.palette.grey[700]}} alt={`${element.merge_fields.FNAME.toUpperCase()}`} src="/static/images/avatar/1.jpg" />
         </ListItemAvatar>
         <ListItemText 
           secondary={

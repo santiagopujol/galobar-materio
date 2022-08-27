@@ -16,7 +16,6 @@ import FormControl from '@mui/material/FormControl'
 // import TableCollapsible from 'src/views/tables/TableCollapsible'
 // import TableStickyHeader from 'src/views/tables/TableStickyHeader'
 import { useEffect, useState } from 'react';
-import { GetServerSideProps } from 'next'
 import { updateStateLoading, 
   updateStateModalConfirm, 
   updateStateHeader, 
@@ -27,8 +26,9 @@ import { Magnify } from 'mdi-material-ui'
 import IconButton from '@mui/material/IconButton'
 import Cached  from 'mdi-material-ui/Cached'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
+import { useTheme } from '@mui/material/styles'
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
+export const getServerSideProps = async (context: any) => {
 	const { query } = context;
 	const {
 		page = 1,
@@ -68,6 +68,8 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
 	const [showResultPagination, setShowResultPagination] = useState(true);
 
   const { modalConfirmState } = setting.settings
+
+  const theme = useTheme()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -189,8 +191,11 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
               onChange={handleChange}
               type="search"
               placeholder='Buscar'
-              sx={{ width: '100%',
-                '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
+              sx={{ 
+                  width: '100%', 
+                  '& .MuiOutlinedInput-root': { 
+                  borderRadius: 4,
+              }}}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -202,7 +207,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
           </form>
         </Box>
         <Grid item xs={12}>
-          <Card>
+          <Card >
             {/* <Avatar
               variant='rounded'
               sx={{

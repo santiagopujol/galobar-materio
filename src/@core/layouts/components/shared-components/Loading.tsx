@@ -2,12 +2,14 @@
 import { Box, LinearProgress } from "@mui/material";
 import React from "react"
 import { useSettings } from "src/@core/hooks/useSettings";
+import { useTheme } from '@mui/material/styles'
 
 const Loading = () => {
 
   const setting = useSettings();
   const { settings } = setting
   const { loadingState } = settings
+  const theme = useTheme()
 
   if (loadingState === true) {
 		return (
@@ -16,11 +18,10 @@ const Loading = () => {
             height: '100%',
             position: 'fixed',
             width: '100%',
-            bgcolor: '#9C9FA4',
+            bgcolor: `rgba(${theme.palette.customColors.main}, 0.18)`,
             zIndex: 4,
             top: 0,
             left:0,
-            opacity:'0.30',
           }}>
         </Box>
 

@@ -33,7 +33,7 @@ const Dashboard = () => {
   const { settings, saveSettings } = setting
 
   useEffect(() => {
-    UserService.checkUser(settings, saveSettings);
+    UserService.checkUser(setting);
     updateStateLoading(setting, false)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

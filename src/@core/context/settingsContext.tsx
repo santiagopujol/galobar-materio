@@ -39,12 +39,12 @@ const initialSettings: Settings = {
     {
       email: 'hola@galowines.com.ar',
       password: 'miclub_galowines',
-      typeUser: "cliente"
+      typeUser: "Admin"
     },
     {
       email: 'miclub@gmail.com',
       password: 'admin123',
-      typeUser: "admin"
+      typeUser: "Root"
     },
   ],
   userState: null,

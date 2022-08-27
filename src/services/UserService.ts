@@ -12,15 +12,14 @@ export const UserService = {
 	// getById,
 };
 
-function checkUser(settings: any, saveSettings: any) {
+function checkUser(setting: any) {
 	const value = localStorage.getItem("user");
 	const user = !!value ? JSON.parse(value) : undefined;
 
 	if (user == undefined) {
 		logout();
 	} else {
-    saveSettings({...settings, userState: user})
-    Router.push('/');
+    setting.saveSettings({...setting.settings, userState: user})
   }
 
 	return user;

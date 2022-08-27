@@ -58,7 +58,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
 	const [dataClientes, setDataClientes]: any = useState([]);
   const [searchValue, setSearchValue] = useState(filter ? filter : '');
   const [currentPageClientes, setCurrentPageClientes] = useState(page ? page : 1);
-	const [showResultPagination, setShowResultPagination] = useState(true);
+	const [showResultPagination, setShowResultPagination] = useState(filter != '' ? false : true);
 
   const { modalConfirmState } = setting.settings
 
@@ -141,8 +141,9 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
     updateStateLoading(setting, false)
     
     if (update == 1) {
+      setShowResultPagination(true);
+      setSearchValue('');
       updateStateNotificationToast(setting, true, "success", "Clientes actualizados con éxito")
-      // clearSearch();
     }
   }
 
@@ -152,11 +153,8 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
 
   // Efecto Respuesta Confirmacion Modal
   useEffect(() => {
-    console.log(modalConfirmState)
     if (modalConfirmState.method === "actualizar_clientes" && modalConfirmState.successResult === true) {
-      console.log("actualizar clientes") // Acualizar
-
-      // Al pasar 1 en el tecer parametro hago un update a firebase y traigo los 10
+      // Al pasar 1 en el tecer parametro hago un update a firebase y traigo por pagina
       getAndSetDataClientes(1, 10, 1, '');
 		}
   }, [modalConfirmState.successResult == true])
@@ -229,7 +227,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
               </Box>
             <ClientesList dataClientsState={dataClientes} />
           </Card>
-          {showResultPagination && (
+          {(showResultPagination == true) && (
             <Box sx={{ display: 'flex', mt: 7, mb:1, alignItems: 'center', justifyContent: 'center' }}>
               <IconButton 
                   color='inherit' 

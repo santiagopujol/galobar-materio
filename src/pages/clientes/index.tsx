@@ -230,7 +230,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
             <ClientesList dataClientsState={dataClientes} />
           </Card>
           {showResultPagination && (
-            <Box sx={{ display: 'flex', mt: 7, alignItems: 'center', justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex', mt: 7, mb:1, alignItems: 'center', justifyContent: 'center' }}>
               <IconButton 
                   color='inherit' 
                   aria-haspopup='true'

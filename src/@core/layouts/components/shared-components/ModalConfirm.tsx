@@ -41,7 +41,7 @@ const ModalConfirm = () => {
             {title}
           </DialogTitle>
           <DialogContent>
-            <DialogContentText>
+            <DialogContentText sx={{color: theme.palette.mode === 'light' ? theme.palette.grey[700] : "default"}}>
               {message}
             </DialogContentText>
           </DialogContent>

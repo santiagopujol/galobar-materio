@@ -8,13 +8,6 @@ import TableBasic from 'src/views/tables/TableBasic'
 import { Avatar, Divider, Box, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, TextField } from '@mui/material'
 import React from 'react'
 import { useSettings } from 'src/@core/hooks/useSettings'
-import FormControl from '@mui/material/FormControl'
-
-// import TableDense from 'src/views/tables/TableDense'
-// import TableSpanning from 'src/views/tables/TableSpanning'
-// import TableCustomized from 'src/views/tables/TableCustomized'
-// import TableCollapsible from 'src/views/tables/TableCollapsible'
-// import TableStickyHeader from 'src/views/tables/TableStickyHeader'
 import { useEffect, useState } from 'react';
 import { updateStateLoading, 
   updateStateModalConfirm, 
@@ -25,8 +18,8 @@ import ClientesList from 'src/components/Clientes/ClientesList'
 import { Magnify } from 'mdi-material-ui'
 import IconButton from '@mui/material/IconButton'
 import Cached  from 'mdi-material-ui/Cached'
-import AccountOutline from 'mdi-material-ui/AccountOutline'
 import { useTheme } from '@mui/material/styles'
+import DotsHorizontal from 'mdi-material-ui/DotsHorizontal'
 
 export const getServerSideProps = async (context: any) => {
 	const { query } = context;
@@ -57,7 +50,7 @@ export const getServerSideProps = async (context: any) => {
 	};
 };
 
-const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
+const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => {
 
   const setting = useSettings();
   const router = useRouter();
@@ -236,6 +229,22 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
               </Box>
             <ClientesList dataClientsState={dataClientes} />
           </Card>
+          {showResultPagination && (
+            <Box sx={{ display: 'flex', mt: 7, alignItems: 'center', justifyContent: 'center' }}>
+              <IconButton 
+                  color='inherit' 
+                  aria-haspopup='true'
+                  onClick={paginado} 
+                  sx={{ 
+                    position: "absolute", 
+                    color: theme.palette.mode === 'light' ? theme.palette.grey[700] : theme.palette.grey[500]
+                }}>
+                <DotsHorizontal
+                  size='medium' 
+                />
+              </IconButton>
+            </Box>
+          )}
         </Grid>
       </Grid>
 

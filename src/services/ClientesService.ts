@@ -21,31 +21,35 @@ async function getClienteById(id: any) {
 async function getClientesByFilter(filters: any) {
   const totalData: any = [];
   const filtersSplitted = filters?.split(" ") || [filters];
-  const filtersSplittedCap = filtersSplitted.map(item => item.substring(0, 1).toUpperCase() + item.substring(1))
+  const filtersSplittedFormat = filtersSplitted.map(item => 
+    item.includes("@") 
+      ?  item 
+      : item.substring(0, 1).toUpperCase() + item.substring(1)
+  )
 
-  console.log(filtersSplitted)
-  const dataFilterByFullName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "full_name", "in", filtersSplittedCap)
+  console.log(filtersSplittedFormat)
+  const dataFilterByFullName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "full_name", "in", filtersSplittedFormat)
   dataFilterByFullName?.map((item) => totalData.push(item))
 
-  const dataFilterByEmailAdress = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "email_address", "in", filtersSplittedCap)
+  const dataFilterByEmailAdress = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "email_address", "in", filtersSplittedFormat)
   dataFilterByEmailAdress?.map((item) => {
     if (totalData.find((el) => item.id === el.id) == null)
       totalData.push(item)
   })
 
-  const dataFilterByFName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.FNAME", "in", filtersSplittedCap)
+  const dataFilterByFName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.FNAME", "in", filtersSplittedFormat)
   dataFilterByFName?.map((item) => {
     if (totalData.find((el) => item.id === el.id) == null)
       totalData.push(item)
   })
 
-  const dataFilterByLName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.LNAME", "in",  filtersSplittedCap)
+  const dataFilterByLName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.LNAME", "in",  filtersSplittedFormat)
   dataFilterByLName?.map((item) => {
     if (totalData.find((el) => item.id === el.id) == null)
       totalData.push(item)
   })
 
-  const dataFilterByPhone = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.PHONE", "in", filtersSplittedCap)
+  const dataFilterByPhone = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "merge_fields.PHONE", "in", filtersSplittedFormat)
   dataFilterByPhone?.map((item) => {
     if (totalData.find((el) => item.id === el.id) == null)
       totalData.push(item)

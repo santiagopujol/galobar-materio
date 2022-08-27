@@ -1,25 +1,28 @@
+import React from 'react'
+
+// ** Hooks
+import { useEffect, useState } from 'react';
+import { useSettings } from 'src/@core/hooks/useSettings'
+import { useTheme } from '@mui/material/styles'
+import { useRouter } from 'next/router'
+
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
-
-// ** Demo Components Imports
-import TableBasic from 'src/views/tables/TableBasic'
-import { Avatar, Divider, Box, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, TextField } from '@mui/material'
-import React from 'react'
-import { useSettings } from 'src/@core/hooks/useSettings'
-import { useEffect, useState } from 'react';
-import { updateStateLoading, 
-  updateStateModalConfirm, 
-  updateStateHeader, 
-  updateStateNotificationToast } from 'src/@core/utils/common';
-import { useRouter } from 'next/router'
-import ClientesList from 'src/components/Clientes/ClientesList'
-import { Magnify } from 'mdi-material-ui'
 import IconButton from '@mui/material/IconButton'
 import Cached  from 'mdi-material-ui/Cached'
-import { useTheme } from '@mui/material/styles'
+import { Magnify } from 'mdi-material-ui'
 import DotsHorizontal from 'mdi-material-ui/DotsHorizontal'
+import {  Box, InputAdornment, TextField } from '@mui/material'
+
+// ** Demo Components Imports
+import ClientesList from 'src/components/Clientes/ClientesList'
+
+// ** Services
+import { updateStateLoading, 
+  updateStateModalConfirm, 
+  updateStateNotificationToast } from 'src/@core/utils/common';
 
 export const getServerSideProps = async (context: any) => {
 	const { query } = context;
@@ -54,15 +57,13 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
 
   const setting = useSettings();
   const router = useRouter();
+  const theme = useTheme()
 
 	const [dataClientes, setDataClientes]: any = useState([]);
   const [searchValue, setSearchValue] = useState(filter ? filter : '');
   const [currentPageClientes, setCurrentPageClientes] = useState(page ? page : 1);
 	const [showResultPagination, setShowResultPagination] = useState(filter != '' ? false : true);
-
   const { modalConfirmState } = setting.settings
-
-  const theme = useTheme()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -94,13 +95,13 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newDataMembers]);
 
-  // Buscando todos los datos
-  function UpdateAllMembersAndGet10() {
-    updateStateLoading(setting, true)
-    router.push(`/clientes?page=1&update=1`);
-    setShowResultPagination(false);
-    setCurrentPageClientes(1);
-  }
+  // Buscando todos los datos por push de ruta
+  // function UpdateAllMembersAndGet10() {
+  //   updateStateLoading(setting, true)
+  //   router.push(`/clientes?page=1&update=1`);
+  //   setShowResultPagination(false);
+  //   setCurrentPageClientes(1);
+  // }
 
   function clearSearch() {
     updateStateLoading(setting, true)
@@ -144,6 +145,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
       setShowResultPagination(true);
       setSearchValue('');
       updateStateNotificationToast(setting, true, "success", "Clientes actualizados con éxito")
+      updateStateModalConfirm(setting, false, "", false)
     }
   }
 
@@ -230,16 +232,14 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
           {(showResultPagination == true) && (
             <Box sx={{ display: 'flex', mt: 7, mb:1, alignItems: 'center', justifyContent: 'center' }}>
               <IconButton 
-                  color='inherit' 
-                  aria-haspopup='true'
-                  onClick={paginado} 
-                  sx={{ 
-                    position: "absolute", 
-                    color: theme.palette.mode === 'light' ? theme.palette.grey[700] : theme.palette.grey[500]
-                }}>
-                <DotsHorizontal
-                  size='medium' 
-                />
+                color='inherit' 
+                aria-haspopup='true'
+                onClick={paginado} 
+                sx={{ 
+                  position: "absolute", 
+                  color: theme.palette.mode === 'light' ? theme.palette.grey[700] : theme.palette.grey[500]
+              }}>
+                <DotsHorizontal/>
               </IconButton>
             </Box>
           )}

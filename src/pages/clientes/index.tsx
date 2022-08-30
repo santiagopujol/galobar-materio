@@ -16,6 +16,9 @@ import { Magnify } from 'mdi-material-ui'
 import DotsHorizontal from 'mdi-material-ui/DotsHorizontal'
 import {  Box, InputAdornment, TextField } from '@mui/material'
 
+// ** Styled Component Import
+import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
+
 // ** Demo Components Imports
 import ClientesList from 'src/components/Clientes/ClientesList'
 
@@ -163,89 +166,83 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
 
   return (
     <>
-      <Grid container spacing={6}>
-        <Box sx={{
-          height: '20px',
-          width: '100%',
-          pl: 6,
-          my: 2,
-          // position: 'fixed',
-          // width: '35%',
-          // zIndex: 3,
-          // top: 9,
-          // left: 55,
-        }} 
-        >
-          <form onSubmit={e => SearchClientes(e)}>
-            <TextField
-              size='small'
-              id='filter'
-              value={searchValue}
-              onChange={handleChange}
-              type="search"
-              placeholder='Buscar'
-              sx={{ 
-                  width: '100%', 
-                  '& .MuiOutlinedInput-root': { 
-                  borderRadius: 4,
-              }}}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Magnify fontSize='small' />
-                  </InputAdornment>
-                )
-              }}
-            />
-          </form>
-        </Box>
-        <Grid item xs={12}>
-          <Card >
-            {/* <Avatar
-              variant='rounded'
-              sx={{
-                mr: 3,
-                width: 44,
-                height: 44,
-                boxShadow: 3,
-                color: 'common.white',
-                backgroundColor: `success.main`
-              }}
+      <ApexChartWrapper>
+        <Grid container spacing={6}>
+          <Grid item xs={12} md={6}>
+            <Box sx={{width: '100%'}} 
             >
-              <AccountOutline color="common.white" sx={{ backgroundColor: `success.main`, fontSize: '1.75rem' }} />
-            </Avatar> */}
-            <CardHeader title='Clientes' TypographyProps={{ variant: 'h6' }} />
-              <Box onClick={openModalUpdateClientes}
+              <form onSubmit={e => SearchClientes(e)}>
+                <TextField
+                  size='small'
+                  id='filter'
+                  value={searchValue}
+                  onChange={handleChange}
+                  type="search"
+                  placeholder='Buscar'
+                  sx={{ 
+                      width: '100%', 
+                      '& .MuiOutlinedInput-root': { 
+                      borderRadius: 4,
+                  }}}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <Magnify fontSize='small' />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </form>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Card >
+              {/* <Avatar
+                variant='rounded'
                 sx={{
-                  height: '20px',
-                  top: "135px",
-                  right: "30px",
-                  position: 'absolute',
-                }}>
+                  mr: 3,
+                  width: 44,
+                  height: 44,
+                  boxShadow: 3,
+                  color: 'common.white',
+                  backgroundColor: `success.main`
+                }}
+              >
+                <AccountOutline color="common.white" sx={{ backgroundColor: `success.main`, fontSize: '1.75rem' }} />
+              </Avatar> */}
+              <CardHeader title='Clientes' TypographyProps={{ variant: 'h6' }} />
+                <Box onClick={openModalUpdateClientes}
+                  sx={{
+                    height: '20px',
+                    top: "162px",
+                    right: "30px",
+                    position: 'absolute',
+                  }}>
+                  <IconButton 
+                    color='inherit' aria-haspopup='true'>
+                    <Cached />
+                  </IconButton>
+                </Box>
+              <ClientesList dataClientsState={dataClientes} />
+            </Card>
+            {(showResultPagination == true) && (
+              <Box sx={{ display: 'flex', mt: 7, mb:1, alignItems: 'center', justifyContent: 'center' }}>
                 <IconButton 
-                  color='inherit' aria-haspopup='true'>
-                  <Cached />
+                  color='inherit' 
+                  aria-haspopup='true'
+                  onClick={paginado} 
+                  sx={{ 
+                    position: "absolute", 
+                    color: theme.palette.mode === 'light' ? theme.palette.grey[700] : theme.palette.grey[500]
+                }}>
+                  <DotsHorizontal/>
                 </IconButton>
               </Box>
-            <ClientesList dataClientsState={dataClientes} />
-          </Card>
-          {(showResultPagination == true) && (
-            <Box sx={{ display: 'flex', mt: 7, mb:1, alignItems: 'center', justifyContent: 'center' }}>
-              <IconButton 
-                color='inherit' 
-                aria-haspopup='true'
-                onClick={paginado} 
-                sx={{ 
-                  position: "absolute", 
-                  color: theme.palette.mode === 'light' ? theme.palette.grey[700] : theme.palette.grey[500]
-              }}>
-                <DotsHorizontal/>
-              </IconButton>
-            </Box>
-          )}
+            )}
+          </Grid>
         </Grid>
-      </Grid>
-
+      </ApexChartWrapper>
     </>
   )
 }

@@ -4,7 +4,7 @@
 // import { FirebaseClient } from '../../services/helpers/FirebaseClient';
 // import { BsPlusLg } from 'react-icons/bs';
 
-// const ClientesPuntosTabCard = ({ dataCliente }) => {
+// const ClientesListItemPuntosTab = ({ dataCliente }) => {
 //   const [dataPuntosCliente, setDataPuntosCliente] = useState(null);
 //   const [dataOperacionesByCliente, setDataOperacionesByCliente] = useState([]);
 
@@ -201,4 +201,4 @@
 //   );
 // };
 
-// export default ClientesPuntosTabCard;
+// export default ClientesListItemPuntosTab;

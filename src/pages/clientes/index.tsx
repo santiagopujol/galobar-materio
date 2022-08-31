@@ -23,8 +23,8 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import ClientesList from 'src/components/Clientes/ClientesList'
 
 // ** Services
-import { updateStateLoading, 
-  updateStateModalConfirm, 
+import { updateStateLoading,
+  updateStateModalConfirm,
   updateStateNotificationToast } from 'src/@core/utils/common';
 
 export const getServerSideProps = async (context: any) => {
@@ -45,7 +45,7 @@ export const getServerSideProps = async (context: any) => {
 		`${baseUrl}/getListMembers?page${page}&count=${count}&update=${update}&filter=${filter}`
 	);
   const newDataMembers = await res.json();
-  
+
 	return {
 		props: {
       newDataMembers,
@@ -56,7 +56,7 @@ export const getServerSideProps = async (context: any) => {
 	};
 };
 
-const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => {
+const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
 
   const setting = useSettings();
   const router = useRouter();
@@ -91,7 +91,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
   }
 
   useEffect(() => {
-    console.log(newDataMembers)
+    console.log(newDataMembers && newDataMembers[0])
 		setDataClientes(newDataMembers);
     updateStateLoading(setting, false)
 
@@ -106,13 +106,13 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
   //   setCurrentPageClientes(1);
   // }
 
-  function clearSearch() {
-    updateStateLoading(setting, true)
-    router.push(`/clientes?page=${currentPageClientes}`);
-    setSearchValue('');
-    setCurrentPageClientes(1);
-    setShowResultPagination(true);
-  }
+  // function clearSearch() {
+  //   updateStateLoading(setting, true)
+  //   router.push(`/clientes?page=${currentPageClientes}`);
+  //   setSearchValue('');
+  //   setCurrentPageClientes(1);
+  //   setShowResultPagination(true);
+  // }
 
   function validateFormSearch() {
     if (!searchValue || searchValue == '') {
@@ -143,7 +143,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
 
     setDataClientes(data);
     updateStateLoading(setting, false)
-    
+
     if (update == 1) {
       setShowResultPagination(true);
       setSearchValue('');
@@ -169,7 +169,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
       <ApexChartWrapper>
         <Grid container spacing={6}>
           <Grid item xs={12} md={6}>
-            <Box sx={{width: '100%'}} 
+            <Box sx={{width: '100%'}}
             >
               <form onSubmit={e => SearchClientes(e)}>
                 <TextField
@@ -179,9 +179,9 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
                   onChange={handleChange}
                   type="search"
                   placeholder='Buscar'
-                  sx={{ 
-                      width: '100%', 
-                      '& .MuiOutlinedInput-root': { 
+                  sx={{
+                      width: '100%',
+                      '& .MuiOutlinedInput-root': {
                       borderRadius: 4,
                   }}}
                   InputProps={{
@@ -219,7 +219,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
                     right: "30px",
                     position: 'absolute',
                   }}>
-                  <IconButton 
+                  <IconButton
                     color='inherit' aria-haspopup='true'>
                     <Cached />
                   </IconButton>
@@ -228,12 +228,12 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any, props) => 
             </Card>
             {(showResultPagination == true) && (
               <Box sx={{ display: 'flex', mt: 7, mb:1, alignItems: 'center', justifyContent: 'center' }}>
-                <IconButton 
-                  color='inherit' 
+                <IconButton
+                  color='inherit'
                   aria-haspopup='true'
-                  onClick={paginado} 
-                  sx={{ 
-                    position: "absolute", 
+                  onClick={paginado}
+                  sx={{
+                    position: "absolute",
                     color: theme.palette.mode === 'light' ? theme.palette.grey[700] : theme.palette.grey[500]
                 }}>
                   <DotsHorizontal/>

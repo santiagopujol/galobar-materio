@@ -13,8 +13,8 @@ const ClientesListItem = ({ element }: any) => {
   const letra2 = element.full_name.toUpperCase().substring(0, 1)
   const nombre1 = element.merge_fields.FNAME.toUpperCase() + " " +element.merge_fields.LNAME.toUpperCase()
   const nombre2 = element.full_name.toUpperCase()
+  const letra3 = element.email_address.toLowerCase().substring(0, 1)
 
-  console.log(letra1, letra2)
   const openItem = (element: any) => {
     router.push('/clientes/' + element.id)
   }
@@ -30,7 +30,7 @@ const ClientesListItem = ({ element }: any) => {
               bgcolor: theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.grey[700]
             }}
           >
-            {letra1 != "" ? letra1 : letra2}
+            {letra1 || letra2 || letra3}
           </Avatar>
         </ListItemAvatar>
         <ListItemText
@@ -38,7 +38,7 @@ const ClientesListItem = ({ element }: any) => {
             <React.Fragment>
               <Typography>
                 <b>
-                  {nombre1 != "" ? nombre1 : nombre2}
+                  {nombre1 || nombre2}
                 </b>
               </Typography>
               <Typography

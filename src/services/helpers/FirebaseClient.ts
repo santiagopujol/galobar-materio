@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, addDoc, setDoc,
-    deleteDoc, doc, where, query, getDoc, startAt, endAt, orderBy
+    deleteDoc, doc, where, query, getDoc, WhereFilterOp
 } from 'firebase/firestore';
- 
+
 const firebaseConfig = {
     apiKey: "AIzaSyDf2Ut5XeGHHG7UXu20YELyCq5xDB5mWjY",
     authDomain: "galobar-184a6.firebaseapp.com",
@@ -18,7 +18,7 @@ initializeApp(firebaseConfig);
 const db = getFirestore();
 
 export const FirebaseClient = {
-    getDocsByRef, 
+    getDocsByRef,
     addDocByRef,
     deleteDocByRef,
     getDocByRefAndId,
@@ -41,7 +41,7 @@ async function getDocsByRef(colRef: string) {
         data.id = doc.id
         dataResult.push(data)
     });
-    
+
   return dataResult
 }
 
@@ -59,20 +59,19 @@ async function getDocByRefAndId(colRef: string, id: any) {
 async function getDocByRefAndDocId(colRef: string, docId: any) {
     let dataResult = {};
     const docRef = doc(db, colRef, docId);
-    const myDoc = await getDoc(docRef);  
+    const myDoc = await getDoc(docRef);
     if (myDoc.exists()) {
         // Guardando key en id
         const data = myDoc.data()
         data.id = myDoc.id
         dataResult = data
-        
+
         return dataResult;
     }
 }
 
 // Get doc by ref and filter
-async function getDocsByRefAndFilter(colRef: string, filterField: string, operator: string, filterValues: string[]) {
-    const querys = [];
+async function getDocsByRefAndFilter(colRef: string, filterField: string, operator: WhereFilterOp, filterValues: string[]) {
     const col = collection(db, colRef);
     const q = query(col, where(filterField, operator, filterValues));
     const snapshot = await getDocs(q);
@@ -98,7 +97,7 @@ async function addDocByRef(colRef: string, data: any) {
 async function updateDocByRefAndId(colRef: string, data: any, id: any) {
     try {
         const docRef = doc(db, colRef, id);
-        await setDoc(docRef, data)      
+        await setDoc(docRef, data)
         .then(() => {
             return true
         })
@@ -131,7 +130,7 @@ async function getUserCliente(email: string, password: string) {
     console.log(password)
     const snapshot = await getDocs(q);
     const list = snapshot.docs.map(doc => doc.data());
-    
+
     return list;
 }
 
@@ -141,7 +140,7 @@ async function getPuntosByClienteFirestore(id: any) {
     const q = query(colRef, where("clientId", "==", id));
     const snapshot = await getDocs(q);
     const list = snapshot.docs.map(doc => doc.data());
-    
+
     return list;
 }
 

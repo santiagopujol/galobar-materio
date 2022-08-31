@@ -1,5 +1,6 @@
 import { ClientesService } from './ClientesService';
 
+// import mailchimp from '@mailchimp/mailchimp_marketing';
 const mailchimp = require("@mailchimp/mailchimp_marketing");
 
 mailchimp.setConfig({
@@ -16,6 +17,7 @@ export const MailchimpService = {
 
 async function getAudienceMailchimp() {
   const responseData = await mailchimp.lists.getList(String(process.env.MAILCHIMP_AUDIENCE_ID));
+
   return JSON.stringify(responseData)
 }
 
@@ -24,7 +26,7 @@ async function getListMembersMailchimp(count = 10, page = 1) {
     String(process.env.MAILCHIMP_AUDIENCE_ID),
     {
       count: count,
-      offset: (page * count) - count, 
+      offset: (page * count) - count,
     }
   );
 
@@ -54,21 +56,23 @@ async function getListMembersMailchimpWithParams(page: any, count: any, update: 
     if (filter && filter != '') {
       const resultDataMembersFiltered = await ClientesService.getClientesByFilter(filter)
 
-      return resultDataMembersFiltered 
+      return resultDataMembersFiltered
       && {
         members: resultDataMembersFiltered,
         totalItems: resultDataMembersFiltered.length
-      } 
+      }
       || []
 
     // Sino viene filter busco por página segun count, por defecto 10
     } else {
       const resultDataMembersByPage = await getDataMembersByPage(count, page)
+
       return resultDataMembersByPage
     }
 
   } catch (error) {
     console.log(error)
+
     return error
   }
 }
@@ -77,6 +81,7 @@ async function getListMembersMailchimpWithParams(page: any, count: any, update: 
 async function getAllDataMembersMailchimp() {
   console.log("Obteniendo string de todos los miembros de mailchimp")
   const resultDataAllMembers = await getListMembersMailchimp(9999999)
+
   return JSON.parse(resultDataAllMembers);
 }
 
@@ -94,6 +99,7 @@ async function getDataMembersByPage(count: number, page: number) {
     count, // cantidad datos
     page // pagina
   )
+
   return JSON.parse(dataListClientes)
 }
 

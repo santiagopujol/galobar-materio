@@ -28,6 +28,12 @@ import TabSecurity from 'src/views/account-settings/TabSecurity'
 import 'react-datepicker/dist/react-datepicker.css'
 import ClientesListItemInfoTab from 'src/components/Clientes/ClientesListItemInfoTab';
 
+// ** Hooks
+import { useSettings } from 'src/@core/hooks/useSettings'
+import { updateStateLoading, updateStateHeader, updateStateNotificationToast } from 'src/@core/utils/common';
+
+// ** Services
+
 export const getServerSideProps = async (context: any) => {
 
   // Buscar info de cliente
@@ -64,8 +70,13 @@ const TabName = styled('span')(({ theme }) => ({
 }))
 
 const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
+
+  //Hooks
+  const setting = useSettings();
+
   // ** State
   const [value, setValue] = useState<string>('account')
+
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
@@ -89,16 +100,7 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
 
   useEffect(() => {
     console.log(dataCliente)
-    // setHeaderComponentState({
-    //   open: true,
-    //   activeIconArrow: true,
-    //   currentPageTitle:
-    //     dataCliente.merge_fields.FNAME != "" ?
-    //       (dataCliente.merge_fields.FNAME.toUpperCase() + " " + dataCliente.merge_fields.LNAME.toUpperCase())
-    //     : dataCliente.email_address,
-    //   prevComponentUrl: '/clientes',
-    //   activeLogo: false,
-    // });
+    updateStateHeader(setting, true, dataCliente.email_address , "/clientes" )
     // setLoadingState(false);
     // setActiveTabDetalleClientes("submenu-tab-clientes-detalle")
     // eslint-disable-next-line react-hooks/exhaustive-deps

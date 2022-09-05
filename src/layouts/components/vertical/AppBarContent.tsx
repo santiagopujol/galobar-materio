@@ -2,15 +2,13 @@
 import Box from '@mui/material/Box'
 import { Theme } from '@mui/material/styles'
 import { useTheme } from '@mui/material/styles'
-
-// import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
-// import InputAdornment from '@mui/material/InputAdornment'
+import Typography from '@mui/material/Typography'
 
 // ** Icons Imports
 import Menu from 'mdi-material-ui/Menu'
-// import Magnify from 'mdi-material-ui/Magnify'
+import ArrowLeft from 'mdi-material-ui/ArrowLeft'
 
 // ** Type Import
 import { Settings } from 'src/@core/context/settingsContext'
@@ -41,6 +39,7 @@ const AppBarContent = (props: Props) => {
 
   // ** Hook
   const hiddenSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
+  const hiddenLg = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
   const theme = useTheme()
 
   useEffect(() => {
@@ -61,79 +60,66 @@ const AppBarContent = (props: Props) => {
         prevComponentUrl: '/',
       }
     })
-
   }
 
-
-  if (!activeIconArrow) {
+  const ArrowBack = (text) => {
     return (
-      <Box sx={{ 
-        width: '100%', 
-        display: 'flex', 
-        position: 'fixed',
-        zIndex: 3,
-        pt: 2,
-        pb: 2,
-        pl: 4,
-        top: 0,
-        left:0,
-        boxShadow: theme.shadows[5],
-        bgcolor: theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.background.default,
-        alignItems: 'center', 
-        justifyContent: 'space-between' }}>
-        <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
-          {hidden ? (
-            <IconButton
-              color='inherit'
-              onClick={toggleNavVisibility}
-              sx={{ ml: -2.75, ...(hiddenSm ? {} : { mr: 3.5 }) }}
-            >
-              <Menu />
-            </IconButton>
-          ) : null}
-        </Box>
-        {/* <TextField
-          size='small'
-          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <Magnify fontSize='small' />
-              </InputAdornment>
-            )
-          }}
-        /> */}
-        <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
-          {/* {hiddenSm ? null : (
-            <Box
-              component='a'
-              target='_blank'
-              rel='noreferrer'
-              sx={{ mr: 4, display: 'flex' }}
-              href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free'
-            >
-              <img
-                height={24}
-                alt='github stars'
-                src='https://img.shields.io/github/stars/themeselection/materio-mui-react-nextjs-admin-template-free?style=social'
-              />
-            </Box>
-          )} */}
-          <ModeToggler settings={settings} saveSettings={saveSettings} />
-          <NotificationDropdown />
-          <UserDropdown />
-        </Box>
-      </Box>
-      )
-  } else {
-
-    // Button Arrow Back
-    return (
-      <IconButton color='inherit' onClick={backArrowButton} >
-        {"< " + currentPageTitle}
-      </IconButton>
+      <>
+        <IconButton color='inherit' onClick={backArrowButton} >
+          <ArrowLeft/>
+        </IconButton>
+        <Typography sx={{ display: 'inline', fontWeight: 700, pl: 1, fontSize: '0.650rem', }}>
+          {currentPageTitle}
+        </Typography>
+      </>
     )
   }
+
+  return (
+    <Box sx={{ 
+      width: '100%', 
+      display: 'flex', 
+      position: 'fixed',
+      zIndex: 3,
+      pt: 2,
+      pb: 2,
+      pl: 4,
+      top: 0,
+      left:0,
+      boxShadow: theme.shadows[5],
+      bgcolor: theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.background.default,
+      alignItems: 'center', 
+      justifyContent: 'space-between' }}>
+
+      {/* BOTON MENU O FLECHA ATRAS */}
+      <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
+        {!activeIconArrow ? (
+          <IconButton
+            color='inherit'
+            onClick={toggleNavVisibility}
+          >
+            <Menu />
+          </IconButton>
+        ) :   
+          // ARROW BACK PARA NO LG 
+          (hiddenLg) ? 
+            <ArrowBack />
+          :    
+          // ARROW BACK PARA LG 
+          <Box sx={{ ml: 65 }}>
+            <ArrowBack />
+          </Box>   
+        }
+      </Box>
+
+      {/* BOTONES DERECHA */}
+      <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
+        <ModeToggler settings={settings} saveSettings={saveSettings} />
+        <NotificationDropdown />
+        <UserDropdown />
+      </Box>
+    </Box>
+  )
 }
 
 export default AppBarContent

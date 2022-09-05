@@ -8,52 +8,42 @@ import {
   Typography,
   useTheme
 } from '@mui/material'
-import ChevronRight from 'mdi-material-ui/ChevronRight'
+import Pencil from 'mdi-material-ui/Pencil'
 import { useRouter } from 'next/router'
 
-const PremiosListItem = ({ el }: any) => {
+const PremiosListItem = ({ element }: any) => {
   const theme = useTheme()
   const router = useRouter()
 
-  // const setting = useSettings();
-
-  const openItem = (el: any) => {
-    router.push('/premios/' + el.id)
+  const openItem = (element: any) => {
+    router.push('/premios/' + element.id)
   }
 
   return (
     <>
-      <ListItemButton onClick={() => openItem(el)} sx={{ boxShadow: theme.shadows[6] }} alignItems='flex-start'>
+      <ListItemButton onClick={() => openItem(element)} sx={{ boxShadow: theme.shadows[6] }} alignItems='flex-start'>
         <ListItemAvatar>
-          <Avatar
-            sx={{
-              color: 'white',
-              bgcolor: theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.grey[700]
-            }}
-          >
-            david
-          </Avatar>
+          <img width={150} height={150} alt={element.nombre} src={element.image64} />
         </ListItemAvatar>
         <ListItemText
           primary={
             <React.Fragment>
               <Typography>
-                <b>{el.nombre}</b>
+                <b>{element.nombre}</b>
               </Typography>
               <Typography
-                sx={{ display: 'inline', color: theme.palette.mode === 'light' ? theme.palette.grey[600] : 'default' }}
+                sx={{ display: 'inline', fontWeight: "875", color: theme.palette.info.main }}
                 component='span'
                 variant='body2'
-                color='text.secondary'
               >
-                {el.puntos} puntos
+                {element.puntos} Puntos
               </Typography>
             </React.Fragment>
           }
         />
-        <ChevronRight
+        <Pencil
           sx={{
-            mt: 4.5,
+            mt: 17,
             mr: -0.5,
             color: 'text.disabled'
           }}

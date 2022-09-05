@@ -11,7 +11,7 @@ const ClientesListItem = ({ element }: any) => {
 
   const letra1 = element.merge_fields.FNAME.toUpperCase().substring(0, 1) + element.merge_fields.LNAME.toUpperCase().substring(0, 1)
   const letra2 = element.full_name.toUpperCase().substring(0, 1)
-  const nombre1 = element.merge_fields.FNAME.toUpperCase() + " " +element.merge_fields.LNAME.toUpperCase()
+  const nombre1 = element.merge_fields.FNAME.toUpperCase() + " " + element.merge_fields.LNAME.toUpperCase()
   const nombre2 = element.full_name.toUpperCase()
   const letra3 = element.email_address.toLowerCase().substring(0, 1)
 

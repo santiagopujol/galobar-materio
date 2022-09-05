@@ -187,7 +187,7 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import IconButton from '@mui/material/IconButton'
 import Filter  from 'mdi-material-ui/Filter'
-import Plus  from 'mdi-material-ui/Plus'
+import PlusThick from 'mdi-material-ui/PlusThick'
 import { Magnify } from 'mdi-material-ui'
 import DotsHorizontal from 'mdi-material-ui/DotsHorizontal'
 import {  Box, InputAdornment, TextField } from '@mui/material'
@@ -299,7 +299,7 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
                     </IconButton>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <IconButton color="info" size='small' aria-label='settings' className='card-more-options'>
-                      <Plus color="info" />
+                      <PlusThick color="info" />
                     </IconButton>
                   </React.Fragment>
                 }

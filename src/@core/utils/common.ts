@@ -27,7 +27,13 @@ export function updateStateUser(setting: any, user: boolean, timeOut = 1) {
 }
 
 // Actualizar estado Header
-export function updateStateHeader(setting: any, activeIconArrow: boolean, currentPageTitle: "Home", prevComponentUrl: "/", timeOut = 1) {
+export function updateStateHeader(
+  setting: any, 
+  activeIconArrow: boolean, 
+  currentPageTitle: string = "Home", 
+  prevComponentUrl: string = "/", 
+  timeOut = 1
+) {
   setTimeout(() => {
     setting.saveSettings({
       ...setting.settings,

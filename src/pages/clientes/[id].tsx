@@ -28,6 +28,12 @@ import TabSecurity from 'src/views/account-settings/TabSecurity'
 import 'react-datepicker/dist/react-datepicker.css'
 import ClientesListItemInfoTab from 'src/components/Clientes/ClientesListItemInfoTab';
 
+// ** Hooks
+import { useSettings } from 'src/@core/hooks/useSettings'
+import { updateStateLoading, updateStateHeader, updateStateNotificationToast } from 'src/@core/utils/common';
+
+// ** Services
+
 export const getServerSideProps = async (context: any) => {
 
   // Buscar info de cliente
@@ -64,8 +70,13 @@ const TabName = styled('span')(({ theme }) => ({
 }))
 
 const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
+
+  //Hooks
+  const setting = useSettings();
+
   // ** State
   const [value, setValue] = useState<string>('account')
+
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
@@ -89,6 +100,7 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
 
   useEffect(() => {
     console.log(dataCliente)
+    updateStateHeader(setting, true, "Cliente", "/clientes" )
     // setHeaderComponentState({
     //   open: true,
     //   activeIconArrow: true,

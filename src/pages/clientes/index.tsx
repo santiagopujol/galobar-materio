@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react';
 import { useSettings } from 'src/@core/hooks/useSettings'
 import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/router'
+import { updateStateLoading,
+  updateStateModalConfirm,
+  updateStateNotificationToast } from 'src/@core/utils/common';
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -23,9 +26,6 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import ClientesList from 'src/components/Clientes/ClientesList'
 
 // ** Services
-import { updateStateLoading,
-  updateStateModalConfirm,
-  updateStateNotificationToast } from 'src/@core/utils/common';
 
 export const getServerSideProps = async (context: any) => {
 	const { query } = context;

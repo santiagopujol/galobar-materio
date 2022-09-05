@@ -28,10 +28,10 @@ export function updateStateUser(setting: any, user: boolean, timeOut = 1) {
 
 // Actualizar estado Header
 export function updateStateHeader(
-  setting: any, 
-  activeIconArrow: boolean, 
-  currentPageTitle: string = "", 
-  prevComponentUrl: string = "/", 
+  setting: any,
+  activeIconArrow = false,
+  currentPageTitle = "",
+  prevComponentUrl = "/",
   timeOut = 1
 ) {
   setTimeout(() => {

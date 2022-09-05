@@ -60,11 +60,11 @@
 //     setSearchValue('');
 //   }
 
-//   function SearchButton() {
-//     setLoadingState(true);
-//     // Buscando por filtro
-//     Router.push(`/premios?filter=${searchValue}`);
-//   }
+  // function SearchButton() {
+  //   // setLoadingState(true);
+  //   // Buscando por filtro
+  //   Router.push(`/premios?filter=${searchValue}`);
+  // }
 
 //   return (
 //     <>
@@ -186,7 +186,8 @@ import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import IconButton from '@mui/material/IconButton'
-import Cached  from 'mdi-material-ui/Cached'
+import Filter  from 'mdi-material-ui/Filter'
+import Plus  from 'mdi-material-ui/Plus'
 import { Magnify } from 'mdi-material-ui'
 import DotsHorizontal from 'mdi-material-ui/DotsHorizontal'
 import {  Box, InputAdornment, TextField } from '@mui/material'
@@ -200,39 +201,10 @@ import ClientesList from 'src/components/Clientes/ClientesList'
 // ** Services
 import { updateStateLoading,
   updateStateModalConfirm,
-  updateStateNotificationToast } from 'src/@core/utils/common';
+  updateStateNotificationToast,
+  updateStateHeader } from 'src/@core/utils/common';
 import PremiosList from 'src/components/Premios/PremiosList';
 import { PremiosService } from 'src/services/PremiosService';
-
-
-// export const getServerSideProps = async (context: any) => {
-// 	const { query } = context;
-// 	const {
-// 		page = 1,
-// 		count = 10,
-// 		update = '0',
-// 		filter = '',
-// 	} = query != null && query;
-
-// 	const baseUrl =
-// 		process.env.NODE_ENV === 'production'
-// 			? 'https://galobar.vercel.app/api'
-// 			: 'http://localhost:3000/api';
-
-// 	const res = await fetch(
-// 		`${baseUrl}/getListMembers?page${page}&count=${count}&update=${update}&filter=${filter}`
-// 	);
-//   const newDataMembers = await res.json();
-
-// 	return {
-// 		props: {
-//       newDataMembers,
-//       page,
-// 			filter,
-// 			baseUrl,
-// 		},
-// 	};
-// };
 
 export const getServerSideProps = async (context: any) => {
   const { query } = context;
@@ -240,104 +212,63 @@ export const getServerSideProps = async (context: any) => {
     filter = '',
   } = query != null && query;
 
-  let dataPremios = await PremiosService.getAllPremios();
+  let newDataPremios = await PremiosService.getAllPremios();
 
   if (filter != '') {
-    dataPremios = await PremiosService.filterAndOrderPremios(dataPremios, filter);
+    newDataPremios = await PremiosService.filterAndOrderPremios(newDataPremios, filter);
   }
 
   return {
     props: {
-      dataPremios,
+      newDataPremios,
       filter
     },
   };
 };
 
+const PremiosPage = ({ newDataPremios, filter  }: any) => {
 
-const PremiosPage = ({ dataPremios, filter  }: any) => {
-
-  console.log("DATA PREMIOS", dataPremios)
+  console.log("DATA PREMIOS", newDataPremios)
   const setting = useSettings();
   const router = useRouter();
   const theme = useTheme()
 
+  const [dataPremios, setDataPremios]: any = useState([]);
+  const [searchValue, setSearchValue] = useState(filter ? filter : '');
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
 
-  // const SearchClientes = (e: any) => {
-  //   e.preventDefault();
-  //   updateStateLoading(setting, true)
-
-  //   // Buscando por filtro
-  //   if (validateFormSearch()) {
-  //     router.push(`/clientes?filter=${searchValue}`);
-  //     setShowResultPagination(false);
-  //     setCurrentPageClientes(1);
-
-  //     // Buscando pagina 1
-  //   } else {
-  //     router.push(`/clientes?page=1`);
-  //     setCurrentPageClientes(1);
-  //     setShowResultPagination(true);
-  //   }
-  // }
-
-  useEffect(() => {
-    // console.log(newDataMembers && newDataMembers[0])
-		// setDataClientes(newDataMembers);
-    // updateStateLoading(setting, false)
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Buscando todos los datos por push de ruta
-  // function UpdateAllMembersAndGet10() {
-  //   updateStateLoading(setting, true)
-  //   router.push(`/clientes?page=1&update=1`);
-  //   setShowResultPagination(false);
-  //   setCurrentPageClientes(1);
-  // }
-
-  // function clearSearch() {
-  //   updateStateLoading(setting, true)
-  //   router.push(`/clientes?page=${currentPageClientes}`);
-  //   setSearchValue('');
-  //   setCurrentPageClientes(1);
-  //   setShowResultPagination(true);
-  // }
-
-  function validateFormSearch() {
-    if (!searchValue || searchValue == '') {
-      return false;
-    }
-
-    return true;
+  const SearchPremios = (e: any) => {
+    e.preventDefault();
+    updateStateLoading(setting, true)
+    router.push(`/premios?filter=${searchValue}`);
   }
 
- 
+  useEffect(() => {
+    updateStateHeader(setting)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  // Efecto Respuesta Confirmacion Modal
-  // useEffect(() => {
-  //   if (modalConfirmState.method === "actualizar_clientes" && modalConfirmState.successResult === true) {
-  //     // Al pasar 1 en el tecer parametro hago un update a firebase y traigo por pagina
-  //     getAndSetDataClientes(1, 10, 1, '');
-	// 	}
-  // }, [modalConfirmState.successResult == true])
+  useEffect(() => {
+    updateStateLoading(setting, false)
+    setDataPremios(newDataPremios);
+  }, [newDataPremios]);
 
   return (
     <>
       <ApexChartWrapper>
-        <Grid container spacing={6}>
-          <Grid item xs={12} md={6}>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={12}>
             <Box sx={{width: '100%'}}
             >
-              {/* onSubmit={e => SearchClientes(e)} */}
-              <form >
+              <form onSubmit={e => SearchPremios(e)}>
                 <TextField
                   size='small'
                   id='filter'
-                  // value={searchValue}
-                  // onChange={handleChange}
+                  value={searchValue}
+                  onChange={handleChange}
                   type="search"
                   placeholder='Buscar'
                   sx={{
@@ -356,54 +287,27 @@ const PremiosPage = ({ dataPremios, filter  }: any) => {
               </form>
             </Box>
           </Grid>
-
           <Grid item xs={12}>
-            <Card >
-              {/* <Avatar
-                variant='rounded'
-                sx={{
-                  mr: 3,
-                  width: 44,
-                  height: 44,
-                  boxShadow: 3,
-                  color: 'common.white',
-                  backgroundColor: `success.main`
-                }}
-              >
-                <AccountOutline color="common.white" sx={{ backgroundColor: `success.main`, fontSize: '1.75rem' }} />
-              </Avatar> */}
-              <CardHeader title='Premios' TypographyProps={{ variant: 'h6' }} />
-                <Box 
-                  sx={{
-                    height: '20px',
-                    top: "162px",
-                    right: "30px",
-                    position: 'absolute',
-                  }}>
-                  <IconButton
-                    color='inherit' aria-haspopup='true'>
-                    <Cached />
-                  </IconButton>
-                </Box>
-              {/* <ClientesList dataClientsState={dataClientes} /> */}
+            <Card>
+              <CardHeader title='Premios'
+                action={
+                  <React.Fragment>
+                    <IconButton size='small' aria-label='settings' className='card-more-options' 
+                      sx={{ color: 'text.secondary'}}>
+                      <Filter />
+                    </IconButton>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <IconButton size='small' aria-label='settings' className='card-more-options' 
+                      sx={{ color: 'white', bgcolor: "primary.main"}}>
+                      <Plus />
+                    </IconButton>  
+                  </React.Fragment>
+                }
+              />
               <PremiosList dataPremios={dataPremios} />
             </Card>
-            
-            {/* {(showResultPagination == true) && (
-              <Box sx={{ display: 'flex', mt: 7, mb:1, alignItems: 'center', justifyContent: 'center' }}>
-                <IconButton
-                  color='inherit'
-                  aria-haspopup='true'
-                  onClick={paginado}
-                  sx={{
-                    position: "absolute",
-                    color: theme.palette.mode === 'light' ? theme.palette.grey[700] : theme.palette.grey[500]
-                }}>
-                  <DotsHorizontal/>
-                </IconButton>
-              </Box>
-            )} */}
           </Grid>
+            
         </Grid>
       </ApexChartWrapper>
     </>

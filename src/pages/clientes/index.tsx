@@ -90,14 +90,6 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
     }
   }
 
-  useEffect(() => {
-    console.log(newDataMembers && newDataMembers[0])
-		setDataClientes(newDataMembers);
-    updateStateLoading(setting, false)
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newDataMembers]);
-
   function validateFormSearch() {
     if (!searchValue || searchValue == '') {
       return false;
@@ -139,6 +131,14 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
   const openModalUpdateClientes = () => {
     updateStateModalConfirm(setting, true, "actualizar_clientes", false, "Actualización de Clientes", "¿Confirma actualizar los datos de los clientes?")
   }
+
+  useEffect(() => {
+    console.log(newDataMembers && newDataMembers[0])
+		setDataClientes(newDataMembers);
+    updateStateLoading(setting, false)
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newDataMembers]);
 
   // Efecto Respuesta Confirmacion Modal
   useEffect(() => {
@@ -182,16 +182,15 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
 
           <Grid item xs={12}>
             <Card>
-              <CardHeader title='Clientes' 
+              <CardHeader title='Clientes'
                 action={
-                  <IconButton onClick={openModalUpdateClientes} size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
+                  <IconButton onClick={openModalUpdateClientes} size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary'   }}>
                     <Cached />
                   </IconButton>
                 }
-                TypographyProps={{ variant: 'h6' }} />
+              />
               <ClientesList dataClientsState={dataClientes} />
             </Card>
-            
             {(showResultPagination == true) && (
               <Box sx={{ display: 'flex', mt: 2, alignItems: 'center', justifyContent: 'center' }}>
                 <IconButton

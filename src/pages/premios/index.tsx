@@ -191,6 +191,7 @@ import Plus  from 'mdi-material-ui/Plus'
 import { Magnify } from 'mdi-material-ui'
 import DotsHorizontal from 'mdi-material-ui/DotsHorizontal'
 import {  Box, InputAdornment, TextField } from '@mui/material'
+import Fab from '@mui/material/Fab'
 
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
@@ -297,10 +298,9 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
                       <Filter />
                     </IconButton>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <IconButton size='small' aria-label='settings' className='card-more-options' 
-                      sx={{ color: 'white', bgcolor: "primary.main"}}>
-                      <Plus />
-                    </IconButton>  
+                    <IconButton color="info" size='small' aria-label='settings' className='card-more-options'>
+                      <Plus color="info" />
+                    </IconButton>
                   </React.Fragment>
                 }
               />

@@ -17,7 +17,7 @@ import IconButton from '@mui/material/IconButton'
 import Cached  from 'mdi-material-ui/Cached'
 import { Magnify } from 'mdi-material-ui'
 import DotsHorizontal from 'mdi-material-ui/DotsHorizontal'
-import {  Box, InputAdornment, TextField } from '@mui/material'
+import { Box, InputAdornment, TextField } from '@mui/material'
 
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'

@@ -190,7 +190,8 @@ import Filter  from 'mdi-material-ui/Filter'
 import PlusThick from 'mdi-material-ui/PlusThick'
 import { Magnify } from 'mdi-material-ui'
 import DotsHorizontal from 'mdi-material-ui/DotsHorizontal'
-import {  Box, InputAdornment, TextField } from '@mui/material'
+import { Box, InputAdornment, TextField } from '@mui/material'
+
 import Fab from '@mui/material/Fab'
 
 // ** Styled Component Import

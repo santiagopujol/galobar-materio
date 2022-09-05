@@ -211,7 +211,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
               >
                 <AccountOutline color="common.white" sx={{ backgroundColor: `success.main`, fontSize: '1.75rem' }} />
               </Avatar> */}
-              <CardHeader title='Clientes' TypographyProps={{ variant: 'h6' }} />
+              {/* <CardHeader title='Clientes' TypographyProps={{ variant: 'h6' }} /> */}
                 <Box onClick={openModalUpdateClientes}
                   sx={{
                     height: '20px',
@@ -226,7 +226,6 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
                 </Box>
               <ClientesList dataClientsState={dataClientes} />
             </Card>
-            
             {(showResultPagination == true) && (
               <Box sx={{ display: 'flex', mt: 7, mb:1, alignItems: 'center', justifyContent: 'center' }}>
                 <IconButton

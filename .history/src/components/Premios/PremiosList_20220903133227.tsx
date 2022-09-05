@@ -1,20 +1,22 @@
 import { List } from '@mui/material';
 import React from 'react';
-import ClientesListItem from './ClientesListItem';
+import ClientesListItem from '../Clientes/ClientesListItem';
 import { Typography, useTheme } from '@mui/material';
+import PremiosListItem from './PremiosListItem';
 
-const ClientesList = ({ dataClientsState }: any) => {
+const ClientesList = ({ dataPremios }: any) => {
 
   const theme = useTheme()
 
   return (
     <>
       <List sx={{ width: '100%', boxShadow: theme.shadows[24], maxWidth: "100%", bgcolor: 'background.paper' }}>
-        {dataClientsState != null && dataClientsState.members != undefined &&
+        {/* {dataClientsState != null && dataClientsState.members != undefined &&
           dataClientsState.members.map((element: any) => (
             <ClientesListItem key={element.id} element={element}></ClientesListItem>
-          ))}
-        {dataClientsState!= null && dataClientsState.members && dataClientsState.members.length == 0 && 
+          ))} */}
+          <PremiosListItem />
+        {dataPremios!= null && 
           <React.Fragment>
             <Typography
               sx={{ display: 'inline', pl: 5, fontSize: '0.875rem'  }}

@@ -10,10 +10,10 @@ const ClientesList = ({ dataClientsState }: any) => {
   return (
     <>
       <List sx={{ width: '100%', boxShadow: theme.shadows[24], maxWidth: "100%", bgcolor: 'background.paper' }}>
-        {dataClientsState != null && dataClientsState.members != undefined &&
+        {/* {dataClientsState != null && dataClientsState.members != undefined &&
           dataClientsState.members.map((element: any) => (
             <ClientesListItem key={element.id} element={element}></ClientesListItem>
-          ))}
+          ))} */}
         {dataClientsState!= null && dataClientsState.members && dataClientsState.members.length == 0 && 
           <React.Fragment>
             <Typography

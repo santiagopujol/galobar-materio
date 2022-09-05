@@ -226,7 +226,6 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
                 </Box>
               <ClientesList dataClientsState={dataClientes} />
             </Card>
-            
             {(showResultPagination == true) && (
               <Box sx={{ display: 'flex', mt: 7, mb:1, alignItems: 'center', justifyContent: 'center' }}>
                 <IconButton

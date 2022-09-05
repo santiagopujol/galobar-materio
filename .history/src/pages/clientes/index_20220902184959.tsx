@@ -221,12 +221,11 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
                   }}>
                   <IconButton
                     color='inherit' aria-haspopup='true'>
-                    <Cached />
+                    {/* <Cached /> */}
                   </IconButton>
                 </Box>
               <ClientesList dataClientsState={dataClientes} />
             </Card>
-            
             {(showResultPagination == true) && (
               <Box sx={{ display: 'flex', mt: 7, mb:1, alignItems: 'center', justifyContent: 'center' }}>
                 <IconButton

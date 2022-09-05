@@ -201,7 +201,7 @@ import ClientesList from 'src/components/Clientes/ClientesList'
 import { updateStateLoading,
   updateStateModalConfirm,
   updateStateNotificationToast } from 'src/@core/utils/common';
-import PremiosList from 'src/components/Premios/PremiosList';
+import PremiosList from 'src/components/Clientes/PremiosList';
 import { PremiosService } from 'src/services/PremiosService';
 
 
@@ -257,30 +257,38 @@ export const getServerSideProps = async (context: any) => {
 
 const PremiosPage = ({ dataPremios, filter  }: any) => {
 
-  console.log("DATA PREMIOS", dataPremios)
+  console.log(dataPremios)
   const setting = useSettings();
   const router = useRouter();
   const theme = useTheme()
 
+	const [dataClientes, setDataClientes]: any = useState([]);
+  const [searchValue, setSearchValue] = useState(filter ? filter : '');
+  const [currentPageClientes, setCurrentPageClientes] = useState(page ? page : 1);
+	const [showResultPagination, setShowResultPagination] = useState(filter != '' ? false : true);
+  const { modalConfirmState } = setting.settings
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
 
-  // const SearchClientes = (e: any) => {
-  //   e.preventDefault();
-  //   updateStateLoading(setting, true)
+  const SearchClientes = (e: any) => {
+    e.preventDefault();
+    updateStateLoading(setting, true)
 
-  //   // Buscando por filtro
-  //   if (validateFormSearch()) {
-  //     router.push(`/clientes?filter=${searchValue}`);
-  //     setShowResultPagination(false);
-  //     setCurrentPageClientes(1);
+    // Buscando por filtro
+    if (validateFormSearch()) {
+      router.push(`/clientes?filter=${searchValue}`);
+      setShowResultPagination(false);
+      setCurrentPageClientes(1);
 
-  //     // Buscando pagina 1
-  //   } else {
-  //     router.push(`/clientes?page=1`);
-  //     setCurrentPageClientes(1);
-  //     setShowResultPagination(true);
-  //   }
-  // }
+      // Buscando pagina 1
+    } else {
+      router.push(`/clientes?page=1`);
+      setCurrentPageClientes(1);
+      setShowResultPagination(true);
+    }
+  }
 
   useEffect(() => {
     // console.log(newDataMembers && newDataMembers[0])
@@ -314,15 +322,47 @@ const PremiosPage = ({ dataPremios, filter  }: any) => {
     return true;
   }
 
- 
+  const paginado = () => {
+    updateStateLoading(setting, true)
+    const currentPage = currentPageClientes + 1;
+    setCurrentPageClientes(currentPage);
+    getAndSetDataClientes(1, currentPage * 10, 0, '');
+  };
+
+  async function getAndSetDataClientes(
+    page = 1,
+    count = 10,
+    update = 0,
+    filter = ''
+  ) {
+    updateStateLoading(setting, true)
+    const res = await fetch(
+      `${baseUrl}/getListMembers?page${page}&count=${count}&filter=${filter}&update=${update}`
+    );
+    const data = await res.json();
+
+    setDataClientes(data);
+    updateStateLoading(setting, false)
+
+    if (update == 1) {
+      setShowResultPagination(true);
+      setSearchValue('');
+      updateStateNotificationToast(setting, true, "success", "Clientes actualizados con éxito")
+      updateStateModalConfirm(setting, false, "", false)
+    }
+  }
+
+  const openModalUpdateClientes = () => {
+    updateStateModalConfirm(setting, true, "actualizar_clientes", false, "Actualización de Clientes", "¿Confirma actualizar los datos de los clientes?")
+  }
 
   // Efecto Respuesta Confirmacion Modal
-  // useEffect(() => {
-  //   if (modalConfirmState.method === "actualizar_clientes" && modalConfirmState.successResult === true) {
-  //     // Al pasar 1 en el tecer parametro hago un update a firebase y traigo por pagina
-  //     getAndSetDataClientes(1, 10, 1, '');
-	// 	}
-  // }, [modalConfirmState.successResult == true])
+  useEffect(() => {
+    if (modalConfirmState.method === "actualizar_clientes" && modalConfirmState.successResult === true) {
+      // Al pasar 1 en el tecer parametro hago un update a firebase y traigo por pagina
+      getAndSetDataClientes(1, 10, 1, '');
+		}
+  }, [modalConfirmState.successResult == true])
 
   return (
     <>
@@ -331,13 +371,12 @@ const PremiosPage = ({ dataPremios, filter  }: any) => {
           <Grid item xs={12} md={6}>
             <Box sx={{width: '100%'}}
             >
-              {/* onSubmit={e => SearchClientes(e)} */}
-              <form >
+              <form onSubmit={e => SearchClientes(e)}>
                 <TextField
                   size='small'
                   id='filter'
-                  // value={searchValue}
-                  // onChange={handleChange}
+                  value={searchValue}
+                  onChange={handleChange}
                   type="search"
                   placeholder='Buscar'
                   sx={{
@@ -373,7 +412,7 @@ const PremiosPage = ({ dataPremios, filter  }: any) => {
                 <AccountOutline color="common.white" sx={{ backgroundColor: `success.main`, fontSize: '1.75rem' }} />
               </Avatar> */}
               <CardHeader title='Premios' TypographyProps={{ variant: 'h6' }} />
-                <Box 
+                <Box onClick={openModalUpdateClientes}
                   sx={{
                     height: '20px',
                     top: "162px",
@@ -386,7 +425,7 @@ const PremiosPage = ({ dataPremios, filter  }: any) => {
                   </IconButton>
                 </Box>
               {/* <ClientesList dataClientsState={dataClientes} /> */}
-              <PremiosList dataPremios={dataPremios} />
+              <PremiosList />
             </Card>
             
             {/* {(showResultPagination == true) && (

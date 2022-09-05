@@ -5,9 +5,6 @@ import { useEffect, useState } from 'react';
 import { useSettings } from 'src/@core/hooks/useSettings'
 import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/router'
-import { updateStateLoading,
-  updateStateModalConfirm,
-  updateStateNotificationToast } from 'src/@core/utils/common';
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -26,6 +23,9 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import ClientesList from 'src/components/Clientes/ClientesList'
 
 // ** Services
+import { updateStateLoading,
+  updateStateModalConfirm,
+  updateStateNotificationToast } from 'src/@core/utils/common';
 
 export const getServerSideProps = async (context: any) => {
 	const { query } = context;
@@ -98,6 +98,22 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newDataMembers]);
 
+  // Buscando todos los datos por push de ruta
+  // function UpdateAllMembersAndGet10() {
+  //   updateStateLoading(setting, true)
+  //   router.push(`/clientes?page=1&update=1`);
+  //   setShowResultPagination(false);
+  //   setCurrentPageClientes(1);
+  // }
+
+  // function clearSearch() {
+  //   updateStateLoading(setting, true)
+  //   router.push(`/clientes?page=${currentPageClientes}`);
+  //   setSearchValue('');
+  //   setCurrentPageClientes(1);
+  //   setShowResultPagination(true);
+  // }
+
   function validateFormSearch() {
     if (!searchValue || searchValue == '') {
       return false;
@@ -151,8 +167,8 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
   return (
     <>
       <ApexChartWrapper>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={12}>
+        <Grid container spacing={6}>
+          <Grid item xs={12} md={6}>
             <Box sx={{width: '100%'}}
             >
               <form onSubmit={e => SearchClientes(e)}>
@@ -181,24 +197,43 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
           </Grid>
 
           <Grid item xs={12}>
-            <Card>
-              <CardHeader title='Clientes' 
-                action={
-                  <IconButton onClick={openModalUpdateClientes} size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
-                    <Cached />
+            <Card >
+              {/* <Avatar
+                variant='rounded'
+                sx={{
+                  mr: 3,
+                  width: 44,
+                  height: 44,
+                  boxShadow: 3,
+                  color: 'common.white',
+                  backgroundColor: `success.main`
+                }}
+              >
+                <AccountOutline color="common.white" sx={{ backgroundColor: `success.main`, fontSize: '1.75rem' }} />
+              </Avatar> */}
+              <CardHeader title='Clientes' TypographyProps={{ variant: 'h6' }} />
+                <Box onClick={openModalUpdateClientes}
+                  sx={{
+                    height: '20px',
+                    top: "162px",
+                    right: "30px",
+                    position: 'absolute',
+                  }}>
+                  <IconButton
+                    color='inherit' aria-haspopup='true'>
+                    {/* <Cached /> */}
                   </IconButton>
-                }
-                TypographyProps={{ variant: 'h6' }} />
+                </Box>
               <ClientesList dataClientsState={dataClientes} />
             </Card>
-            
             {(showResultPagination == true) && (
-              <Box sx={{ display: 'flex', mt: 2, alignItems: 'center', justifyContent: 'center' }}>
+              <Box sx={{ display: 'flex', mt: 7, mb:1, alignItems: 'center', justifyContent: 'center' }}>
                 <IconButton
                   color='inherit'
                   aria-haspopup='true'
                   onClick={paginado}
                   sx={{
+                    position: "absolute",
                     color: theme.palette.mode === 'light' ? theme.palette.grey[700] : theme.palette.grey[500]
                 }}>
                   <DotsHorizontal/>

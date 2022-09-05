@@ -201,7 +201,7 @@ import ClientesList from 'src/components/Clientes/ClientesList'
 import { updateStateLoading,
   updateStateModalConfirm,
   updateStateNotificationToast } from 'src/@core/utils/common';
-import PremiosList from 'src/components/Premios/PremiosList';
+import PremiosList from 'src/components/Clientes/PremiosList';
 import { PremiosService } from 'src/services/PremiosService';
 
 
@@ -257,7 +257,7 @@ export const getServerSideProps = async (context: any) => {
 
 const PremiosPage = ({ dataPremios, filter  }: any) => {
 
-  console.log("DATA PREMIOS", dataPremios)
+  console.log(dataPremios)
   const setting = useSettings();
   const router = useRouter();
   const theme = useTheme()
@@ -386,7 +386,7 @@ const PremiosPage = ({ dataPremios, filter  }: any) => {
                   </IconButton>
                 </Box>
               {/* <ClientesList dataClientsState={dataClientes} /> */}
-              <PremiosList dataPremios={dataPremios} />
+              <PremiosList />
             </Card>
             
             {/* {(showResultPagination == true) && (

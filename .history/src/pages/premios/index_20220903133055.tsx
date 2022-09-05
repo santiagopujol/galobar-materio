@@ -386,7 +386,7 @@ const PremiosPage = ({ dataPremios, filter  }: any) => {
                   </IconButton>
                 </Box>
               {/* <ClientesList dataClientsState={dataClientes} /> */}
-              <PremiosList dataPremios={dataPremios} />
+              <PremiosList />
             </Card>
             
             {/* {(showResultPagination == true) && (

@@ -201,7 +201,7 @@ import ClientesList from 'src/components/Clientes/ClientesList'
 import { updateStateLoading,
   updateStateModalConfirm,
   updateStateNotificationToast } from 'src/@core/utils/common';
-import PremiosList from 'src/components/Premios/PremiosList';
+import PremiosList from 'src/components/Clientes/PremiosList';
 import { PremiosService } from 'src/services/PremiosService';
 
 
@@ -257,7 +257,7 @@ export const getServerSideProps = async (context: any) => {
 
 const PremiosPage = ({ dataPremios, filter  }: any) => {
 
-  console.log("DATA PREMIOS", dataPremios)
+  console.log(dataPremios)
   const setting = useSettings();
   const router = useRouter();
   const theme = useTheme()
@@ -315,6 +315,32 @@ const PremiosPage = ({ dataPremios, filter  }: any) => {
   }
 
  
+  async function getAndSetDataClientes(
+    page = 1,
+    count = 10,
+    update = 0,
+    filter = ''
+  ) {
+    updateStateLoading(setting, true)
+    const res = await fetch(
+      `${baseUrl}/getListMembers?page${page}&count=${count}&filter=${filter}&update=${update}`
+    );
+    const data = await res.json();
+
+    setDataClientes(data);
+    updateStateLoading(setting, false)
+
+    if (update == 1) {
+      setShowResultPagination(true);
+      setSearchValue('');
+      updateStateNotificationToast(setting, true, "success", "Clientes actualizados con éxito")
+      updateStateModalConfirm(setting, false, "", false)
+    }
+  }
+
+  const openModalUpdateClientes = () => {
+    updateStateModalConfirm(setting, true, "actualizar_clientes", false, "Actualización de Clientes", "¿Confirma actualizar los datos de los clientes?")
+  }
 
   // Efecto Respuesta Confirmacion Modal
   // useEffect(() => {
@@ -373,7 +399,7 @@ const PremiosPage = ({ dataPremios, filter  }: any) => {
                 <AccountOutline color="common.white" sx={{ backgroundColor: `success.main`, fontSize: '1.75rem' }} />
               </Avatar> */}
               <CardHeader title='Premios' TypographyProps={{ variant: 'h6' }} />
-                <Box 
+                <Box onClick={openModalUpdateClientes}
                   sx={{
                     height: '20px',
                     top: "162px",
@@ -386,7 +412,7 @@ const PremiosPage = ({ dataPremios, filter  }: any) => {
                   </IconButton>
                 </Box>
               {/* <ClientesList dataClientsState={dataClientes} /> */}
-              <PremiosList dataPremios={dataPremios} />
+              <PremiosList />
             </Card>
             
             {/* {(showResultPagination == true) && (

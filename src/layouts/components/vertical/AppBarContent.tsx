@@ -2,9 +2,9 @@
 import Box from '@mui/material/Box'
 import { Theme } from '@mui/material/styles'
 import { useTheme } from '@mui/material/styles'
-
 import IconButton from '@mui/material/IconButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import Typography from '@mui/material/Typography'
 
 // ** Icons Imports
 import Menu from 'mdi-material-ui/Menu'
@@ -64,9 +64,14 @@ const AppBarContent = (props: Props) => {
 
   const ArrowBack = (text) => {
     return (
-      <IconButton color='inherit'  onClick={backArrowButton} >
-        <ArrowLeft/>
-      </IconButton>
+      <>
+        <IconButton color='inherit' onClick={backArrowButton} >
+          <ArrowLeft/>
+        </IconButton>
+        <Typography sx={{ display: 'inline', fontWeight: 700, pl: 1, fontSize: '0.650rem', }}>
+          {currentPageTitle}
+        </Typography>
+      </>
     )
   }
 

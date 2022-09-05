@@ -100,17 +100,7 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
 
   useEffect(() => {
     console.log(dataCliente)
-    updateStateHeader(setting, true, "Cliente", "/clientes" )
-    // setHeaderComponentState({
-    //   open: true,
-    //   activeIconArrow: true,
-    //   currentPageTitle:
-    //     dataCliente.merge_fields.FNAME != "" ?
-    //       (dataCliente.merge_fields.FNAME.toUpperCase() + " " + dataCliente.merge_fields.LNAME.toUpperCase())
-    //     : dataCliente.email_address,
-    //   prevComponentUrl: '/clientes',
-    //   activeLogo: false,
-    // });
+    updateStateHeader(setting, true, dataCliente.email_address , "/clientes" )
     // setLoadingState(false);
     // setActiveTabDetalleClientes("submenu-tab-clientes-detalle")
     // eslint-disable-next-line react-hooks/exhaustive-deps

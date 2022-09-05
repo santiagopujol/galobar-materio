@@ -30,7 +30,7 @@ export function updateStateUser(setting: any, user: boolean, timeOut = 1) {
 export function updateStateHeader(
   setting: any, 
   activeIconArrow: boolean, 
-  currentPageTitle: string = "Home", 
+  currentPageTitle: string = "", 
   prevComponentUrl: string = "/", 
   timeOut = 1
 ) {

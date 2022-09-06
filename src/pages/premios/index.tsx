@@ -189,21 +189,13 @@ import IconButton from '@mui/material/IconButton'
 import Filter  from 'mdi-material-ui/Filter'
 import PlusThick from 'mdi-material-ui/PlusThick'
 import { Magnify } from 'mdi-material-ui'
-import DotsHorizontal from 'mdi-material-ui/DotsHorizontal'
 import { Box, InputAdornment, TextField } from '@mui/material'
-
-import Fab from '@mui/material/Fab'
 
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
-// ** Demo Components Imports
-import ClientesList from 'src/components/Clientes/ClientesList'
-
 // ** Services
 import { updateStateLoading,
-  updateStateModalConfirm,
-  updateStateNotificationToast,
   updateStateHeader } from 'src/@core/utils/common';
 import PremiosList from 'src/components/Premios/PremiosList';
 import { PremiosService } from 'src/services/PremiosService';
@@ -299,7 +291,9 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
                       <Filter />
                     </IconButton>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <IconButton color="info" size='small' aria-label='settings' className='card-more-options'>
+                    <IconButton color="info" size='small' aria-label='settings' className='card-more-options'
+                      onClick={() => router.push('/premios/new')}
+                      >
                       <PlusThick color="info" />
                     </IconButton>
                   </React.Fragment>

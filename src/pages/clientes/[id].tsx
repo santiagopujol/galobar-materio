@@ -77,7 +77,6 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
   // ** State
   const [value, setValue] = useState<string>('account')
 
-
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
   }

@@ -1,21 +1,22 @@
 import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
 import { getFirestore, collection, getDocs, addDoc, setDoc,
     deleteDoc, doc, where, query, getDoc, WhereFilterOp
 } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDf2Ut5XeGHHG7UXu20YELyCq5xDB5mWjY",
-    authDomain: "galobar-184a6.firebaseapp.com",
-    databaseURL: "https://galobar-184a6-default-rtdb.firebaseio.com",
-    projectId: "galobar-184a6",
-    storageBucket: "galobar-184a6.appspot.com",
-    messagingSenderId: "28522361301",
-    appId: "1:28522361301:web:2a20d40f1bfa6761f40d5c",
-    measurementId: "G-10DCXWB8N8"
+  apiKey: "AIzaSyD7pN9OVx55S6a4r3fNUAvdOeju1-AoFD4",
+  authDomain: "club-galo.firebaseapp.com",
+  projectId: "club-galo",
+  storageBucket: "club-galo.appspot.com",
+  messagingSenderId: "1078929646643",
+  appId: "1:1078929646643:web:3de9620273c296f2b9af46",
+  measurementId: "G-C4WYC0PSX7"
 };
 
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const db = getFirestore();
+// const analytics = getAnalytics(app);
 
 export const FirebaseClient = {
     getDocsByRef,

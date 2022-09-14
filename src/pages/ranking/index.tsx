@@ -29,7 +29,7 @@ interface Data {
   id: number
   fullName: string
   email: string
-  ultimaOperacion: string
+  ultimaOperacion: Date
   total_operaciones: number
   total_puntos_acumulados: number
   total_premios_canjeados: number
@@ -39,7 +39,7 @@ function createData(
   id: number,
   fullName: string,
   email: string,
-  ultimaOperacion: string,
+  ultimaOperacion: Date,
   total_operaciones: number,
   total_puntos_acumulados: number,
   total_premios_canjeados: number

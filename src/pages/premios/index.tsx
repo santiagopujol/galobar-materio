@@ -230,7 +230,7 @@ export const getServerSideProps = async (context: any) => {
 
 const PremiosPage = ({ newDataPremios, filter  }: any) => {
 
-  console.log("DATA PREMIOS", newDataPremios)
+
   const setting = useSettings();
   const router = useRouter();
   const theme = useTheme()

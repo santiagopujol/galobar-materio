@@ -22,6 +22,7 @@ import Avatar from '@mui/material/Avatar'
 
 import { visuallyHidden } from '@mui/utils'
 import Stack from '@mui/material/Stack'
+import { parseTwoDigitYear } from 'moment'
 
 interface Data {
   id: number
@@ -239,7 +240,7 @@ interface EnhancedTableToolbarProps {
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc')
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('calories')
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('total_puntos_acumulados')
   const [selected, setSelected] = React.useState<readonly string[]>([])
   const [page, setPage] = React.useState(0)
   const [dense, setDense] = React.useState(false)
@@ -371,9 +372,10 @@ export default function EnhancedTable() {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage='Filas por página.'
         />
       </Paper>
-      <FormControlLabel control={<Switch checked={dense} onChange={handleChangeDense} />} label='Dense padding' />
+      <FormControlLabel control={<Switch checked={dense} onChange={handleChangeDense} />} label='Comprimir filas' />
     </Box>
   )
 }

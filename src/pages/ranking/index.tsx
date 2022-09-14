@@ -23,6 +23,7 @@ import Avatar from '@mui/material/Avatar'
 import { visuallyHidden } from '@mui/utils'
 import Stack from '@mui/material/Stack'
 import { parseTwoDigitYear } from 'moment'
+import moment from 'moment';
 
 interface Data {
   id: number
@@ -55,11 +56,11 @@ function createData(
 }
 
 const rows = [
-  createData(1, 'Pedro Perez', 'pedro@gmail.com', '06/10/2022', 54, 60000, 20),
-  createData(2, 'Marcelo Marea', 'marce@gmail.com', '11/10/2022', 40, 50000, 15),
-  createData(3, 'Carlos Mive', 'fer@gmail.com', '21/09/2022', 53, 30000, 5),
-  createData(4, 'Osvaldo Notx', 'osvaldo@gmail.com', '10/09/2022', 44, 20000, 7),
-  createData(5, 'Mike Wasosky', 'mike@gmail.com', '05/10/2022', 34, 20000, 11)
+  createData(1, 'Pedro Perez', 'pedro@gmail.com', moment("2022-10-11").toDate(), 54, 60000, 20),
+  createData(2, 'Marcelo Marea', 'marce@gmail.com', moment("2022-09-10").toDate(), 40, 50000, 15),
+  createData(3, 'Carlos Mive', 'fer@gmail.com', moment("2022-08-09").toDate(), 53, 30000, 5),
+  createData(4, 'Osvaldo Notx', 'osvaldo@gmail.com', moment("2021-05-06").toDate(), 44, 20000, 7),
+  createData(5, 'Mike Wasosky', 'mike@gmail.com', moment("2021-07-09").toDate(), 34, 20000, 11)
 ]
 const img =
   'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
@@ -345,7 +346,7 @@ export default function EnhancedTable() {
                         {row.fullName}
                       </TableCell>
                       <TableCell align='right'>{row.email}</TableCell>
-                      <TableCell align='right'>{row.ultimaOperacion}</TableCell>
+                      <TableCell align='right'>{moment(row.ultimaOperacion).format('DD/MM/YYYY')}</TableCell>
                       <TableCell align='right'>{row.total_operaciones}</TableCell>
                       <TableCell align='right'>{row.total_puntos_acumulados}</TableCell>
                       <TableCell align='right'>{row.total_premios_canjeados}</TableCell>

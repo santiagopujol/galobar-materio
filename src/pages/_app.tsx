@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
+import dynamic from 'next/dynamic'
 
 // ** Loader Import
 import NProgress from 'nprogress'
@@ -15,8 +16,11 @@ import type { EmotionCache } from '@emotion/cache'
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Component Imports
-import UserLayout from 'src/layouts/UserLayout'
-import ThemeComponent from 'src/@core/theme/ThemeComponent'
+// import UserLayout from 'src/layouts/UserLayout'
+// import ThemeComponent from 'src/@core/theme/ThemeComponent'
+// ** Dynamic Components
+const UserLayout = dynamic(() => import('src/layouts/UserLayout'))
+const ThemeComponent = dynamic(() => import('src/@core/theme/ThemeComponent'))
 
 // ** Contexts
 import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsContext'
@@ -77,11 +81,12 @@ const App = (props: ExtendedAppProps) => {
         <SettingsConsumer>
           {({ settings }) => {
             return (
-              <ThemeComponent settings={settings}>{getLayout(
+              <ThemeComponent settings={settings}>
+                {getLayout(
                   <>
-                    <Loading/>
-                    <ModalConfirm/>
-                    <NotificationToast/>
+                    <Loading />
+                    <ModalConfirm />
+                    <NotificationToast />
                     <Component {...pageProps} />
                   </>
                 )}

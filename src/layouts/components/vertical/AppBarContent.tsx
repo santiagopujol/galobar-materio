@@ -43,8 +43,7 @@ const AppBarContent = (props: Props) => {
   const theme = useTheme()
 
   useEffect(() => {
-    console.log(props)
-    console.log(searchComponent)
+
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.headerState])

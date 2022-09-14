@@ -1,4 +1,5 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 
 // ** Hooks
 import { useEffect, useState } from 'react';
@@ -23,7 +24,10 @@ import { Box, InputAdornment, TextField } from '@mui/material'
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
 // ** Demo Components Imports
-import ClientesList from 'src/components/Clientes/ClientesList'
+//import ClientesList from 'src/components/Clientes/ClientesList'
+
+// ** Dynamic Components
+const ClientesList = dynamic(() => import('src/components/Clientes/ClientesList'))
 
 // ** Services
 

@@ -45,7 +45,7 @@ const ModalConfirm = () => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button fullWidth variant='body2' onClick={closeAction}>
+            <Button fullWidth onClick={closeAction}>
               {buttonFalse}
             </Button>
             <Button fullWidth variant='contained' onClick={confirmAction}>

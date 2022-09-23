@@ -61,7 +61,7 @@ const AppBarContent = (props: Props) => {
     })
   }
 
-  const ArrowBack = (text) => {
+  const ArrowBack = (text: any) => {
     return (
       <>
         <IconButton color='inherit' onClick={backArrowButton} >

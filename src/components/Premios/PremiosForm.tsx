@@ -232,13 +232,13 @@
 
 // export default PremiosForm;
 
-import { useEffect, useState } from 'react';
+import { ChangeEvent, ElementType, useEffect, useState } from 'react';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
-import Button from '@mui/material/Button'
+import Button, { ButtonProps } from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
@@ -253,9 +253,9 @@ import EmailOutline from 'mdi-material-ui/EmailOutline'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
 
-const PremiosForm = ({ dataPremio, edit = false }) => {
+const PremiosForm = ({ dataPremio, edit = false }: any) => {
   const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
-
+  console.log(dataPremio)
   const ImgStyled = styled('img')(({ theme }) => ({
     width: 120,
     height: 120,
@@ -384,14 +384,14 @@ const PremiosForm = ({ dataPremio, edit = false }) => {
             </Grid>
             <Grid item xs={6}>
               <Box sx={{ display: 'flex', alignItems: 'left', justifyContent: 'left' }}>
-                <Button xs={6} size='large' type='submit' sx={{ mr: 2 }} color="error" variant='outlined'>
+                <Button>
                   Eliminar
                 </Button>
               </Box>
             </Grid>
             <Grid item xs={6}>
               <Box sx={{ display: 'flex', alignItems: 'right', justifyContent: 'right' }}>
-                <Button xs={6} size='large' type='submit' sx={{ mr: 2 }} variant='contained'>
+                <Button>
                   Guardar
                 </Button>
               </Box>

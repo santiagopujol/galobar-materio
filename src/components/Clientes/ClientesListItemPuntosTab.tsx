@@ -1,3 +1,10 @@
+const ClientesListItemPuntosTab = {
+
+}
+
+export default ClientesListItemPuntosTab
+
+
 // import { useEffect, useState } from 'react';
 // import customStyles from '../../styles/custom.module.css';
 // import { useAppContext } from '../../utils/context';

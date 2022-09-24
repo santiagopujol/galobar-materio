@@ -72,7 +72,7 @@ const LoginPage = () => {
   // ** State
   const [values, setValues] = useState<State>({
     email: 'hola@galowines.com.ar', // TEST TEMP ''
-    password: 'miclub_galowines', // TEST TEMP ''
+    password: '', // TEST TEMP ''
     showPassword: false
   })
 

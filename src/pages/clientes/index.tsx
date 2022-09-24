@@ -42,7 +42,7 @@ export const getServerSideProps = async (context: any) => {
 
 	const baseUrl =
 		process.env.NODE_ENV === 'production'
-			? 'https://galobar.vercel.app/api'
+			? 'https://galobarclub.vercel.app//api'
 			: 'http://localhost:3000/api';
 
 	const res = await fetch(

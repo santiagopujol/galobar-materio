@@ -246,6 +246,8 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Typography from '@mui/material/Typography'
 
 import { styled } from '@mui/material/styles'
+import { useSettings } from 'src/@core/hooks/useSettings'
+import { Common } from 'src/@core/utils/common';
 
 // ** Icons Imports
 import Phone from 'mdi-material-ui/Phone'
@@ -254,8 +256,10 @@ import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
 
 const PremiosForm = ({ dataPremio, edit = false }: any) => {
-  const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
+  const setting = useSettings();
+
   console.log(dataPremio)
+  
   const ImgStyled = styled('img')(({ theme }) => ({
     width: 120,
     height: 120,
@@ -280,14 +284,121 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
     }
   }))
   
-  const onChange = (file: ChangeEvent) => {
-    const reader = new FileReader()
-    const { files } = file.target as HTMLInputElement
-    if (files && files.length !== 0) {
-      reader.onload = () => setImgSrc(reader.result as string)
+  // const onChange = (file: ChangeEvent) => {
+  //   const reader = new FileReader()
+  //   const { files } = file.target as HTMLInputElement
+  //   if (files && files.length !== 0) {
+  //     reader.onload = () => setImgSrc(reader.result as string)
   
-      reader.readAsDataURL(files[0])
+  //     reader.readAsDataURL(files[0])
+  //   }
+  // }
+
+  const [stateForm, setStateForm] = useState({
+    id: edit ? dataPremio.id : null,
+    nombre: dataPremio.nombre || "",
+    descripcion: dataPremio.descripcion || "",
+    puntos: dataPremio.puntos || "",
+    image64: dataPremio.image64 || null,
+    imageUrl: dataPremio.imageUrl || null,
+    fechaAbm: dataPremio.fechaAbm || "",
+  });
+
+  const imagenInicial = dataPremio.image64 || null
+  const [resetImage, setResetImage] = useState(false) 
+  const { modalConfirmState } = setting.settings
+
+  // const {
+  //   setLoadingState,
+  //   setNotificationState,
+  //   modalConfirmState,
+  //   setModalConfirmState,
+  // } = useAppContext();
+
+  function handleChange(e) {
+    if (e.target.files) {
+      stateForm.imageUrl = URL.createObjectURL(e.target.files[0])
+      Common.getBase64(e.target.files[0]).then(data => {
+        stateForm.image64 = data
+        setStateForm({ ...stateForm, [e.target.name]: e.target.files[0] });
+      })
+      setResetImage(false)
+    } else {
+      setStateForm({ ...stateForm, [e.target.name]: e.target.value });
     }
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    await saveFormData(stateForm)
+  }
+
+  const validateForm = () => {
+    if (stateForm.imageUrl != null) {
+      return true
+    }
+    setNotificationState({
+      open: true,
+      type: "warning",
+      message: "Por favor, seleccionar un archivo.",
+      timeOut: 2000
+    })
+    return false
+  }
+
+  async function saveFormData(data: object) {
+    console.log(stateForm)
+    if (!validateForm()) return false;
+
+    setLoadingState(true)
+    await PremiosService.savePremio(data)
+      .then((res) => {
+        setNotificationState({
+          open: true,
+          type: "success",
+          message: "Premio guardado con éxito !",
+          timeOut: 2000
+        })
+        Router.push('/premios');
+      }).catch((error) => {
+        setNotificationState({
+          open: true,
+          type: "error",
+          message: "Ocurrió un error al realizar la operación, intente nuevamente.",
+          timeOut: 2000
+        })
+      });
+  }
+
+  // Efecto secundario para escuchar la respuesta del modal de confirmacion 
+  useEffect(() => {
+    if (modalConfirmState.method === "eliminar_premio" && modalConfirmState.successResult == true) {
+      eliminarPremio(stateForm.id)
+      updateStateModalConfirm(setting, false, "", false)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalConfirmState.successResult == true])
+
+  const eliminarPremio = async function (id) {
+    setLoadingState(true)
+    await PremiosService.deletePremio(id)
+      .then((res) => {
+        setNotificationState({
+          open: true,
+          type: "success",
+          message: "Premio eliminado con éxito !",
+          timeOut: 2000
+        })
+        Router.push('/premios');
+      }).catch((error) => {
+        setNotificationState({
+          open: true,
+          type: "error",
+          message: "Ocurrió un error al realizar la operación, intente nuevamente.",
+          timeOut: 2000
+        })
+      });
   }
 
 
@@ -300,12 +411,17 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label='Full Name'
-                placeholder='Leonard Carter'
+                type='text'
+                name="nombre"
+                required
+                label='Nombre'
+                onChange={handleChange}
+                value={stateForm.nombre}
+                placeholder='-'
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <AccountOutline />
+                      {/* <AccountOutline /> */}
                     </InputAdornment>
                   )
                 }}
@@ -314,29 +430,17 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                type='email'
-                label='Email'
-                placeholder='carterleonard@gmail.com'
-                helperText='You can use letters, numbers & periods'
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <EmailOutline />
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
+                required
+                name="puntos"
+                label='Puntos'
                 type='number'
-                label='Phone No.'
-                placeholder='+1-123-456-8790'
+                value={stateForm.puntos}
+                onChange={handleChange}
+                placeholder='-'
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <Phone />
+                      {/* <Phone /> */}
                     </InputAdornment>
                   )
                 }}
@@ -346,34 +450,87 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
               <TextField
                 fullWidth
                 multiline
+                type='text'
+                name="descripcion"
                 minRows={3}
-                label='Message'
-                placeholder='Bio...'
+                onChange={handleChange}
+                value={stateForm.descripcion}
+                label='Descripción'
+                placeholder='...'
                 sx={{ '& .MuiOutlinedInput-root': { alignItems: 'baseline' } }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <MessageOutline />
+                      {/* <MessageOutline /> */}
                     </InputAdornment>
                   )
                 }}
               />
             </Grid>
+
+            {/* <div className="mt-3 mb-3"> */}
+              {/* EDIT FORM */}
+              {/* {stateForm.id != null &&
+                <div className="w-full fixed bottom-0 left-0 justify-center text-white">
+                  <button type="button"
+                    onClick={() => setModalConfirmState({ open: true, method: "eliminar_premio" })
+                    }
+                    className={`justify-center text-gray-400 border-gray-700 border-r border-1 hover:text-red-500 ${customStyles.font_app_content} ${customStyles.bg_primary_app} w-1/2 hover:bg-[red-500]
+                    rounded-t-sm py-3 text-center opacity-95 hover:opacity-100 inline-flex font-bold items-center focus:ring-2 focus:outline-none focus:ring-red-500`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 -ml-1 w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                    ELIMINAR
+                  </button>
+                  <button type="submit" className={` 
+                    ${customStyles.font_app_content} ${customStyles.bg_primary_app} w-1/2 hover:bg-[${customStyles.bg_primary_app}]
+                    rounded-t-sm py-3 text-center text-gray-400 hover:opacity-100 opacity-95 border-gray-700 border-l border-1 hover:text-green-500 font-bold inline-flex 
+                    justify-center items-center focus:ring-2 focus:outline-none focus:ring-green-500`}>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      className="mr-2 -ml-1 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    GUARDAR
+                  </button>
+                </div>
+              }
+              {/* NUEVO FORM */}
+              {/* {stateForm.id == null &&
+                <button type="submit" className={`w-full fixed bottom-0 left-0 justify-center text-white 
+                    ${customStyles.font_app_content} ${customStyles.bg_primary_app} hover:bg-[${customStyles.bg_primary_app}] hover:opacity-100 opacity-95
+                    rounded-t-sm py-3 text-gray-400 text-center font-bold inline-flex items-center focus:ring-2 focus:outline-none hover:text-green-500 focus:ring-green-500`}>
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                    className="mr-2 -ml-1 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  GUARDAR
+                </button>
+              }
+            </div> */} 
+
             <Grid item xs={12} sx={{ marginBottom: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <ImgStyled src={imgSrc} alt='Profile Pic' />
+                {(stateForm.imageUrl != null || stateForm.image64 != null) &&
+                  <ImgStyled src={
+                    resetImage ? imagenInicial : 
+                      stateForm.image64 != null ? 
+                        stateForm.image64 : 
+                        stateForm.imageUrl} 
+                  alt="image_premio" />
+                }
                 <Box>
                   <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
                     Agregar Imagen
                     <input
                       hidden
+                      name="image" 
                       type='file'
-                      onChange={onChange}
+                      onChange={handleChange}
                       accept='image/png, image/jpeg'
                       id='account-settings-upload-image'
                     />
                   </ButtonStyled>
-                  <ResetButtonStyled color='error' variant='outlined' onClick={() => setImgSrc('/images/avatars/1.png')}>
+                  <ResetButtonStyled color='error' variant='outlined' onClick={() => setResetImage(true) }>
                     Limpiar Imagen
                   </ResetButtonStyled>
                   <Typography variant='body2' sx={{ marginTop: 5 }}>
@@ -382,14 +539,17 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
                 </Box>
               </Box>
             </Grid>
-            <Grid item xs={6}>
-              <Box sx={{ display: 'flex', alignItems: 'left', justifyContent: 'left' }}>
-                <Button>
-                  Eliminar
-                </Button>
-              </Box>
-            </Grid>
-            <Grid item xs={6}>
+            {/* EDIT FORM */}
+            {stateForm.id != null &&
+              <Grid item xs={6}>
+                <Box sx={{ display: 'flex', alignItems: 'left', justifyContent: 'left' }}>
+                  <Button color='error'>
+                    Eliminar
+                  </Button>
+                </Box>
+              </Grid>
+            }
+            <Grid item xs={stateForm.id != null ? 6 : 12}>
               <Box sx={{ display: 'flex', alignItems: 'right', justifyContent: 'right' }}>
                 <Button>
                   Guardar

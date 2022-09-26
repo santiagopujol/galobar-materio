@@ -41,9 +41,9 @@ const navigation = (): VerticalNavItemsType => {
       path: '/premios'
     },
     {
-      title: 'Beneficios',
+      title: 'Motivos de visita',
       icon: GlassWine,
-      path: '/beneficios'
+      path: '/motivosdevisita'
     },
 
     // {

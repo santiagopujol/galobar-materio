@@ -222,7 +222,6 @@ export const getServerSideProps = async (context: any) => {
 
 const PremiosPage = ({ newDataPremios, filter  }: any) => {
 
-
   const setting = useSettings();
   const router = useRouter();
   const theme = useTheme()

@@ -36,7 +36,7 @@ const salesData: DataType[] = [
     icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
   },
   {
-    stats: '77',
+    stats: '400',
     title: 'Clientes',
     color: 'success',
     icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />

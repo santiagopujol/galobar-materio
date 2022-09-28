@@ -48,11 +48,11 @@ function createData(
 }
 
 const rows = [
-  createData(1, 'Pedro Perez', 'pedro@gmail.com', moment('2022-10-16').toDate(), 54, 60000, 20),
+  createData(1, 'Pedro Rodriguez', 'pedro@gmail.com', moment('2022-10-16').toDate(), 54, 60000, 20),
   createData(2, 'Marcelo Marea', 'marce@gmail.com', moment('2022-10-11').toDate(), 40, 50000, 15),
-  createData(3, 'Carlos Mive', 'fer@gmail.com', moment('2022-10-22').toDate(), 53, 30000, 5),
+  createData(3, 'Carlos Mive', 'carlosmive@gmail.com', moment('2022-10-22').toDate(), 53, 30000, 5),
   createData(4, 'Osvaldo Notx', 'osvaldo@gmail.com', moment('2022-09-15').toDate(), 44, 20000, 7),
-  createData(5, 'Mike Wasosky', 'mike@gmail.com', moment('2022-09-13').toDate(), 34, 20000, 11)
+  createData(5, 'Juan Fernandez', 'juan@gmail.com', moment('2022-09-13').toDate(), 34, 20000, 11)
 ]
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {

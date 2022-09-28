@@ -68,7 +68,7 @@
 //           message: "Premio guardado con éxito !",
 //           timeOut: 2000
 //         })
-//         Router.push('/premios');
+//         router.push('/premios');
 //       }).catch((error) => {
 //         setNotificationState({
 //           open: true,
@@ -99,7 +99,7 @@
 //           message: "Premio eliminado con éxito !",
 //           timeOut: 2000
 //         })
-//         Router.push('/premios');
+//         router.push('/premios');
 //       }).catch((error) => {
 //         setNotificationState({
 //           open: true,
@@ -232,7 +232,7 @@
 
 // export default PremiosForm;
 
-import { ChangeEvent, ElementType, useEffect, useState } from 'react';
+import { FormEvent, ChangeEvent, ElementType, useEffect, useState } from 'react';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -248,6 +248,9 @@ import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
 import { useSettings } from 'src/@core/hooks/useSettings'
 import { Common } from 'src/@core/utils/common';
+import { updateStateModalConfirm } from 'src/@core/utils/common'
+import { useRouter } from 'next/router'
+import { PremiosService } from '../../services/PremiosService';
 
 // ** Icons Imports
 import Phone from 'mdi-material-ui/Phone'
@@ -257,7 +260,6 @@ import MessageOutline from 'mdi-material-ui/MessageOutline'
 
 const PremiosForm = ({ dataPremio, edit = false }: any) => {
   const setting = useSettings();
-
   console.log(dataPremio)
   
   const ImgStyled = styled('img')(({ theme }) => ({
@@ -307,6 +309,7 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
   const imagenInicial = dataPremio.image64 || null
   const [resetImage, setResetImage] = useState(false) 
   const { modalConfirmState } = setting.settings
+  const router = useRouter()
 
   // const {
   //   setLoadingState,
@@ -315,7 +318,7 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
   //   setModalConfirmState,
   // } = useAppContext();
 
-  function handleChange(e) {
+  function handleChange(e: any) {
     if (e.target.files) {
       stateForm.imageUrl = URL.createObjectURL(e.target.files[0])
       Common.getBase64(e.target.files[0]).then(data => {
@@ -337,12 +340,12 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
     if (stateForm.imageUrl != null) {
       return true
     }
-    setNotificationState({
-      open: true,
-      type: "warning",
-      message: "Por favor, seleccionar un archivo.",
-      timeOut: 2000
-    })
+    // setNotificationState({
+    //   open: true,
+    //   type: "warning",
+    //   message: "Por favor, seleccionar un archivo.",
+    //   timeOut: 2000
+    // })
     return false
   }
 
@@ -350,23 +353,23 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
     console.log(stateForm)
     if (!validateForm()) return false;
 
-    setLoadingState(true)
+    // setLoadingState(true)
     await PremiosService.savePremio(data)
       .then((res) => {
-        setNotificationState({
-          open: true,
-          type: "success",
-          message: "Premio guardado con éxito !",
-          timeOut: 2000
-        })
-        Router.push('/premios');
+        // setNotificationState({
+        //   open: true,
+        //   type: "success",
+        //   message: "Premio guardado con éxito !",
+        //   timeOut: 2000
+        // })
+        router.push('/premios');
       }).catch((error) => {
-        setNotificationState({
-          open: true,
-          type: "error",
-          message: "Ocurrió un error al realizar la operación, intente nuevamente.",
-          timeOut: 2000
-        })
+        // setNotificationState({
+        //   open: true,
+        //   type: "error",
+        //   message: "Ocurrió un error al realizar la operación, intente nuevamente.",
+        //   timeOut: 2000
+        // })
       });
   }
 
@@ -380,24 +383,24 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalConfirmState.successResult == true])
 
-  const eliminarPremio = async function (id) {
-    setLoadingState(true)
+  const eliminarPremio = async function (id: number) {
+    // setLoadingState(true)
     await PremiosService.deletePremio(id)
       .then((res) => {
-        setNotificationState({
-          open: true,
-          type: "success",
-          message: "Premio eliminado con éxito !",
-          timeOut: 2000
-        })
-        Router.push('/premios');
+        // setNotificationState({
+        //   open: true,
+        //   type: "success",
+        //   message: "Premio eliminado con éxito !",
+        //   timeOut: 2000
+        // })
+        router.push('/premios');
       }).catch((error) => {
-        setNotificationState({
-          open: true,
-          type: "error",
-          message: "Ocurrió un error al realizar la operación, intente nuevamente.",
-          timeOut: 2000
-        })
+        // setNotificationState({
+        //   open: true,
+        //   type: "error",
+        //   message: "Ocurrió un error al realizar la operación, intente nuevamente.",
+        //   timeOut: 2000
+        // })
       });
   }
 

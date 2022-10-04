@@ -18,6 +18,7 @@ async function getPremioById(id: any) {
 }
 
 async function savePremio(data: any) {
+  console.log(data)
   delete data.image
   if (data.id != null) {
     return await FirebaseClient.updateDocByRefAndId(REFMODEL, data, data.id)

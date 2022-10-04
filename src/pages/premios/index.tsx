@@ -196,7 +196,9 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
 // ** Services
 import { updateStateLoading,
-  updateStateHeader } from 'src/@core/utils/common';
+  updateStateHeader, 
+  updateStateModalConfirm 
+} from 'src/@core/utils/common';
 import PremiosList from 'src/components/Premios/PremiosList';
 import { PremiosService } from 'src/services/PremiosService';
 
@@ -239,14 +241,29 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
     router.push(`/premios?filter=${searchValue}`);
   }
 
-  useEffect(() => {
-    updateStateHeader(setting)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // useEffect(() => {
+  //   updateStateHeader(setting, false, "", "/" )
+  //   updateStateModalConfirm(setting, false, "", false)
+
+  // }, [])
 
   useEffect(() => {
-    updateStateLoading(setting, false)
     setDataPremios(newDataPremios);
+    // updateStateLoading(setting, false)
+    // updateStateModalConfirm(setting, false, "", false)
+    // updateStateHeader(setting, false, "", "/" )
+
+    setting.saveSettings({
+      ...setting.settings,
+      loadingState: false,
+      headerState: {
+        activeIconArrow: false,
+        currentPageTitle: "",
+        prevComponentUrl: "/",
+      },
+      modalConfirmState: {}
+    })
+
   }, [newDataPremios]);
 
   return (

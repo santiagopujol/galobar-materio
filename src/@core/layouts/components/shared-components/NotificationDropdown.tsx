@@ -118,10 +118,10 @@ const NotificationDropdown = () => {
       >
         <MenuItem disableRipple>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-            <Typography sx={{ fontWeight: 600 }}>Notifications</Typography>
+            <Typography sx={{ fontWeight: 600 }}>Notificaciones</Typography>
             <Chip
               size='small'
-              label='8 New'
+              label='1 Nueva'
               color='primary'
               sx={{ height: 20, fontSize: '0.75rem', fontWeight: 500, borderRadius: '10px' }}
             />
@@ -130,17 +130,17 @@ const NotificationDropdown = () => {
         <ScrollWrapper>
           <MenuItem onClick={handleDropdownClose}>
             <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-              <Avatar alt='Flora' src='/images/avatars/4.png' />
+              <Avatar alt='Flora' src='/images/logos/logo_galo.png' />
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
-                <MenuItemTitle>Congratulation Flora! 🎉</MenuItemTitle>
-                <MenuItemSubtitle variant='body2'>Won the monthly best seller badge</MenuItemSubtitle>
+                <MenuItemTitle>Felicitaciones ! 🎉</MenuItemTitle>
+                <MenuItemSubtitle variant='body2'>Bienvenido a Club Galo</MenuItemSubtitle>
               </Box>
               <Typography variant='caption' sx={{ color: 'text.disabled' }}>
-                Today
+                Hoy
               </Typography>
             </Box>
           </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
+          {/* <MenuItem onClick={handleDropdownClose}>
             <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
               <Avatar sx={{ color: 'common.white', backgroundColor: 'primary.main' }}>VU</Avatar>
               <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
@@ -199,14 +199,14 @@ const NotificationDropdown = () => {
                 27 Dec
               </Typography>
             </Box>
-          </MenuItem>
+          </MenuItem> */}
         </ScrollWrapper>
         <MenuItem
           disableRipple
           sx={{ py: 3.5, borderBottom: 0, borderTop: theme => `1px solid ${theme.palette.divider}` }}
         >
           <Button fullWidth variant='contained' onClick={handleDropdownClose}>
-            Read All Notifications
+            Ver Todas
           </Button>
         </MenuItem>
       </Menu>

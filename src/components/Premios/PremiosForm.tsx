@@ -248,7 +248,6 @@ import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
 import { useSettings } from 'src/@core/hooks/useSettings'
 import { Common } from 'src/@core/utils/common';
-import { updateStateModalConfirm } from 'src/@core/utils/common'
 import { useRouter } from 'next/router'
 import { PremiosService } from '../../services/PremiosService';
 
@@ -258,9 +257,15 @@ import EmailOutline from 'mdi-material-ui/EmailOutline'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
 
+// ** States
+import { 
+  updateStateLoading, 
+  updateStateModalConfirm, 
+  updateStateNotificationToast 
+} from 'src/@core/utils/common';
+
 const PremiosForm = ({ dataPremio, edit = false }: any) => {
   const setting = useSettings();
-  console.log(dataPremio)
   
   const ImgStyled = styled('img')(({ theme }) => ({
     width: 120,
@@ -285,16 +290,6 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
       marginTop: theme.spacing(4)
     }
   }))
-  
-  // const onChange = (file: ChangeEvent) => {
-  //   const reader = new FileReader()
-  //   const { files } = file.target as HTMLInputElement
-  //   if (files && files.length !== 0) {
-  //     reader.onload = () => setImgSrc(reader.result as string)
-  
-  //     reader.readAsDataURL(files[0])
-  //   }
-  // }
 
   const [stateForm, setStateForm] = useState({
     id: edit ? dataPremio.id : null,
@@ -311,13 +306,6 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
   const { modalConfirmState } = setting.settings
   const router = useRouter()
 
-  // const {
-  //   setLoadingState,
-  //   setNotificationState,
-  //   modalConfirmState,
-  //   setModalConfirmState,
-  // } = useAppContext();
-
   function handleChange(e: any) {
     if (e.target.files) {
       stateForm.imageUrl = URL.createObjectURL(e.target.files[0])
@@ -331,76 +319,72 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
     }
   }
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    await saveFormData(stateForm)
-  }
-
-  const validateForm = () => {
-    if (stateForm.imageUrl != null) {
-      return true
-    }
-    // setNotificationState({
-    //   open: true,
-    //   type: "warning",
-    //   message: "Por favor, seleccionar un archivo.",
-    //   timeOut: 2000
-    // })
-    return false
-  }
+  // const handleSubmit = async (e: FormEvent) => {
+  //   e.preventDefault()
+  //   await saveFormData(stateForm)
+  // }
 
   async function saveFormData(data: object) {
     console.log(stateForm)
     if (!validateForm()) return false;
-
-    // setLoadingState(true)
-    await PremiosService.savePremio(data)
+    updateStateLoading(setting, true)
+    await PremiosService.savePremio(stateForm)
       .then((res) => {
-        // setNotificationState({
-        //   open: true,
-        //   type: "success",
-        //   message: "Premio guardado con éxito !",
-        //   timeOut: 2000
-        // })
+        updateStateNotificationToast(setting, true, "success", "Premio guardado con éxito !", 2000)
         router.push('/premios');
       }).catch((error) => {
-        // setNotificationState({
-        //   open: true,
-        //   type: "error",
-        //   message: "Ocurrió un error al realizar la operación, intente nuevamente.",
-        //   timeOut: 2000
-        // })
+        updateStateNotificationToast(setting, true, "error", "Ocurrió un error al realizar la operación, intente nuevamente.", 2000)
       });
+  }
+
+  const validateForm = () => {
+    if (stateForm.nombre == null || stateForm.nombre == "") {
+      updateStateNotificationToast(setting, true, "warning", "Por favor, ingrese un nombre.", 2000)
+      return false
+    }
+
+    if (stateForm.puntos == null || stateForm.puntos == "") {
+      updateStateNotificationToast(setting, true, "warning", "Por favor, ingrese valor en puntos.", 2000)
+      return false
+    }
+
+    if (stateForm.imageUrl == null) {
+      updateStateNotificationToast(setting, true, "warning", "Por favor, seleccionar un archivo.", 2000)
+      return false
+    }
+
+    return true
   }
 
   // Efecto secundario para escuchar la respuesta del modal de confirmacion 
   useEffect(() => {
+    console.log("hola", modalConfirmState)
     if (modalConfirmState.method === "eliminar_premio" && modalConfirmState.successResult == true) {
       eliminarPremio(stateForm.id)
-      updateStateModalConfirm(setting, false, "", false)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalConfirmState.successResult == true])
 
   const eliminarPremio = async function (id: number) {
-    // setLoadingState(true)
+    console.log(id)
+    setting.saveSettings({
+      ...setting.settings,
+      loadingState: false,
+      modalConfirmState: {}
+    })
+    // updateStateNotificationToast(setting, true, "success", "Premio eliminado con éxito !", 2000)
+
     await PremiosService.deletePremio(id)
       .then((res) => {
-        // setNotificationState({
-        //   open: true,
-        //   type: "success",
-        //   message: "Premio eliminado con éxito !",
-        //   timeOut: 2000
-        // })
+        // updateStateNotificationToast(setting, true, "success", "Premio eliminado con éxito !", 2000)
+        alert("eliminado")
+
         router.push('/premios');
       }).catch((error) => {
-        // setNotificationState({
-        //   open: true,
-        //   type: "error",
-        //   message: "Ocurrió un error al realizar la operación, intente nuevamente.",
-        //   timeOut: 2000
-        // })
+        alert("error")
+
+        // updateStateNotificationToast(setting, true, "error", "Ocurrió un error al realizar la operación, intente nuevamente.", 2000)
       });
   }
 
@@ -546,7 +530,7 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
             {stateForm.id != null &&
               <Grid item xs={6}>
                 <Box sx={{ display: 'flex', alignItems: 'left', justifyContent: 'left' }}>
-                  <Button color='error'>
+                  <Button color='error' onClick={() => updateStateModalConfirm(setting, true, "eliminar_premio")}>
                     Eliminar
                   </Button>
                 </Box>
@@ -554,7 +538,7 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
             }
             <Grid item xs={stateForm.id != null ? 6 : 12}>
               <Box sx={{ display: 'flex', alignItems: 'right', justifyContent: 'right' }}>
-                <Button>
+                <Button onClick={() => saveFormData() }>
                   Guardar
                 </Button>
               </Box>

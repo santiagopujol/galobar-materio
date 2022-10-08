@@ -327,13 +327,31 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
   async function saveFormData(data: object) {
     console.log(stateForm)
     if (!validateForm()) return false;
-    updateStateLoading(setting, true)
+    setting.saveSettings({ ...setting.settings, loadingState: true })
     await PremiosService.savePremio(stateForm)
       .then((res) => {
-        updateStateNotificationToast(setting, true, "success", "Premio guardado con éxito !", 2000)
+        setting.saveSettings({
+          ...setting.settings,
+          loadingState: false,
+          notificationState: {
+            open: true,
+            type: "success",
+            message: "Premio guardado con éxito !",
+            timeOut: 2000
+          },
+        })
         router.push('/premios');
       }).catch((error) => {
-        updateStateNotificationToast(setting, true, "error", "Ocurrió un error al realizar la operación, intente nuevamente.", 2000)
+        setting.saveSettings({
+          ...setting.settings,
+          loadingState: false,
+          notificationState: {
+            open: true,
+            type: "error",
+            message: "Ocurrió un error al realizar la operación, intente nuevamente.",
+            timeOut: 2000
+          },
+        })
       });
   }
 
@@ -368,23 +386,34 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
 
   const eliminarPremio = async function (id: number) {
     console.log(id)
-    setting.saveSettings({
-      ...setting.settings,
-      loadingState: false,
-      modalConfirmState: {}
-    })
-    // updateStateNotificationToast(setting, true, "success", "Premio eliminado con éxito !", 2000)
-
+    setting.saveSettings({ ...setting.settings, loadingState: true })
     await PremiosService.deletePremio(id)
       .then((res) => {
-        // updateStateNotificationToast(setting, true, "success", "Premio eliminado con éxito !", 2000)
-        alert("eliminado")
-
+        setting.saveSettings({
+          ...setting.settings,
+          loadingState: false,
+          modalConfirmState: {},
+          notificationState: {
+            open: true,
+            type: "success",
+            message: "Premio eliminado con éxito !",
+            timeOut: 2000
+          },
+        })
         router.push('/premios');
       }).catch((error) => {
         alert("error")
-
-        // updateStateNotificationToast(setting, true, "error", "Ocurrió un error al realizar la operación, intente nuevamente.", 2000)
+        setting.saveSettings({
+          ...setting.settings,
+          loadingState: false,
+          modalConfirmState: {},
+          notificationState: {
+            open: true,
+            type: "error",
+            message: "Ocurrió un error al realizar la operación, intente nuevamente.",
+            timeOut: 2000
+          },
+        })
       });
   }
 

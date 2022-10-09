@@ -1,127 +1,12 @@
-// import customStyles from '../../styles/custom.module.css';
-// import moment from 'moment';
-// import { FaBirthdayCake } from 'react-icons/fa';
-// import { BsPhone } from 'react-icons/bs';
-// import { RiVipLine } from 'react-icons/ri';
-// import { AiOutlineMail } from 'react-icons/ai'
-
-// const ClientesListItemInfoTab = ({ dataCliente }) => {
-//   const {
-//     merge_fields: { FNAME, LNAME, PHONE, BIRTHDAY },
-//     email_address,
-//     vip,
-//     last_changed,
-//   } = dataCliente;
-
-//   return (
-//     <>
-//       <div className="shadow-md border-r-1 pb-1 shadow-slate-600/50 rounded mt-3">
-//         <table className="responsive w-full text-left ">
-//           {/* 
-//             <thead className={"text-base " + customStyles.bg_primary_app + " " + customStyles.col_secondary_app}>
-//               <tr>
-//                   <th scope="col" className={`px-4 py-2 text-md w-fit flex flex-row align-middle items-center ${customStyles.font_app_content}`}>
-//                       <Image src={imageInfo} alt="notebook" width={25} height={25} />
-//                       <span className="pl-3">Información</span>
-//                   </th>
-//               </tr>
-//             </thead> 
-//           */}
-//           <tbody>
-//             {/* <tr className="border-b border-gray-300"> */}
-//               {/* <td className="px-3 py-3 font-bold rounded inline-flex items-center"> */}
-//                 {/* <div className="relative w-10 h-10 mr-4 mb-2 overflow-hidden rounded-full ">
-//                   <svg
-//                     className={'absolute w-12 h-12 -left-1 ' + customStyles.col_primary_app}
-//                     fill="currentColor"
-//                     viewBox="0 0 20 20"
-//                     xmlns="http://www.w3.org/2000/svg"
-//                   >
-//                     <path
-//                       fillRule="evenodd"
-//                       d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-//                       clipRule="evenodd"
-//                     ></path>
-//                   </svg>
-//                 </div> */}
-//                 {/* <div className={'text-left ' + customStyles.font_app_content}>
-//                   <b className="text-gray-900">
-//                     {FNAME.toUpperCase()} {LNAME.toUpperCase()}
-//                   </b> */}
-//                   {/* <p className="text-gray-500 text-sm"> {email_address}</p> */}
-                
-//               {/* </td> */}
-//             {/* </tr> */}
-//             <tr>
-//               <td
-//                 className={`pl-7 rounded pt-3 pb-2 inline-block w-auto ${customStyles.font_app_content}`}
-//               >
-//                 <p className="flex gap-1 items-center font-bold align-middle">
-//                   <AiOutlineMail /><span>Email</span>
-//                 </p>
-//                 <p className="text-gray-900">
-//                   <p className="text-gray-500 font-bold">{email_address != '' ? email_address : '-'}</p>
-//                 </p>
-//               </td>
-//             </tr>
-//             <tr>
-//               <td
-//                 className={`pl-7 rounded pt-3 pb-2 inline-block w-auto ${customStyles.font_app_content}`}
-//               >
-//                 <p className="flex gap-1 items-center font-bold align-middle">
-//                   <BsPhone /><span>Teléfono</span>
-//                 </p>
-//                 <p className="text-gray-900">
-//                   <p className="text-gray-500">{PHONE != '' ? PHONE : '-'}</p>
-//                 </p>
-//               </td>
-//             </tr>
-//             <tr>
-//               <td
-//                 className={`pl-7 rounded pt-2 pb-2 inline-block w-auto ${customStyles.font_app_content}`}
-//               >
-//                 <p className="flex gap-1 items-center font-bold align-middle">
-//                   <FaBirthdayCake />
-//                   <span>Cumpleaños</span>
-//                 </p>
-//                 <p className="text-gray-500">{BIRTHDAY != '' ? BIRTHDAY : '-'}</p>
-//               </td>
-//             </tr>
-//             <tr>
-//               <td
-//                 className={`pl-7 rounded pt-2 pb-2 inline-block w-auto ${customStyles.font_app_content}`}
-//               >
-//                 <p className="flex gap-1 items-center font-bold align-middle">
-//                   <RiVipLine /> <span>Vip:</span>
-//                 </p>
-//                 <p className={"font-bold " + (!vip ? 'text-green-500' : 'text-red-500')}>{!vip ? 'Si' : 'No'}</p>
-//               </td>
-//             </tr>
-//             <tr>
-//               <td
-//                 className={`pl-7 rounded pt-2 pb-2 inline-block w-auto ${customStyles.font_app_content}`}
-//               >
-//                 <p className="flex gap-1 items-center font-bold align-middle">Ult. Modificación</p>
-//                 <p className="text-gray-500">
-//                   {last_changed != null && moment(Date.parse(last_changed)).format('DD/MM/YYYY')}
-//                 </p>
-//               </td>
-//             </tr>
-//           </tbody>
-//         </table>
-//       </div>
-//     </>
-//   )
-// }
-
-// export default ClientesListItemInfoTab;
-
-
 // ** React Imports
 import { useState, ElementType, ChangeEvent, SyntheticEvent } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import CardMedia from '@mui/material/CardMedia'
+import AvatarGroup from '@mui/material/AvatarGroup'
+import Avatar from '@mui/material/Avatar'
 import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
 import Alert from '@mui/material/Alert'
@@ -141,7 +26,7 @@ import Button, { ButtonProps } from '@mui/material/Button'
 import Close from 'mdi-material-ui/Close'
 
 // App Imports
-// import moment from 'moment';
+import moment from 'moment';
 
 
 const ImgStyled = styled('img')(({ theme }) => ({
@@ -192,7 +77,60 @@ const ClientesListItemInfoTab = ({ dataCliente }: { dataCliente: any }) => {
 
   return (
     <CardContent>
-      <form>
+      <Card sx={{ position: 'relative' }}>
+      <CardMedia sx={{ height: '5rem' }} image='/images/cards/background-user.png' />
+      <Avatar
+        alt='Robert Meyer'
+        src='/images/avatars/1.png'
+        sx={{
+          width: 75,
+          height: 75,
+          left: '1.313rem',
+          top: '2.28125rem',
+          position: 'absolute',
+          border: theme => `0.25rem solid ${theme.palette.common.white}`
+        }}
+      />
+      <CardContent>
+        <Box
+          sx={{
+            mt: 5.75,
+            mb: 8.75,
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <Box sx={{ mr: 2, mb: 1, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant='h6'>{FNAME.toUpperCase()} {LNAME.toUpperCase()}</Typography>
+            <Typography variant='body2'>{email_address != '' ? email_address : '-'}</Typography>
+            <br></br>
+            <Typography variant='body2'>Teléfono: <b>{PHONE != '' ? PHONE : '-'}</b></Typography>
+            <Typography variant='body2'>Cumpleaños: <b>{BIRTHDAY != '' ?  BIRTHDAY.split('/')[1] + "/" + BIRTHDAY.split('/')[0] : '-'}</b></Typography>
+            <Typography variant='body2'>Vip: <b>{!vip ? 'Si' : 'No'}</b></Typography>
+            <Typography variant='body2'>Última Modificación: <b>{last_changed != null && moment(Date.parse(last_changed)).format('DD/MM/YYYY')}</b></Typography>
+          </Box>
+          {/* <Button variant='contained'>Send Request</Button> */}
+        </Box>
+        {/* <Box sx={{ gap: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant='subtitle2' sx={{ whiteSpace: 'nowrap', color: 'text.primary' }}>
+            18 mutual friends
+          </Typography> 
+          <AvatarGroup max={4}>
+            <Avatar src='/images/avatars/8.png' alt='Alice Cobb' />
+            <Avatar src='/images/avatars/7.png' alt='Jeffery Warner' />
+            <Avatar src='/images/avatars/3.png' alt='Howard Lloyd' />
+            <Avatar src='/images/avatars/2.png' alt='Bettie Dunn' />
+            <Avatar src='/images/avatars/4.png' alt='Olivia Sparks' />
+            <Avatar src='/images/avatars/5.png' alt='Jimmy Hanson' />
+            <Avatar src='/images/avatars/6.png' alt='Hallie Richards' />
+          </AvatarGroup>
+        </Box> */}
+      </CardContent>
+    </Card>
+
+      {/* <form>
         <Grid container spacing={7}>
           <Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -287,7 +225,7 @@ const ClientesListItemInfoTab = ({ dataCliente }: { dataCliente: any }) => {
             </Button>
           </Grid>
         </Grid>
-      </form>
+      </form> */}
     </CardContent>
   )
 }

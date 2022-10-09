@@ -119,7 +119,7 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <AccountOutline />
-                <TabName>Account</TabName>
+                <TabName>Información</TabName>
               </Box>
             }
           />
@@ -128,7 +128,7 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <LockOpenOutline />
-                <TabName>Security</TabName>
+                <TabName>Puntos</TabName>
               </Box>
             }
           />
@@ -137,7 +137,7 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <InformationOutline />
-                <TabName>Info</TabName>
+                <TabName>Premios</TabName>
               </Box>
             }
           />

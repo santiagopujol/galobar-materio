@@ -168,7 +168,7 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   const setting = useSettings();
 
   const [order, setOrder] = useState<Order>('asc')
-  const [orderBy, setOrderBy] = useState<keyof Data>('ultimaOperacion')
+  const [orderBy, setOrderBy] = useState<keyof Data>('fechaOperacion')
   const [page, setPage] = useState(0)
   const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(5)
@@ -192,10 +192,11 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
     setDense(event.target.checked)
   }
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
-
   interface State {
-    puntos: string
+    puntos: string,
+    fechaOperacion: string
+    tipoOperacion: string,
+    clientId: string,
   }
   
   const [stateForm, setStateForm] = useState<State>({
@@ -204,6 +205,13 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
     tipoOperacion: 'Crédito',
     clientId: dataCliente.id
   })
+
+  // const [stateForm, setStateForm] = useState({
+  //   puntos: '',
+  //   fechaOperacion: moment(Date.now()).format("yyyy-MM-DD hh:mm"),
+  //   tipoOperacion: 'Crédito',
+  //   clientId: dataCliente.id,
+  // });
 
   const handlePuntosInputChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setStateForm({ ...stateForm, [prop]: event.target.value })
@@ -252,11 +260,13 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   }
   
   const getAndSetDataOperaciones = () => {
-    FirebaseClient.getOperacionesByClienteFirestore(dataCliente.id).then((result) => {
+    FirebaseClient.getOperacionesByClienteFirestore(dataCliente.id).then((result: any) => {
       console.log(result);
       setRows(result)
     });
   };
+  
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   useEffect(() => {
     getAndSetDataOperaciones();
@@ -328,7 +338,7 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
                   const labelId = `enhanced-table-checkbox-${index}`
 
                   return (
-                    <TableRow hover role='checkbox' tabIndex={-1} key={row.id}>
+                    <TableRow hover role='checkbox' tabIndex={-1} key={index}>
                       <TableCell align='left'>{moment(row.fechaOperacion).format('DD/MM/YYYY HH:MM')}</TableCell>
                       <TableCell align='left'>{row.tipoOperacion}</TableCell>
                       <TableCell align='left'>{row.puntos}</TableCell>

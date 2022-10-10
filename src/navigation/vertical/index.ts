@@ -43,7 +43,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Motivos de visita',
       icon: GlassWine,
-      path: '/motivosdevisita'
+      path: '/motivos_visita'
     },
 
     // {

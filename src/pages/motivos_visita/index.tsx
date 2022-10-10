@@ -24,8 +24,8 @@ import { updateStateLoading,
   updateStateHeader, 
   updateStateModalConfirm 
 } from 'src/@core/utils/common';
-import PremiosList from 'src/components/Premios/PremiosList';
-import { PremiosService } from 'src/services/PremiosService';
+import MotivosVisitaList from 'src/components/MotivosVisita/MotivosVisitaList';
+import { MotivosVisitaService } from 'src/services/MotivosVisitaService';
 
 export const getServerSideProps = async (context: any) => {
   const { query } = context;
@@ -33,37 +33,37 @@ export const getServerSideProps = async (context: any) => {
     filter = '',
   } = query != null && query;
 
-  let newDataPremios = await PremiosService.getAllPremios();
+  let newData = await MotivosVisitaService.getAll();
 
   if (filter != '') {
-    newDataPremios = await PremiosService.filterAndOrderPremios(newDataPremios, filter);
+    newData = await MotivosVisitaService.filterAndOrder(newData, filter);
   }
 
   return {
     props: {
-      newDataPremios,
+      newData,
       filter
     },
   };
 };
 
-const PremiosPage = ({ newDataPremios, filter  }: any) => {
+const MotivosVisitaPage = ({ newData, filter  }: any) => {
 
   const setting = useSettings();
   const router = useRouter();
   const theme = useTheme()
 
-  const [dataPremios, setDataPremios]: any = useState([]);
+  const [data, setData]: any = useState([]);
   const [searchValue, setSearchValue] = useState(filter ? filter : '');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
 
-  const SearchPremios = (e: any) => {
+  const Search = (e: any) => {
     e.preventDefault();
     updateStateLoading(setting, true)
-    router.push(`/premios?filter=${searchValue}`);
+    router.push(`/motivos_visita?filter=${searchValue}`);
   }
 
   // useEffect(() => {
@@ -73,7 +73,7 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
   // }, [])
 
   useEffect(() => {
-    setDataPremios(newDataPremios);
+    setData(newData);
     // updateStateLoading(setting, false)
     // updateStateModalConfirm(setting, false, "", false)
     // updateStateHeader(setting, false, "", "/" )
@@ -89,7 +89,7 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
       modalConfirmState: {}
     })
 
-  }, [newDataPremios]);
+  }, [newData]);
 
   return (
     <>
@@ -98,7 +98,7 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
           <Grid item xs={12} md={12}>
             <Box sx={{width: '100%'}}
             >
-              <form onSubmit={e => SearchPremios(e)}>
+              <form onSubmit={e => Search(e)}>
                 <TextField
                   size='small'
                   id='filter'
@@ -124,7 +124,7 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
           </Grid>
           <Grid item xs={12}>
             <Card>
-              <CardHeader title='Premios'
+              <CardHeader title='Motivos de visita'
                 action={
                   <React.Fragment>
                     <IconButton size='small' aria-label='settings' className='card-more-options' 
@@ -133,14 +133,14 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
                     </IconButton>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <IconButton color="info" size='small' aria-label='settings' className='card-more-options'
-                      onClick={() => router.push('/premios/new')}
+                      onClick={() => router.push('/motivos_visita/new')}
                       >
                       <PlusThick color="info" />
                     </IconButton>
                   </React.Fragment>
                 }
               />
-              <PremiosList dataPremios={dataPremios} />
+              <MotivosVisitaList data={data} />
             </Card>
           </Grid>
             
@@ -150,4 +150,4 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
   )
 }
 
-export default PremiosPage
+export default MotivosVisitaPage

@@ -11,12 +11,12 @@ import {
 import Pencil from 'mdi-material-ui/Pencil'
 import { useRouter } from 'next/router'
 
-const PremiosListItem = ({ element }: any) => {
+const MotivosVisitaListItem = ({ element }: any) => {
   const theme = useTheme()
   const router = useRouter()
 
   const openItem = (element: any) => {
-    router.push('/premios/' + element.id)
+    router.push('/motivos_visita/' + element.id)
   }
 
   return (
@@ -30,13 +30,6 @@ const PremiosListItem = ({ element }: any) => {
             <React.Fragment>
               <Typography>
                 <b>{element.nombre}</b>
-              </Typography>
-              <Typography
-                sx={{ display: 'inline', fontWeight: "875", color: theme.palette.info.main }}
-                component='span'
-                variant='body2'
-              >
-                {element.puntos} Puntos
               </Typography>
               <Typography>
                 <small>
@@ -58,4 +51,4 @@ const PremiosListItem = ({ element }: any) => {
   )
 }
 
-export default PremiosListItem
+export default MotivosVisitaListItem

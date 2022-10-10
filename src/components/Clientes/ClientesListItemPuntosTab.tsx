@@ -1,5 +1,254 @@
-const ClientesListItemPuntosTab = {
+// ** React Imports
+import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 
+// ** MUI Imports
+import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+
+import Grid from '@mui/material/Grid'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import Divider from '@mui/material/Divider'
+import InputLabel from '@mui/material/InputLabel'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
+import CardContent from '@mui/material/CardContent'
+import FormControl from '@mui/material/FormControl'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import InputAdornment from '@mui/material/InputAdornment'
+
+// ** Icons Imports
+import EyeOutline from 'mdi-material-ui/EyeOutline'
+import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
+import CashIcon from 'mdi-material-ui/Cash'
+
+// App Imports
+import moment from 'moment';
+import { Numeric9PlusCircle } from 'mdi-material-ui'
+
+import Paper from '@mui/material/Paper'
+import Table from '@mui/material/Table'
+import TableRow from '@mui/material/TableRow'
+import TableHead from '@mui/material/TableHead'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TablePagination from '@mui/material/TablePagination'
+
+const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
+
+  interface State {
+    puntos: string
+  }
+  
+  const [values, setValues] = useState<State>({
+    puntos: '',
+  })
+
+  const handlePuntosInputChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
+    setValues({ ...values, [prop]: event.target.value })
+  }
+
+  const [dataPuntosCliente, setDataPuntosCliente] = useState(null);
+  const [dataOperacionesByCliente, setDataOperacionesByCliente] = useState([]);
+
+  const getPuntosCliente = async () => {
+    // await FirebaseClient.getPuntosByClienteFirestore(dataCliente.id).then((result) => {
+    //   console.log('Resultados', result);
+    //   setDataPuntosCliente(result[0]);
+    // });
+    // setLoadingState(false);
+
+    // return JSON.stringify(dataOperaciones)
+  };
+
+  const getDataOperaciones = () => {
+    // FirebaseClient.getOperacionesByClienteFirestore(dataCliente.id).then((result) => {
+      // console.log(result);
+      // setDataOperacionesByCliente(result);
+    // });
+    // return JSON.stringify(dataOperaciones)
+  };
+  
+  interface Column {
+    id: 'name' | 'code' | 'population' | 'size' | 'density'
+    label: string
+    minWidth?: number
+    align?: 'right'
+    format?: (value: number) => string
+  }
+  
+  const columns: readonly Column[] = [
+    { id: 'name', label: 'Name', minWidth: 170 },
+    { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+    {
+      id: 'population',
+      label: 'Population',
+      minWidth: 170,
+      align: 'right',
+      format: (value: number) => value.toLocaleString('en-US')
+    },
+    {
+      id: 'size',
+      label: 'Size\u00a0(km\u00b2)',
+      minWidth: 170,
+      align: 'right',
+      format: (value: number) => value.toLocaleString('en-US')
+    },
+    {
+      id: 'density',
+      label: 'Density',
+      minWidth: 170,
+      align: 'right',
+      format: (value: number) => value.toFixed(2)
+    }
+  ]
+  
+  interface Data {
+    name: string
+    code: string
+    size: number
+    density: number
+    population: number
+  }
+  
+  function createData(name: string, code: string, population: number, size: number): Data {
+    const density = population / size
+  
+    return { name, code, population, size, density }
+  }
+  
+  const rows = [
+    createData('India', 'IN', 1324171354, 3287263),
+    createData('China', 'CN', 1403500365, 9596961),
+    createData('Italy', 'IT', 60483973, 301340),
+    createData('United States', 'US', 327167434, 9833520),
+    createData('Canada', 'CA', 37602103, 9984670),
+    createData('Australia', 'AU', 25475400, 7692024),
+    createData('Germany', 'DE', 83019200, 357578),
+    createData('Ireland', 'IE', 4857000, 70273),
+    createData('Mexico', 'MX', 126577691, 1972550),
+    createData('Japan', 'JP', 126317000, 377973),
+    createData('France', 'FR', 67022000, 640679),
+    createData('United Kingdom', 'GB', 67545757, 242495),
+    createData('Russia', 'RU', 146793744, 17098246),
+    createData('Nigeria', 'NG', 200962417, 923768),
+    createData('Brazil', 'BR', 210147125, 8515767)
+  ]
+  
+  const [page, setPage] = useState<number>(0)
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10)
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(+event.target.value)
+    setPage(0)
+  }
+
+  useEffect(() => {
+    // getPuntosCliente();
+    // getDataOperaciones();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ** State
+
+  return (
+    <form>
+      <CardContent sx={{ paddingBottom: 0 }}>
+        <Grid container spacing={5}>
+          <Grid item xs={12} sm={6}>
+            <Grid container spacing={5}>
+              <Grid item xs={12} sx={{ marginTop: 4.75 }}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor='puntos-input'>Puntos</InputLabel>
+                  <OutlinedInput
+                    label='Puntos'
+                    value={values.puntos}
+                    id='puntos-input'
+                    type='number'
+                    onChange={handlePuntosInputChange('puntos')}
+                    endAdornment={
+                      <InputAdornment position='end'>
+                        <IconButton
+                          edge='end'
+                          aria-label='puntos-icon'
+                        >
+                          <CashIcon/>
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </Grid>
+              
+            </Grid>
+
+            <Box sx={{ mt: 5 }}>
+                <Button variant='contained' sx={{ marginRight: 3.5 }}>
+                    Cargar Puntos
+                </Button>
+              </Box>
+          </Grid>
+
+          <Grid
+            item
+            sm={6}
+            xs={12}
+            sx={{ display: 'flex', marginTop: [7.5, 2.5], alignItems: 'center', justifyContent: 'center' }}
+          >
+            <img width={183} alt='avatar' height={256} src='/images/pages/pose-m-1.png' />
+          </Grid>
+        </Grid>
+
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label='sticky table'>
+              <TableHead>
+                <TableRow>
+                  {columns.map(column => (
+                    <TableCell key={column.id} align={column.align} sx={{ minWidth: column.minWidth }}>
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
+                  return (
+                    <TableRow hover role='checkbox' tabIndex={-1} key={row.code}>
+                      {columns.map(column => {
+                        const value = row[column.id]
+
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format && typeof value === 'number' ? column.format(value) : value}
+                          </TableCell>
+                        )
+                      })}
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component='div'
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+
+      </CardContent>
+    </form>
+  )
 }
 
 export default ClientesListItemPuntosTab

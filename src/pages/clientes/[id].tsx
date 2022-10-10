@@ -17,8 +17,8 @@ import MuiTab, { TabProps } from '@mui/material/Tab'
 
 // ** Icons Imports
 import AccountOutline from 'mdi-material-ui/AccountOutline'
-import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
-import InformationOutline from 'mdi-material-ui/InformationOutline'
+import CashIcon from 'mdi-material-ui/Cash'
+import GiftOutline from 'mdi-material-ui/GiftOutline'
 
 // ** Demo Tabs Imports
 import TabInfo from 'src/views/account-settings/TabInfo'
@@ -27,6 +27,8 @@ import TabSecurity from 'src/views/account-settings/TabSecurity'
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 import ClientesListItemInfoTab from 'src/components/Clientes/ClientesListItemInfoTab';
+import ClientesListItemPuntosTab from 'src/components/Clientes/ClientesListItemPuntosTab';
+import ClientesListItemPremiosTab from 'src/components/Clientes/ClientesListItemPremiosTab';
 
 // ** Hooks
 import { useSettings } from 'src/@core/hooks/useSettings'
@@ -127,7 +129,7 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
             value='security'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <LockOpenOutline />
+                <CashIcon />
                 <TabName>Puntos</TabName>
               </Box>
             }
@@ -136,7 +138,7 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
             value='info'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <InformationOutline />
+                <GiftOutline />
                 <TabName>Premios</TabName>
               </Box>
             }
@@ -147,10 +149,13 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
           <ClientesListItemInfoTab dataCliente={dataCliente} />
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='security'>
-          <TabSecurity />
+          {/* <TabSecurity /> */}
+          <ClientesListItemPuntosTab dataCliente={dataCliente} />
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='info'>
           <TabInfo />
+          {/* <ClientesListItemPremiosTab dataCliente={dataCliente} /> */}
+
         </TabPanel>
       </TabContext>
     </Card>

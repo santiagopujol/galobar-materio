@@ -185,7 +185,7 @@ function EnhancedTableHead(props: any) {
   )
 }
 
-export default function EnhancedTable() {
+export default function Ranking() {
   const [order, setOrder] = React.useState<Order>('asc')
   const [orderBy, setOrderBy] = React.useState<keyof Data>('ultimaOperacion')
   const [page, setPage] = React.useState(0)

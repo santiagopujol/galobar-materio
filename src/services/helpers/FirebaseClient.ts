@@ -151,6 +151,6 @@ async function getOperacionesByClienteFirestore(id: any) {
     const q = query(colRef, where("clientId", "==", id));
     const snapshot = await getDocs(q);
     const list = snapshot.docs.map(doc => doc.data());
-
+    
     return list;
 }

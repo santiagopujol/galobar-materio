@@ -38,6 +38,11 @@ const PremiosListItem = ({ element }: any) => {
               >
                 {element.puntos} Puntos
               </Typography>
+              <Typography>
+                <small>
+                  {element.descripcion}
+                </small>
+              </Typography>
             </React.Fragment>
           }
         />

@@ -43,7 +43,6 @@ export const getServerSideProps = async (context: any) => {
 
   //Get data puntos de la base y pasarlo al componente de puntos
   // ...
-  console.log(dataCliente)
 
   return {
     props: {

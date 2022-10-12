@@ -99,7 +99,6 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
   // };
 
   useEffect(() => {
-    console.log(dataCliente)
     updateStateHeader(setting, true, dataCliente.email_address , "/clientes" )
     // setLoadingState(false);
     // setActiveTabDetalleClientes("submenu-tab-clientes-detalle")

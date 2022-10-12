@@ -244,7 +244,6 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   }
 
   async function saveFormPuntos() {
-    console.log(stateForm)
     if (!validateForm()) return false;
     setting.saveSettings({ ...setting.settings, loadingState: true })
     await FirebaseClient.addDocByRef("operaciones_miembros", stateForm)
@@ -298,11 +297,11 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   useEffect(() => {
     const getData = async () => {
       const dataMotivosResult = await getDataMotivosVisita().then(result => result);
+      console.log(dataMotivosResult)
       setDataMotivosVisita(dataMotivosResult)
       getAndSetDataOperaciones(dataMotivosResult);
     }
-
-
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

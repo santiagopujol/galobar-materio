@@ -1,22 +1,19 @@
 // ** React Imports
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import InputLabel from '@mui/material/InputLabel'
 import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
 import CardHeader from '@mui/material/CardHeader'
-import Checkbox from '@mui/material/Checkbox'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import { visuallyHidden } from '@mui/utils'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
@@ -42,8 +39,6 @@ import TablePagination from '@mui/material/TablePagination'
 import { FirebaseClient } from 'src/services/helpers/FirebaseClient'
 
 import { 
-  updateStateLoading, 
-  updateStateModalConfirm, 
   updateStateNotificationToast 
 } from 'src/@core/utils/common';
 
@@ -308,7 +303,6 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   useEffect(() => {
     const getData = async () => {
       const dataMotivosResult = await getDataMotivosVisita().then(result => result);
-      console.log(dataMotivosResult)
       setDataMotivosVisita(dataMotivosResult)
       getAndSetDataOperaciones(dataMotivosResult);
     }

@@ -1,16 +1,14 @@
 // ** React Imports
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import InputLabel from '@mui/material/InputLabel'
 import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
@@ -25,9 +23,6 @@ import {
   useTheme
 } from '@mui/material'
 
-// ** Icons Imports
-import CashIcon from 'mdi-material-ui/Cash'
-
 // App Imports
 import moment from 'moment';
 
@@ -40,19 +35,17 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import { FirebaseClient } from 'src/services/helpers/FirebaseClient'
+import { PremiosService } from 'src/services/PremiosService';
 
 import { 
-  updateStateLoading, 
-  updateStateModalConfirm, 
   updateStateNotificationToast 
 } from 'src/@core/utils/common';
 
 interface Data {
   id: number,
   fechaOperacion: Date,
-  tipoOperacion: string,
   puntos: number,
-  motivoVisitaNombre: string,
+  premioNombre: string,
 }
 
 function createData(
@@ -60,14 +53,13 @@ function createData(
   fechaOperacion: Date,
   tipoOperacion: string,
   puntos: number,
-  motivoVisitaNombre: string,
+  premioNombre: string,
 ): Data {
   return {
     id,
     fechaOperacion,
-    tipoOperacion,
     puntos,
-    motivoVisitaNombre
+    premioNombre
   }
 }
 
@@ -124,16 +116,10 @@ const headCells: readonly HeadCell[] = [
     label: 'Fecha Operación'
   },
   {
-    id: 'motivoVisitaNombre',
+    id: 'premioNombre',
     numeric: false,
     disablePadding: false,
     label: 'Motivo Visita'
-  },
-  {
-    id: 'tipoOperacion',
-    numeric: false,
-    disablePadding: true,
-    label: 'Operación'
   },
   {
     id: 'puntos',
@@ -189,15 +175,17 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
   const [rows, setRows] = useState([]); //dataOperacionesByCliente
-  const [dataMotivosVisita, setDataMotivosVisita] = useState([]);
+  const [dataPremios, setDataPremios] = useState([]);
   const [stateForm, setStateForm] = useState<State>({
     puntos: '',
-    motivoVisitaId: '',
+    premioId: '',
     fechaOperacion: moment(Date.now()).format("yyyy-MM-DD hh:mm"),
-    tipoOperacion: 'Crédito',
     clientId: dataCliente.id
   })
 
+  const [totalPuntosUsados, setTotalPuntosUsados] = useState(0)
+  const [totalPuntosDisponibles, setTotalPuntosDisponibles] = useState(0)
+  
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
@@ -213,44 +201,41 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
     setPage(0)
   }
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked)
-  }
-
   interface State {
     puntos: string,
-    motivoVisitaId: string,
+    premioId: string,
     fechaOperacion: string
-    tipoOperacion: string,
     clientId: string,
   }
 
-  const handleInputChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
-    setStateForm({ ...stateForm, [prop]: event.target.value })
-  }
-
-  const handleSelectChange = (prop: keyof State) => (event: SelectChangeEvent<string>) => {
-    setStateForm({ ...stateForm, [prop]: event.target.value })
+  const handleSelectChange = (prop1: keyof State, prop2: keyof State) => (event: SelectChangeEvent<string>) => {
+    setStateForm({ 
+      ...stateForm, 
+      [prop1]: event.target.value.split("-")[0], 
+      [prop2]: event.target.value.split("-")[1] 
+    })
   }
 
   const validateForm = () => {
-    if (stateForm.puntos == null || stateForm.puntos == "") {
-      updateStateNotificationToast(setting, true, "warning", "Por favor, ingrese puntos a cargar.", 2000)
+
+    if (stateForm.premioId == '') {
+      updateStateNotificationToast(setting, true, "warning", "Por favor, ingrese un premio a canjear.", 2000)
       return false
     }
 
-    if (stateForm.motivoVisitaId == '') {
-      updateStateNotificationToast(setting, true, "warning", "Por favor, ingrese un motivo de visita.", 2000)
+    if (Number(stateForm.puntos) > totalPuntosDisponibles) {
+      updateStateNotificationToast(setting, true, "warning", "No tiene suficientes puntos para cargar este premio.", 2000)
       return false
     }
 
     return true
   }
 
-  async function saveFormPuntos() {
+  async function saveFormCanjePremio() {
+    console.log(stateForm)
     if (!validateForm()) return false;
     setting.saveSettings({ ...setting.settings, loadingState: true })
-    await FirebaseClient.addDocByRef("operaciones_miembros", stateForm)
+    await FirebaseClient.addDocByRef("canje_premios", stateForm)
       .then((res) => {
         setting.saveSettings({
           ...setting.settings,
@@ -258,12 +243,20 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
           notificationState: {
             open: true,
             type: "success",
-            message: "Puntos cargados con éxito !",
+            message: "Premio canjeado con éxito !",
             timeOut: 2000
           },
         })
-        setStateForm({...stateForm, puntos: '', motivoVisitaId: ''})
-        getAndSetDataOperaciones(dataMotivosVisita);
+        setStateForm({...stateForm, premioId: ''})
+        FirebaseClient.addDocByRef("operaciones_miembros", {
+          puntos: -stateForm.puntos,
+          motivoVisitaId: 'lYei1m0Xot7daKfdAraA', // motivo canje premios, temporal
+          fechaOperacion: moment(Date.now()).format("yyyy-MM-DD hh:mm"),
+          tipoOperacion: 'Débito',
+          clientId: dataCliente.id
+        })
+        getAndSetDataPremiosCanjeados(dataPremios);
+        getPuntosDisponibles();
       }).catch((error) => {
         setting.saveSettings({
           ...setting.settings,
@@ -279,20 +272,33 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
   }
 
 
-  const getDataMotivosVisita = async () => {
-    return await FirebaseClient.getMotivosVisita().then((result: any) => {
+  const getDataPremios = async () => {
+    return await PremiosService.getAllPremios().then((result: any) => {
       return result
     });
   };
 
-  const getAndSetDataOperaciones = (dataMotivosResult: any) => {
-    FirebaseClient.getOperacionesByClienteFirestore(dataCliente.id).then((result: any) => {
-      result.forEach((operacion: any) => {
-        operacion.motivoVisitaNombre = dataMotivosResult
-          .filter((motivo: any) => motivo.id == operacion.motivoVisitaId)
+  const getAndSetDataPremiosCanjeados = (dataPremios: any) => {
+    FirebaseClient.getPremiosCanjeadosByClienteFirestore(dataCliente.id).then((result: any) => {
+      let totPuntosUsados = 0;
+      result.forEach((premiosCanjeados: any) => {
+        premiosCanjeados.premioNombre = dataPremios
+          .filter((premio: any) => premio.id == premiosCanjeados.premioId)
           .map((m: any) => m.nombre)
+          totPuntosUsados = totPuntosUsados + Number(premiosCanjeados.puntos);
       })
       setRows(result)
+      setTotalPuntosUsados(totPuntosUsados)
+    });
+  };
+
+  const getPuntosDisponibles = () => {
+    FirebaseClient.getOperacionesByClienteFirestore(dataCliente.id).then((result: any) => {
+      let totPuntosDisponibles = 0;
+      result.forEach((operaciones: any) => {
+        totPuntosDisponibles = totPuntosDisponibles + Number(operaciones.puntos);
+      })
+      setTotalPuntosDisponibles(totPuntosDisponibles)
     });
   };
   
@@ -300,10 +306,11 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
 
   useEffect(() => {
     const getData = async () => {
-      const dataMotivosResult = await getDataMotivosVisita().then(result => result);
-      console.log(dataMotivosResult)
-      setDataMotivosVisita(dataMotivosResult)
-      getAndSetDataOperaciones(dataMotivosResult);
+      const dataPremiosResult = await getDataPremios().then(result => result);
+      console.log(dataPremiosResult)
+      setDataPremios(dataPremiosResult)
+      getAndSetDataPremiosCanjeados(dataPremiosResult);
+      getPuntosDisponibles();
     }
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -315,45 +322,23 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
         <Grid container spacing={5}>
           <Grid item xs={12} sm={6}>
             <Grid container spacing={5}>
-              <Grid item xs={12} sx={{ marginTop: 4.75 }}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor='puntos-input'>Puntos</InputLabel>
-                  <OutlinedInput
-                    label='Puntos'
-                    value={stateForm.puntos}
-                    id='puntos-input'
-                    type='number'
-                    onChange={handleInputChange('puntos')}
-                    endAdornment={
-                      <InputAdornment position='end'>
-                        <IconButton
-                          edge='end'
-                          aria-label='puntos-icon'
-                        >
-                          <CashIcon/>
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </Grid>
               <Grid item xs={12} sm={12}>
                 <FormControl fullWidth>
-                  <InputLabel>Motivo de visita</InputLabel>
-                  <Select label='Motivo de visita'
-                    id='motivoVisita-select'
-                    placeholder="Seleccione motivo"
-                    value={stateForm.motivoVisitaId}
-                    onChange={handleSelectChange('motivoVisitaId')}
+                  <InputLabel>Premio</InputLabel>
+                  <Select label='Premio'
+                    id='premio-select'
+                    placeholder="Seleccione premio"
+                    value={stateForm.premioId+"-"+stateForm.puntos}
+                    onChange={handleSelectChange('premioId', 'puntos')}
                     >
-                    {dataMotivosVisita != null && dataMotivosVisita.length > 0 &&
-                      dataMotivosVisita.map((element: any) => (
-                        <MenuItem key={element.id} value={element.id} >
+                    {dataPremios != null && dataPremios.length > 0 &&
+                      dataPremios.map((element: any) => (
+                        <MenuItem key={element.id} value={element.id+"-"+element.puntos} >
                             <Avatar 
                               alt={element.nombre}
                               src={element.image64}
                             />
-                          &nbsp;{element.nombre}
+                          &nbsp;{element.nombre} ({element.puntos} puntos)
                         </MenuItem>
                       )
                     )}
@@ -363,12 +348,11 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
             </Grid>
 
             <Box sx={{ mt: 5 }}>
-                <Button variant='contained' onClick={() => saveFormPuntos()} sx={{ marginRight: 3.5 }}>
-                    Cargar Puntos
+                <Button variant='contained' onClick={() => saveFormCanjePremio()} sx={{ marginRight: 3.5 }}>
+                    Canjear Premio ({totalPuntosDisponibles} Puntos Disponibles)
                 </Button>
               </Box>
           </Grid>
-
           <Grid
             item
             sm={6}
@@ -380,7 +364,8 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
         </Grid>
 
         <Paper sx={{ width: '100%', mb: 2 }}>
-        <CardHeader title='Premios Canjeados' />
+        <CardHeader title={`Historial Premios Canjeados ` + "(" + totalPuntosUsados + " Puntos Usados)"}/>
+        
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle' size={dense ? 'small' : 'medium'}>
             <EnhancedTableHead
@@ -398,10 +383,12 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
                   return (
                     <TableRow hover role='checkbox' tabIndex={-1} key={index}>
                       <TableCell align='left'>{moment(row.fechaOperacion).format('DD/MM/YYYY HH:MM')}</TableCell>
-                      <TableCell align='left'>{row.motivoVisitaNombre}</TableCell>
-                      <TableCell align='left'>{row.tipoOperacion}</TableCell>
-                      <TableCell align='left'>{row.puntos}</TableCell>
-                      
+                      <TableCell align='left' sx={{ 
+                          bgcolor: theme.palette.primary.dark , color: "white"
+                        }} 
+                      >{row.premioNombre}</TableCell>
+                      <TableCell align='left' 
+                      ><b>{row.puntos}</b></TableCell>
                     </TableRow>
                   )
                 })}

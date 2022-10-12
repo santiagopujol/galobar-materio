@@ -31,6 +31,7 @@ export const FirebaseClient = {
     getOperacionesByClienteFirestore,
     getMotivosVisita,
     getMotivoVisitaById,
+    getPremiosCanjeadosByClienteFirestore,
 }
 
 // Get all docs by ref to firebase
@@ -148,6 +149,15 @@ async function getPuntosByClienteFirestore(id: any) {
 //Get Operaciones By Cliente
 async function getOperacionesByClienteFirestore(id: any) {
     const colRef = collection(db, 'operaciones_miembros');
+    const q = query(colRef, where("clientId", "==", id));
+    const snapshot = await getDocs(q);
+    const list = snapshot.docs.map(doc => doc.data());
+    return list;
+}
+
+// Get Prermios Canjeados By Cliente
+async function getPremiosCanjeadosByClienteFirestore(id: any) {
+    const colRef = collection(db, 'canje_premios');
     const q = query(colRef, where("clientId", "==", id));
     const snapshot = await getDocs(q);
     const list = snapshot.docs.map(doc => doc.data());

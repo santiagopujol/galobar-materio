@@ -18,7 +18,6 @@ async function getById(id: any) {
 }
 
 async function save(data: any) {
-  console.log(data)
   delete data.image
   if (data.id != null) {
     return await FirebaseClient.updateDocByRefAndId(REFMODEL, data, data.id)

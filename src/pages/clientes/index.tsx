@@ -137,7 +137,6 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
   }
 
   useEffect(() => {
-    console.log(newDataMembers && newDataMembers[0])
 		setDataClientes(newDataMembers);
     updateStateLoading(setting, false)
 

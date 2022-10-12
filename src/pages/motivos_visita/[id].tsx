@@ -24,8 +24,6 @@ const MotivosVisitaItemPage = ({ data }: { data: any }) => {
   const setting = useSettings();
 
 	useEffect(() => {
-    console.log(data.nombre)
-
     updateStateHeader(setting, true, data.nombre , "/motivos_visita" )
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps

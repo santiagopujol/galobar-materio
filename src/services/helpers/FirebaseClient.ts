@@ -28,6 +28,7 @@ export const FirebaseClient = {
     getDocsByRefAndFilter,
     getUserCliente,
     getPuntosByClienteFirestore,
+    getOperaciones,
     getOperacionesByClienteFirestore,
     getMotivosVisita,
     getMotivoVisitaById,
@@ -131,7 +132,6 @@ async function deleteDocByRef(colRef: string, id: string) {
 async function getUserCliente(email: string, password: string) {
     const colRef = collection(db, 'user_clientes');
     const q = query(colRef, where("email", "==", email));
-    console.log(password)
     const snapshot = await getDocs(q);
     const list = snapshot.docs.map(doc => doc.data());
     return list;
@@ -141,6 +141,15 @@ async function getUserCliente(email: string, password: string) {
 async function getPuntosByClienteFirestore(id: any) {
     const colRef = collection(db, 'miembros_puntos');
     const q = query(colRef, where("clientId", "==", id));
+    const snapshot = await getDocs(q);
+    const list = snapshot.docs.map(doc => doc.data());
+    return list;
+}
+
+// Get Operaciones Total
+async function getOperaciones() {
+    const colRef = collection(db, 'operaciones_miembros');
+    const q = query(colRef);
     const snapshot = await getDocs(q);
     const list = snapshot.docs.map(doc => doc.data());
     return list;

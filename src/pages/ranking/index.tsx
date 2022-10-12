@@ -1,4 +1,11 @@
 import * as React from 'react'
+import { useEffect, useState } from 'react'
+
+import {
+  useTheme
+} from '@mui/material'
+
+
 import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -16,6 +23,8 @@ import CardHeader from '@mui/material/CardHeader'
 import Avatar from '@mui/material/Avatar'
 import { visuallyHidden } from '@mui/utils'
 import moment from 'moment'
+import { ClientesService } from 'src/services/ClientesService';
+import { FirebaseClient } from 'src/services/helpers/FirebaseClient'
 
 interface Data {
   id: number
@@ -25,6 +34,7 @@ interface Data {
   total_operaciones: number
   total_puntos_acumulados: number
   total_premios_canjeados: number
+  letra: string
 }
 
 function createData(
@@ -34,7 +44,8 @@ function createData(
   ultimaOperacion: Date,
   total_operaciones: number,
   total_puntos_acumulados: number,
-  total_premios_canjeados: number
+  total_premios_canjeados: number,
+  letra: string
 ): Data {
   return {
     id,
@@ -43,17 +54,19 @@ function createData(
     ultimaOperacion,
     total_operaciones,
     total_puntos_acumulados,
-    total_premios_canjeados
+    total_premios_canjeados,
+    letra
   }
 }
 
-const rows = [
-  createData(1, 'Pedro Rodriguez', 'pedro@gmail.com', moment('2022-10-16').toDate(), 54, 60000, 20),
-  createData(2, 'Marcelo Marea', 'marce@gmail.com', moment('2022-10-11').toDate(), 40, 50000, 15),
-  createData(3, 'Carlos Mive', 'carlosmive@gmail.com', moment('2022-10-22').toDate(), 53, 30000, 5),
-  createData(4, 'Osvaldo Notx', 'osvaldo@gmail.com', moment('2022-09-15').toDate(), 44, 20000, 7),
-  createData(5, 'Juan Fernandez', 'juan@gmail.com', moment('2022-09-13').toDate(), 34, 20000, 11)
-]
+// const rows = [
+//   createData(1, 'Pedro Rodriguez', 'pedro@gmail.com', moment('2022-10-16').toDate(), 54, 60000, 20),
+//   createData(2, 'Marcelo Marea', 'marce@gmail.com', moment('2022-10-11').toDate(), 40, 50000, 15),
+//   createData(3, 'Carlos Mive', 'carlosmive@gmail.com', moment('2022-10-22').toDate(), 53, 30000, 5),
+//   createData(4, 'Osvaldo Notx', 'osvaldo@gmail.com', moment('2022-09-15').toDate(), 44, 20000, 7),
+//   createData(5, 'Juan Fernandez', 'juan@gmail.com', moment('2022-09-13').toDate(), 34, 20000, 11)
+// ]
+
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -186,11 +199,14 @@ function EnhancedTableHead(props: any) {
 }
 
 export default function Ranking() {
+  const theme = useTheme()
   const [order, setOrder] = React.useState<Order>('asc')
   const [orderBy, setOrderBy] = React.useState<keyof Data>('ultimaOperacion')
   const [page, setPage] = React.useState(0)
   const [dense, setDense] = React.useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const [rows, setRows] = useState([]);
+
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -214,6 +230,71 @@ export default function Ranking() {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
+  const getAndSetDataRanking = async (dataClientes: any) => {
+    FirebaseClient.getOperaciones().then((operaciones: any) => {
+      // Agrupar clientes con operaciones
+      const clientesConOperaciones = [...new Set(operaciones.map((item: any) => item.clientId))];
+      const arrayRankingTemp: any = [];
+
+      clientesConOperaciones.forEach((clienteConOpId: any) => {
+        let totPuntos = 0;
+        let cantOperaciones = 0;
+        let cantPremiosCanjeados = 0
+        let ultimaOperacion = ""
+        
+        operaciones.forEach((op: any) => {
+          if (clienteConOpId == op.clientId) {
+            totPuntos = totPuntos + Number(op.puntos);
+            cantOperaciones = cantOperaciones + 1
+            cantPremiosCanjeados = (op.motivoVisitaId == "lYei1m0Xot7daKfdAraA") /* canje premio */ ? cantPremiosCanjeados + 1 : cantPremiosCanjeados
+
+            if (ultimaOperacion == "" || (op.fechaOperacion > ultimaOperacion)) {
+              ultimaOperacion = op.fechaOperacion
+            }
+          }
+        })
+        
+        // temporal porque trabaja con toda la data de clientes innecesario
+        const infoCliente = dataClientes.find((el: any) => el.id == clienteConOpId )
+        const letra1 = infoCliente.merge_fields.FNAME.toUpperCase().substring(0, 1) + infoCliente.merge_fields.LNAME.toUpperCase().substring(0, 1)
+        const letra2 = infoCliente.full_name.toUpperCase().substring(0, 1)
+        const nombre1 = infoCliente.merge_fields.FNAME.toUpperCase() + " " + infoCliente.merge_fields.LNAME.toUpperCase()
+        const nombre2 = infoCliente.full_name.toUpperCase()
+        const letra3 = infoCliente.email_address.toLowerCase().substring(0, 1)
+        // fin temporal
+
+        arrayRankingTemp.push({
+          letra: letra1 || letra2 || letra3,
+          email: infoCliente.email_address,
+          fullName: nombre1 || nombre2,
+          clientId: clienteConOpId,
+          ultimaOperacion: ultimaOperacion,
+          total_puntos_acumulados: totPuntos,
+          total_operaciones: cantOperaciones,
+          total_premios_canjeados: cantPremiosCanjeados
+        })
+      })
+
+      setRows(arrayRankingTemp)
+    });
+  };
+
+  const getDataClientes = async () => {
+    return await ClientesService.getAllClientes().then((result: any) => {
+      return result
+    });
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      // temporal se pasa toda la data cliente
+      const dataClientes = await getDataClientes()
+      getAndSetDataRanking(dataClientes);
+    }
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -236,9 +317,15 @@ export default function Ranking() {
                   const labelId = `enhanced-table-checkbox-${index}`
 
                   return (
-                    <TableRow hover role='checkbox' tabIndex={-1} key={row.fullName}>
+                    <TableRow hover role='checkbox' tabIndex={-1} key={index}>
                       <TableCell align='center'>
-                        <Avatar alt={row.fullName} src='#' />
+                        <Avatar sx={{
+                            color:"white",
+                            bgcolor: theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.grey[700]
+                          }}
+                        >
+                          {row.letra}
+                        </Avatar>                      
                       </TableCell>
                       <TableCell component='th' id={labelId} scope='row' padding='none'>
                         {row.fullName}

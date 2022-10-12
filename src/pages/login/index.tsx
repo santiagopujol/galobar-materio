@@ -110,7 +110,6 @@ const LoginPage = () => {
       updateStateLoading(setting, false, 1000)
       updateStateNotificationToast(setting, true, "warning", "Usuario y/o contraseña incorrecta, intente nuevamente")
     }
-    console.log("States Post Login Action", settings)
 }
 
   return (

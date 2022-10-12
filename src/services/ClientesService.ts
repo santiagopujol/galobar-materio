@@ -27,7 +27,6 @@ async function getClientesByFilter(filters: any) {
       : item.substring(0, 1).toUpperCase() + item.substring(1)
   )
 
-  console.log(filtersSplittedFormat)
   const dataFilterByFullName = await FirebaseClient.getDocsByRefAndFilter(REFMODEL, "full_name", "in", filtersSplittedFormat)
   dataFilterByFullName?.map((item) => totalData.push(item))
 

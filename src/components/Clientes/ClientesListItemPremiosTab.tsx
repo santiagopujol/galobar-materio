@@ -119,13 +119,13 @@ const headCells: readonly HeadCell[] = [
     id: 'premioNombre',
     numeric: false,
     disablePadding: false,
-    label: 'Motivo Visita'
+    label: 'Premio'
   },
   {
     id: 'puntos',
     numeric: false,
     disablePadding: false,
-    label: 'Puntos'
+    label: 'Puntos Usados'
   },
 ]
 
@@ -232,7 +232,6 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
   }
 
   async function saveFormCanjePremio() {
-    console.log(stateForm)
     if (!validateForm()) return false;
     setting.saveSettings({ ...setting.settings, loadingState: true })
     await FirebaseClient.addDocByRef("canje_premios", stateForm)
@@ -307,7 +306,6 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
   useEffect(() => {
     const getData = async () => {
       const dataPremiosResult = await getDataPremios().then(result => result);
-      console.log(dataPremiosResult)
       setDataPremios(dataPremiosResult)
       getAndSetDataPremiosCanjeados(dataPremiosResult);
       getPuntosDisponibles();

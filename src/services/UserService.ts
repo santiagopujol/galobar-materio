@@ -28,7 +28,6 @@ function checkUser(setting: any) {
 function login(values: any, adminUsersAccessTemp: any) {
 
 	//Buscar en firebase
-  console.log(adminUsersAccessTemp)
   const user = adminUsersAccessTemp.find(
     (user: any) =>
       user.email == values.email &&

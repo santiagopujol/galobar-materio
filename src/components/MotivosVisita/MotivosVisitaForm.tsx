@@ -86,7 +86,6 @@ const MotivosVisitaForm = ({ data, edit = false }: any) => {
   }
 
   async function saveFormData() {
-    console.log(stateForm)
     if (!validateForm()) return false;
     setting.saveSettings({ ...setting.settings, loadingState: true })
     await MotivosVisitaService.save(stateForm)
@@ -132,7 +131,6 @@ const MotivosVisitaForm = ({ data, edit = false }: any) => {
 
   // Efecto secundario para escuchar la respuesta del modal de confirmacion 
   useEffect(() => {
-    console.log("hola", modalConfirmState)
     if (modalConfirmState.method === "eliminar_motivo_visita" && modalConfirmState.successResult == true) {
       eliminar(stateForm.id)
     }
@@ -141,7 +139,6 @@ const MotivosVisitaForm = ({ data, edit = false }: any) => {
   }, [modalConfirmState.successResult == true])
 
   const eliminar = async function (id: number) {
-    console.log(id)
     setting.saveSettings({ ...setting.settings, loadingState: true })
     await MotivosVisitaService.deleteMotivoVisita(id)
       .then((res) => {

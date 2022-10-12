@@ -92,7 +92,6 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
 
   // const getPuntosCliente = () => {
   //   getPuntosByClienteFirestore(dataCliente.id).then((result) => {
-  //     // console.log(result);
   //     setDataPuntoscliente(result[0]);
   //   });
   //   // return JSON.stringify(dataOperaciones)

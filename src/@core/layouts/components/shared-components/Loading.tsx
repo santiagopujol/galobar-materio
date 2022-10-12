@@ -73,7 +73,6 @@ export default Loading
 //     if (!loadingState === true) {
 //       const timeOutInterval = 50;
 //         for (let index = 1; index < 11; index++) {
-//           console.log(valuePorc)
 //           setTimeout(() => {
 //               setValuePorc(index * 10)
 //           }, (timeOutInterval * index));

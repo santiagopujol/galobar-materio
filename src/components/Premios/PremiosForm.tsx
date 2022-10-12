@@ -86,7 +86,6 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
   }
 
   async function saveFormData() {
-    console.log(stateForm)
     if (!validateForm()) return false;
     setting.saveSettings({ ...setting.settings, loadingState: true })
     await PremiosService.savePremio(stateForm)
@@ -137,7 +136,6 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
 
   // Efecto secundario para escuchar la respuesta del modal de confirmacion 
   useEffect(() => {
-    console.log("hola", modalConfirmState)
     if (modalConfirmState.method === "eliminar_premio" && modalConfirmState.successResult == true) {
       eliminarPremio(stateForm.id)
     }
@@ -146,7 +144,6 @@ const PremiosForm = ({ dataPremio, edit = false }: any) => {
   }, [modalConfirmState.successResult == true])
 
   const eliminarPremio = async function (id: number) {
-    console.log(id)
     setting.saveSettings({ ...setting.settings, loadingState: true })
     await PremiosService.deletePremio(id)
       .then((res) => {

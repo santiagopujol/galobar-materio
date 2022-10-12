@@ -24,8 +24,6 @@ const EditPremioItemPage = ({ dataPremio }: { dataPremio: any }) => {
   const setting = useSettings();
 
 	useEffect(() => {
-    console.log(dataPremio.nombre)
-
     updateStateHeader(setting, true, dataPremio.nombre , "/premios" )
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps

@@ -147,13 +147,10 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
           <ClientesListItemInfoTab dataCliente={dataCliente} />
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='security'>
-          {/* <TabSecurity /> */}
           <ClientesListItemPuntosTab dataCliente={dataCliente} />
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='info'>
-          <TabInfo />
-          {/* <ClientesListItemPremiosTab dataCliente={dataCliente} /> */}
-
+          <ClientesListItemPremiosTab dataCliente={dataCliente} />
         </TabPanel>
       </TabContext>
     </Card>

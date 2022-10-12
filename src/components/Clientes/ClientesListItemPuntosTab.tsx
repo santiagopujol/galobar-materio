@@ -21,6 +21,9 @@ import TableSortLabel from '@mui/material/TableSortLabel'
 import { visuallyHidden } from '@mui/utils'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import {
+  useTheme
+} from '@mui/material'
 
 // ** Icons Imports
 import CashIcon from 'mdi-material-ui/Cash'
@@ -177,6 +180,7 @@ function EnhancedTableHead(props: any) {
 
 const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   const setting = useSettings();
+  const theme = useTheme()
 
   const [order, setOrder] = useState<Order>('asc')
   const [orderBy, setOrderBy] = useState<keyof Data>('fechaOperacion')
@@ -193,6 +197,8 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
     tipoOperacion: 'Crédito',
     clientId: dataCliente.id
   })
+
+  const [totalPuntos, setTotalPuntos] = useState(0)
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -240,6 +246,8 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
       return false
     }
 
+    stateForm.tipoOperacion = stateForm.puntos > 0 ? 'Crédito' : 'Débito';
+
     return true
   }
 
@@ -283,12 +291,15 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
 
   const getAndSetDataOperaciones = (dataMotivosResult: any) => {
     FirebaseClient.getOperacionesByClienteFirestore(dataCliente.id).then((result: any) => {
+      let totPuntos = 0;
       result.forEach((operacion: any) => {
         operacion.motivoVisitaNombre = dataMotivosResult
           .filter((motivo: any) => motivo.id == operacion.motivoVisitaId)
           .map((m: any) => m.nombre)
+          totPuntos = totPuntos + Number(operacion.puntos);
       })
       setRows(result)
+      setTotalPuntos(totPuntos)
     });
   };
   
@@ -376,7 +387,8 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
         </Grid>
 
         <Paper sx={{ width: '100%', mb: 2 }}>
-        <CardHeader title='Historial Operaciones' />
+        <CardHeader title={`Historial Operaciones ` + "(" + totalPuntos + " Puntos Disponibles)"}/>
+        
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle' size={dense ? 'small' : 'medium'}>
             <EnhancedTableHead
@@ -395,9 +407,17 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
                     <TableRow hover role='checkbox' tabIndex={-1} key={index}>
                       <TableCell align='left'>{moment(row.fechaOperacion).format('DD/MM/YYYY HH:MM')}</TableCell>
                       <TableCell align='left'>{row.motivoVisitaNombre}</TableCell>
-                      <TableCell align='left'>{row.tipoOperacion}</TableCell>
-                      <TableCell align='left'>{row.puntos}</TableCell>
-                      
+                      <TableCell color='error' align='left' sx={{ 
+                          bgcolor: row.tipoOperacion == 'Crédito' ? 
+                          theme.palette.success.dark : 
+                          theme.palette.error.dark, color: "white"
+                        }} 
+                      >
+                        {row.tipoOperacion}
+                      </TableCell>
+                      <TableCell align='left'>
+                        <b>{row.puntos}</b>
+                      </TableCell>
                     </TableRow>
                   )
                 })}

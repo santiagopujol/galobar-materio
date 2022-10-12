@@ -185,6 +185,8 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
 
   const [rows, setRows] = useState([]); //dataOperacionesByCliente
   const [dataMotivosVisita, setDataMotivosVisita] = useState([]);
+  const [dataMotivosVisitaSinCanje, setDataMotivosVisitaSinCanje] = useState([]);
+
   const [stateForm, setStateForm] = useState<State>({
     puntos: '',
     motivoVisitaId: '',
@@ -303,6 +305,13 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   useEffect(() => {
     const getData = async () => {
       const dataMotivosResult = await getDataMotivosVisita().then(result => result);
+      const dataMotivosVisitaSinCanje = await getDataMotivosVisita().then(result => result); // Buscando 2 veces temporal
+
+      // Eliminamos el canje premio que no se debe utilizar aqui
+      const motivoCanjePremioId = dataMotivosVisitaSinCanje.findIndex((el: any) => el.nombre == "Canje Premio");
+      dataMotivosVisitaSinCanje.splice(motivoCanjePremioId, 1)
+
+      setDataMotivosVisitaSinCanje(dataMotivosVisitaSinCanje)
       setDataMotivosVisita(dataMotivosResult)
       getAndSetDataOperaciones(dataMotivosResult);
     }
@@ -347,8 +356,8 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
                     value={stateForm.motivoVisitaId}
                     onChange={handleSelectChange('motivoVisitaId')}
                     >
-                    {dataMotivosVisita != null && dataMotivosVisita.length > 0 &&
-                      dataMotivosVisita.map((element: any) => (
+                    {dataMotivosVisitaSinCanje != null && dataMotivosVisitaSinCanje.length > 0 &&
+                      dataMotivosVisitaSinCanje.map((element: any) => (
                         <MenuItem key={element.id} value={element.id} >
                             <Avatar 
                               alt={element.nombre}

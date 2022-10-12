@@ -246,7 +246,7 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
       return false
     }
 
-    stateForm.tipoOperacion = stateForm.puntos > 0 ? 'Crédito' : 'Débito';
+    stateForm.tipoOperacion = Number(stateForm.puntos) > 0 ? 'Crédito' : 'Débito';
 
     return true
   }

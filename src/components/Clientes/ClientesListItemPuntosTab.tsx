@@ -255,8 +255,8 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
             timeOut: 2000
           },
         })
-        setStateForm({...stateForm, puntos: ''})
-        getAndSetDataOperaciones();
+        setStateForm({...stateForm, puntos: '', motivoVisitaId: ''})
+        getAndSetDataOperaciones(dataMotivosVisita);
       }).catch((error) => {
         setting.saveSettings({
           ...setting.settings,
@@ -272,16 +272,16 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   }
 
 
-  const getAndSetDataMotivosVisita = () => {
-    FirebaseClient.getMotivosVisita().then((result: any) => {
-      setDataMotivosVisita(result)
+  const getDataMotivosVisita = async () => {
+    return await FirebaseClient.getMotivosVisita().then((result: any) => {
+      return result
     });
   };
 
-  const getAndSetDataOperaciones = () => {
+  const getAndSetDataOperaciones = (dataMotivosResult: any) => {
     FirebaseClient.getOperacionesByClienteFirestore(dataCliente.id).then((result: any) => {
       result.forEach((operacion: any) => {
-        operacion.motivoVisitaNombre = dataMotivosVisita.filter(motivo => motivo.id == operacion.motivoVisitaId).map(m => m.nombre)
+        operacion.motivoVisitaNombre = dataMotivosResult.filter(motivo => motivo.id == operacion.motivoVisitaId).map(m => m.nombre)
       })
       setRows(result)
     });
@@ -289,9 +289,11 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
-  useEffect(() => {
-    getAndSetDataMotivosVisita();
-    getAndSetDataOperaciones();
+  useEffect(async () => {
+    const dataMotivosResult = await getDataMotivosVisita().then(result => result);
+    setDataMotivosVisita(dataMotivosResult)
+    getAndSetDataOperaciones(dataMotivosResult);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

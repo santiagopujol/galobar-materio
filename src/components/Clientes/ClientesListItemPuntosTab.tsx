@@ -19,7 +19,7 @@ import CardHeader from '@mui/material/CardHeader'
 import Checkbox from '@mui/material/Checkbox'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import { visuallyHidden } from '@mui/utils'
-import Select from '@mui/material/Select'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 
 // ** Icons Imports
@@ -215,13 +215,17 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
 
   interface State {
     puntos: string,
-    motivoVisitaId: number,
+    motivoVisitaId: string,
     fechaOperacion: string
     tipoOperacion: string,
     clientId: string,
   }
 
   const handleInputChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
+    setStateForm({ ...stateForm, [prop]: event.target.value })
+  }
+
+  const handleSelectChange = (prop: keyof State) => (event: SelectChangeEvent<string>) => {
     setStateForm({ ...stateForm, [prop]: event.target.value })
   }
 
@@ -281,7 +285,9 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   const getAndSetDataOperaciones = (dataMotivosResult: any) => {
     FirebaseClient.getOperacionesByClienteFirestore(dataCliente.id).then((result: any) => {
       result.forEach((operacion: any) => {
-        operacion.motivoVisitaNombre = dataMotivosResult.filter(motivo => motivo.id == operacion.motivoVisitaId).map(m => m.nombre)
+        operacion.motivoVisitaNombre = dataMotivosResult
+          .filter((motivo: any) => motivo.id == operacion.motivoVisitaId)
+          .map((m: any) => m.nombre)
       })
       setRows(result)
     });
@@ -289,10 +295,13 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
-  useEffect(async () => {
-    const dataMotivosResult = await getDataMotivosVisita().then(result => result);
-    setDataMotivosVisita(dataMotivosResult)
-    getAndSetDataOperaciones(dataMotivosResult);
+  useEffect(() => {
+    const getData = async () => {
+      const dataMotivosResult = await getDataMotivosVisita().then(result => result);
+      setDataMotivosVisita(dataMotivosResult)
+      getAndSetDataOperaciones(dataMotivosResult);
+    }
+
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -332,11 +341,11 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
                     id='motivoVisita-select'
                     placeholder="Seleccione motivo"
                     value={stateForm.motivoVisitaId}
-                    onChange={handleInputChange('motivoVisitaId')}
+                    onChange={handleSelectChange('motivoVisitaId')}
                     >
                     {dataMotivosVisita != null && dataMotivosVisita.length > 0 &&
                       dataMotivosVisita.map((element: any) => (
-                        <MenuItem key={element.id} value={element.id} element={element}>
+                        <MenuItem key={element.id} value={element.id} >
                             <Avatar 
                               alt={element.nombre}
                               src={element.image64}

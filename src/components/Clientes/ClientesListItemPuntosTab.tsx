@@ -19,6 +19,8 @@ import CardHeader from '@mui/material/CardHeader'
 import Checkbox from '@mui/material/Checkbox'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import { visuallyHidden } from '@mui/utils'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
 
 // ** Icons Imports
 import CashIcon from 'mdi-material-ui/Cash'
@@ -47,6 +49,7 @@ interface Data {
   fechaOperacion: Date,
   tipoOperacion: string,
   puntos: number,
+  motivoVisitaNombre: string,
 }
 
 function createData(
@@ -54,12 +57,14 @@ function createData(
   fechaOperacion: Date,
   tipoOperacion: string,
   puntos: number,
+  motivoVisitaNombre: string,
 ): Data {
   return {
     id,
     fechaOperacion,
     tipoOperacion,
     puntos,
+    motivoVisitaNombre
   }
 }
 
@@ -114,6 +119,12 @@ const headCells: readonly HeadCell[] = [
     numeric: false,
     disablePadding: false,
     label: 'Fecha Operación'
+  },
+  {
+    id: 'motivoVisitaNombre',
+    numeric: false,
+    disablePadding: false,
+    label: 'Motivo Visita'
   },
   {
     id: 'tipoOperacion',
@@ -173,6 +184,16 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
+  const [rows, setRows] = useState([]); //dataOperacionesByCliente
+  const [dataMotivosVisita, setDataMotivosVisita] = useState([]);
+  const [stateForm, setStateForm] = useState<State>({
+    puntos: '',
+    motivoVisitaId: '',
+    fechaOperacion: moment(Date.now()).format("yyyy-MM-DD hh:mm"),
+    tipoOperacion: 'Crédito',
+    clientId: dataCliente.id
+  })
+
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
@@ -194,30 +215,15 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
 
   interface State {
     puntos: string,
+    motivoVisitaId: number,
     fechaOperacion: string
     tipoOperacion: string,
     clientId: string,
   }
-  
-  const [stateForm, setStateForm] = useState<State>({
-    puntos: '',
-    fechaOperacion: moment(Date.now()).format("yyyy-MM-DD hh:mm"),
-    tipoOperacion: 'Crédito',
-    clientId: dataCliente.id
-  })
 
-  // const [stateForm, setStateForm] = useState({
-  //   puntos: '',
-  //   fechaOperacion: moment(Date.now()).format("yyyy-MM-DD hh:mm"),
-  //   tipoOperacion: 'Crédito',
-  //   clientId: dataCliente.id,
-  // });
-
-  const handlePuntosInputChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setStateForm({ ...stateForm, [prop]: event.target.value })
   }
-
-  const [rows, setRows] = useState([]); //dataOperacionesByCliente
 
   const validateForm = () => {
     if (stateForm.puntos == null || stateForm.puntos == "") {
@@ -225,10 +231,16 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
       return false
     }
 
+    if (stateForm.motivoVisitaId == '') {
+      updateStateNotificationToast(setting, true, "warning", "Por favor, ingrese un motivo de visita.", 2000)
+      return false
+    }
+
     return true
   }
 
   async function saveFormPuntos() {
+    console.log(stateForm)
     if (!validateForm()) return false;
     setting.saveSettings({ ...setting.settings, loadingState: true })
     await FirebaseClient.addDocByRef("operaciones_miembros", stateForm)
@@ -258,10 +270,19 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
         })
       });
   }
-  
+
+
+  const getAndSetDataMotivosVisita = () => {
+    FirebaseClient.getMotivosVisita().then((result: any) => {
+      setDataMotivosVisita(result)
+    });
+  };
+
   const getAndSetDataOperaciones = () => {
     FirebaseClient.getOperacionesByClienteFirestore(dataCliente.id).then((result: any) => {
-      console.log(result);
+      result.forEach((operacion: any) => {
+        operacion.motivoVisitaNombre = dataMotivosVisita.filter(motivo => motivo.id == operacion.motivoVisitaId).map(m => m.nombre)
+      })
       setRows(result)
     });
   };
@@ -269,6 +290,7 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   useEffect(() => {
+    getAndSetDataMotivosVisita();
     getAndSetDataOperaciones();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -287,7 +309,7 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
                     value={stateForm.puntos}
                     id='puntos-input'
                     type='number'
-                    onChange={handlePuntosInputChange('puntos')}
+                    onChange={handleInputChange('puntos')}
                     endAdornment={
                       <InputAdornment position='end'>
                         <IconButton
@@ -301,7 +323,29 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
                   />
                 </FormControl>
               </Grid>
-              
+              <Grid item xs={12} sm={12}>
+                <FormControl fullWidth>
+                  <InputLabel>Motivo de visita</InputLabel>
+                  <Select label='Motivo de visita'
+                    id='motivoVisita-select'
+                    placeholder="Seleccione motivo"
+                    value={stateForm.motivoVisitaId}
+                    onChange={handleInputChange('motivoVisitaId')}
+                    >
+                    {dataMotivosVisita != null && dataMotivosVisita.length > 0 &&
+                      dataMotivosVisita.map((element: any) => (
+                        <MenuItem key={element.id} value={element.id} element={element}>
+                            <Avatar 
+                              alt={element.nombre}
+                              src={element.image64}
+                            />
+                          &nbsp;{element.nombre}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
 
             <Box sx={{ mt: 5 }}>
@@ -340,8 +384,10 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
                   return (
                     <TableRow hover role='checkbox' tabIndex={-1} key={index}>
                       <TableCell align='left'>{moment(row.fechaOperacion).format('DD/MM/YYYY HH:MM')}</TableCell>
+                      <TableCell align='left'>{row.motivoVisitaNombre}</TableCell>
                       <TableCell align='left'>{row.tipoOperacion}</TableCell>
                       <TableCell align='left'>{row.puntos}</TableCell>
+                      
                     </TableRow>
                   )
                 })}

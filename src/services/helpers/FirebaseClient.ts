@@ -28,7 +28,9 @@ export const FirebaseClient = {
     getDocsByRefAndFilter,
     getUserCliente,
     getPuntosByClienteFirestore,
-    getOperacionesByClienteFirestore
+    getOperacionesByClienteFirestore,
+    getMotivosVisita,
+    getMotivoVisitaById,
 }
 
 // Get all docs by ref to firebase
@@ -131,7 +133,6 @@ async function getUserCliente(email: string, password: string) {
     console.log(password)
     const snapshot = await getDocs(q);
     const list = snapshot.docs.map(doc => doc.data());
-
     return list;
 }
 
@@ -141,7 +142,6 @@ async function getPuntosByClienteFirestore(id: any) {
     const q = query(colRef, where("clientId", "==", id));
     const snapshot = await getDocs(q);
     const list = snapshot.docs.map(doc => doc.data());
-
     return list;
 }
 
@@ -151,6 +151,24 @@ async function getOperacionesByClienteFirestore(id: any) {
     const q = query(colRef, where("clientId", "==", id));
     const snapshot = await getDocs(q);
     const list = snapshot.docs.map(doc => doc.data());
-    
+    return list;
+}
+
+
+//Get Motivos Visita
+async function getMotivosVisita() {
+    const colRef = collection(db, 'motivos_visita');
+    const q = query(colRef);
+    const snapshot = await getDocs(q);
+    const list = snapshot.docs.map(doc => doc.data());
+    return list;
+}
+
+//Get Motivos Visita by Id
+async function getMotivoVisitaById(id: any) {
+    const colRef = collection(db, 'motivos_visita');
+    const q = query(colRef, where("id", "==", id));
+    const snapshot = await getDocs(q);
+    const list = snapshot.docs.map(doc => doc.data());
     return list;
 }

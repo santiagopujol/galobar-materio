@@ -244,7 +244,7 @@ export default function Ranking() {
         
         operaciones.forEach((op: any) => {
           if (clienteConOpId == op.clientId) {
-            totPuntos = totPuntos + Number(op.puntos);
+            totPuntos = totPuntos + (op.puntos > 0 ? Number(op.puntos) : 0);
             cantOperaciones = cantOperaciones + 1
             cantPremiosCanjeados = (op.motivoVisitaId == "lYei1m0Xot7daKfdAraA") /* canje premio */ ? cantPremiosCanjeados + 1 : cantPremiosCanjeados
 

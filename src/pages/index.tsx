@@ -38,7 +38,7 @@ const Dashboard = () => {
   const setting = useSettings();
   const { settings, saveSettings } = setting
 
-  const [clienteMes, setClienteMes] = useState(null);
+  const [dataClienteMes, setDataClienteMes] = useState(null);
   const [totalCrecimientoMes, setTotalCrecimientoMes] = useState('X');
   const [totalDataClientes, setTotalDataClientes] = useState(200);
   const [totalDataOperaciones, setTotalDataOperaciones] = useState(100);
@@ -62,6 +62,67 @@ const Dashboard = () => {
     });
   };
 
+  const getDataClientes = async () => {
+    return await ClientesService.getAllClientes().then((result: any) => {
+      return result
+    });
+  };
+
+  const getClienteMes = async (dataClientes: any) => {
+    return await FirebaseClient.getOperaciones().then((operaciones: any) => {
+      // Agrupar clientes con operaciones
+      const clientesConOperaciones = [...new Set(operaciones.map((item: any) => item.clientId))];
+      const arrayRankingTemp: any = [];
+
+      clientesConOperaciones.forEach((clienteConOpId: any) => {
+        let totPuntos = 0;
+        let cantOperaciones = 0;
+        let cantPremiosCanjeados = 0
+        let ultimaOperacion = ""
+        
+        operaciones.forEach((op: any) => {
+          if (clienteConOpId == op.clientId) {
+            totPuntos = totPuntos + (op.puntos > 0 ? Number(op.puntos) : 0);
+            cantOperaciones = cantOperaciones + 1
+            cantPremiosCanjeados = (op.motivoVisitaId == "lYei1m0Xot7daKfdAraA") /* canje premio */ ? cantPremiosCanjeados + 1 : cantPremiosCanjeados
+
+            if (ultimaOperacion == "" || (op.fechaOperacion > ultimaOperacion)) {
+              ultimaOperacion = op.fechaOperacion
+            }
+          }
+        })
+        
+        // temporal porque trabaja con toda la data de clientes innecesario
+        const infoCliente = dataClientes.find((el: any) => el.id == clienteConOpId )
+        const letra1 = infoCliente.merge_fields.FNAME.toUpperCase().substring(0, 1) + infoCliente.merge_fields.LNAME.toUpperCase().substring(0, 1)
+        const letra2 = infoCliente.full_name.toUpperCase().substring(0, 1)
+        const nombre1 = infoCliente.merge_fields.FNAME.toUpperCase() + " " + infoCliente.merge_fields.LNAME.toUpperCase()
+        const nombre2 = infoCliente.full_name.toUpperCase()
+        const letra3 = infoCliente.email_address.toLowerCase().substring(0, 1)
+        // fin temporal
+
+        arrayRankingTemp.push({
+          letra: letra1 || letra2 || letra3,
+          email: infoCliente.email_address,
+          fullName: nombre1 || nombre2,
+          clientId: clienteConOpId,
+          ultimaOperacion: ultimaOperacion,
+          total_puntos_acumulados: totPuntos,
+          total_operaciones: cantOperaciones,
+          total_premios_canjeados: cantPremiosCanjeados
+        })
+      })
+
+      const bestClient = arrayRankingTemp.reduce(function(prev, current) {
+          return (prev.total_puntos_acumulados > current.total_puntos_acumulados) ? prev : current
+      }) 
+
+      // const bestClientMonth = null
+      setDataClienteMes(bestClient)
+      return bestClient
+    });
+  };
+
   useEffect(() => {
     UserService.checkUser(setting);
     updateStateLoading(setting, true)
@@ -76,6 +137,11 @@ const Dashboard = () => {
       const dataCountPremiosCanje = await getDataCountPremiosCanje()
       setTotalDataPremiosCanje(dataCountPremiosCanje)
 
+      // temporal se pasa toda la data cliente
+      const dataClientes = await getDataClientes()
+      const clienteMes = await getClienteMes(dataClientes)
+      setDataClienteMes(clienteMes)
+
       updateStateLoading(setting, false)
     }
     asyncUseEffect();
@@ -88,7 +154,7 @@ const Dashboard = () => {
       <Grid container spacing={6}>
         <Grid item xs={12} md={4}>
           <ClienteMesHome 
-            cliente={clienteMes} 
+            cliente={dataClienteMes} 
           />
         </Grid>
         <Grid item xs={12} md={8}>

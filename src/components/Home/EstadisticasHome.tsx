@@ -22,60 +22,6 @@ import GiftOutline from 'mdi-material-ui/GiftOutline'
 // ** Types
 import { ThemeColor } from 'src/@core/layouts/types'
 
-// interface DataType {
-//   stats: string
-//   title: string
-//   color: ThemeColor
-//   icon: ReactElement
-// }
-
-  // const dataStatics: DataType[] = [
-  //   {
-  //     stats: '420',
-  //     title: 'Ventas',
-  //     color: 'primary',
-  //     icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
-  //   },
-  //   {
-  //     stats: '400',
-  //     title: 'Clientes',
-  //     color: 'success',
-  //     icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />
-  //   },
-  //   {
-  //     stats: '160',
-  //     color: 'warning',
-  //     title: 'Premios canjeados',
-  //     icon: <CellphoneLink sx={{ fontSize: '1.75rem' }} />
-  //   },
-  // ]
-
-const renderStats = (dataStatics) => {
-  return dataStatics.map((item: DataType, index: number) => (
-    <Grid item xs={12} sm={3} key={index}>
-      <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-        <Avatar
-          variant='rounded'
-          sx={{
-            mr: 3,
-            width: 44,
-            height: 44,
-            boxShadow: 3,
-            color: 'common.white',
-            backgroundColor: `${item.color}.main`
-          }}
-        >
-          {item.icon}
-        </Avatar>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography variant='caption'>{item.title}</Typography>
-          <Typography variant='h6'>{item.stats}</Typography>
-        </Box>
-      </Box>
-    </Grid>
-  ))
-}
-
 const EstadisticasHome = ({ porcCrecimiento, operaciones, clientes, premiosCanjeados }: any) => {
 
   return (

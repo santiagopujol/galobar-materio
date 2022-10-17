@@ -292,13 +292,13 @@ export default function Ranking() {
   useEffect(() => {
     updateStateLoading(setting, true)
 
-    const getData = async () => {
+    const asyncUseEffect = async () => {
       // temporal se pasa toda la data cliente
       const dataClientes = await getDataClientes()
       getAndSetDataRanking(dataClientes);
       updateStateLoading(setting, false)
     }
-    getData();
+    asyncUseEffect();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -21,8 +21,9 @@ const TrophyImg = styled('img')({
   position: 'absolute'
 })
 
-const ClienteMesHome = () => {
+const ClienteMesHome = (dataCliente: any) => {
   // ** Hook
+  console.log(dataCliente)
   const theme = useTheme()
 
   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
@@ -32,7 +33,7 @@ const ClienteMesHome = () => {
       <CardContent>
         <Typography variant='h6'>Felicitaciones Pedro! 🥳</Typography>
         <Typography variant='body2' sx={{ letterSpacing: '0.25px' }}>
-          Mejor cliente del mes
+          Mejor cliente actual
         </Typography>
         <Typography variant='h5' sx={{ my: 4, color: 'success.main' }}>
           $60000

@@ -26,6 +26,8 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 // ** Demo Components Imports
 //import ClientesList from 'src/components/Clientes/ClientesList'
 
+import { ClientesService } from 'src/services/ClientesService';
+
 // ** Dynamic Components
 const ClientesList = dynamic(() => import('src/components/Clientes/ClientesList'))
 
@@ -71,6 +73,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
   const [currentPageClientes, setCurrentPageClientes] = useState(page ? page : 1);
 	const [showResultPagination, setShowResultPagination] = useState(filter != '' ? false : true);
   const { modalConfirmState } = setting.settings
+  const [totalDataClientes, setTotalDataClientes] = useState(0);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -154,7 +157,19 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
     updateStateModalConfirm(setting, true, "actualizar_clientes", false, "Actualización de Clientes", "¿Confirma actualizar los datos de los clientes?")
   }
 
+  const getDataCountClientes = async () => {
+    return await ClientesService.getCountClientes().then((result: any) => {
+      return result
+    });
+  };
+
   useEffect(() => {
+    const asyncUseEffect = async () => {
+      const dataCountClientes = await getDataCountClientes()
+      setTotalDataClientes(dataCountClientes)
+    }
+    asyncUseEffect();
+
 		setDataClientes(newDataMembers);
     updateStateLoading(setting, false)
 
@@ -202,7 +217,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
 
           <Grid item xs={12}>
             <Card>
-              <CardHeader title='Clientes'
+              <CardHeader title={`Clientes (${totalDataClientes})`}
                 action={
                   <IconButton onClick={openModalUpdateClientes} size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary'   }}>
                     <Cached />

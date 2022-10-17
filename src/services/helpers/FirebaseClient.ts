@@ -20,6 +20,7 @@ const db = getFirestore();
 
 export const FirebaseClient = {
     getDocsByRef,
+    getCountDataByRef,
     addDocByRef,
     deleteDocByRef,
     getDocByRefAndId,
@@ -40,8 +41,7 @@ async function getCountDataByRef(colRef: string) {
     const dataResult: any[] = [];
     const col = collection(db, colRef)
     const snapshot = await getDocs(col);
-    console.log(snapshot)
-    return null
+    return snapshot._snapshot.docChanges.length
 }
 
 // Get all docs by ref to firebase

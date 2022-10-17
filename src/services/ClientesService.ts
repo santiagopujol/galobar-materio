@@ -3,6 +3,7 @@ import { FirebaseClient } from "./helpers/FirebaseClient";
 const REFMODEL = "miembros_clientes"
 export const ClientesService = {
   getAllClientes,
+  getCountClientes,
   getClienteById,
   getClientesByFilter,
   saveCliente,

@@ -35,6 +35,15 @@ export const FirebaseClient = {
     getPremiosCanjeadosByClienteFirestore,
 }
 
+//Get Count Data By Col
+async function getCountDataByRef(colRef: string) {
+    const dataResult: any[] = [];
+    const col = collection(db, colRef)
+    const snapshot = await getDocs(col);
+    console.log(snapshot)
+    return null
+}
+
 // Get all docs by ref to firebase
 async function getDocsByRef(colRef: string) {
     const dataResult: any[] = [];

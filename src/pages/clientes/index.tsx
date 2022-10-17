@@ -109,6 +109,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
     getAndSetDataClientes(1, currentPage * 10, 0, '');
   };
 
+  // Al pasar 1 en el tecer parametro hago un update a firebase y traigo por pagina
   async function getAndSetDataClientes(
     page = 1,
     count = 10,
@@ -132,6 +133,23 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
     }
   }
 
+  // Temporal por problemas con timeout en vercell, (hay que pagar para q dure mas, sino ver otra forma)
+  async function getAllDataClientes() {
+    updateStateNotificationToast(setting, true, "warning", "Actualizando clientes, espere un momento", 9000)
+    updateStateModalConfirm(setting, false, "", false)
+    setSearchValue('');
+    setShowResultPagination(true);
+
+    fetch(
+      `${baseUrl}/getListMembers?page${1}&count=${10}&filter=${''}&update=${1}`
+    );
+
+    setTimeout(() => {
+      router.push(`/clientes?page=1`);
+    }, 8000)
+
+  }
+
   const openModalUpdateClientes = () => {
     updateStateModalConfirm(setting, true, "actualizar_clientes", false, "Actualización de Clientes", "¿Confirma actualizar los datos de los clientes?")
   }
@@ -146,8 +164,7 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
   // Efecto Respuesta Confirmacion Modal
   useEffect(() => {
     if (modalConfirmState.method === "actualizar_clientes" && modalConfirmState.successResult === true) {
-      // Al pasar 1 en el tecer parametro hago un update a firebase y traigo por pagina
-      getAndSetDataClientes(1, 10, 1, '');
+      getAllDataClientes();
 		}
   }, [modalConfirmState.successResult == true])
 

@@ -14,6 +14,10 @@ async function getAllClientes() {
   return await FirebaseClient.getDocsByRef(REFMODEL)
 }
 
+async function getCountClientes() {
+  return await FirebaseClient.getCountDataByRef(REFMODEL)
+}
+
 async function getClienteById(id: any) {
   return await FirebaseClient.getDocByRefAndDocId(REFMODEL, id)
 }

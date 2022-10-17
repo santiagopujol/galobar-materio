@@ -14,27 +14,71 @@ import CardStatisticsVerticalComponent from 'src/@core/components/card-statistic
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
 // ** Demo Components Imports
-import Table from 'src/views/dashboard/Table'
-import Trophy from 'src/views/dashboard/Trophy'
-import TotalEarning from 'src/views/dashboard/TotalEarning'
-import StatisticsCard from 'src/views/dashboard/StatisticsCard'
-import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
-import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
-import SalesByCountries from 'src/views/dashboard/SalesByCountries'
+// import Table from 'src/views/dashboard/Table'
+// import Trophy from 'src/views/dashboard/Trophy'
+// import TotalEarning from 'src/views/dashboard/TotalEarning'
+// import StatisticsCard from 'src/views/dashboard/StatisticsCard'
+// import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
+// import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
+// import SalesByCountries from 'src/views/dashboard/SalesByCountries'
 
-import { useEffect } from 'react'
+import ClienteMesHome from 'src/components/Home/ClienteMesHome'
+import EstadisticasHome from 'src/components/Home/EstadisticasHome'
+
+import { useEffect, useState } from 'react';
 import { UserService } from 'src/services'
 import { useSettings } from 'src/@core/hooks/useSettings'
 import { updateStateLoading } from 'src/@core/utils/common'
+
+import { ClientesService } from 'src/services/ClientesService';
+import { FirebaseClient } from 'src/services/helpers/FirebaseClient'
 
 const Dashboard = () => {
 
   const setting = useSettings();
   const { settings, saveSettings } = setting
 
+  const [clienteMes, setClienteMes] = useState(null);
+  const [totalCrecimientoMes, setTotalCrecimientoMes] = useState('X');
+  const [totalDataClientes, setTotalDataClientes] = useState(200);
+  const [totalDataOperaciones, setTotalDataOperaciones] = useState(100);
+  const [totalDataPremiosCanje, setTotalDataPremiosCanje] = useState(300);
+
+  const getDataCountClientes = async () => {
+    return await ClientesService.getCountClientes().then((result: any) => {
+      return result
+    });
+  };
+
+  const getDataCountOperaciones = async () => {
+    return await FirebaseClient.getCountOperaciones().then((result: any) => {
+      return result
+    });
+  };
+
+  const getDataCountPremiosCanje = async () => {
+    return await FirebaseClient.getCountPremiosCanje().then((result: any) => {
+      return result
+    });
+  };
+
   useEffect(() => {
     UserService.checkUser(setting);
-    updateStateLoading(setting, false)
+    updateStateLoading(setting, true)
+
+    const asyncUseEffect = async () => {
+      const dataCountClientes = await getDataCountClientes()
+      setTotalDataClientes(dataCountClientes)
+
+      const dataCountOperaciones = await getDataCountOperaciones()
+      setTotalDataOperaciones(dataCountOperaciones)
+
+      const dataCountPremiosCanje = await getDataCountPremiosCanje()
+      setTotalDataPremiosCanje(dataCountPremiosCanje)
+
+      updateStateLoading(setting, false)
+    }
+    asyncUseEffect();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -43,17 +87,24 @@ const Dashboard = () => {
     <ApexChartWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12} md={4}>
-          <Trophy />
+          <ClienteMesHome 
+            cliente={clienteMes} 
+          />
         </Grid>
         <Grid item xs={12} md={8}>
-          <StatisticsCard />
+          <EstadisticasHome 
+            porcCrecimiento={totalCrecimientoMes} 
+            operaciones={totalDataOperaciones} 
+            clientes={totalDataClientes} 
+            premiosCanjeados={totalDataPremiosCanje}
+          />
         </Grid>
-        <Grid item xs={12} md={6} lg={4}>
+        {/* <Grid item xs={12} md={6} lg={4}>
           <WeeklyOverview />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <TotalEarning />
-        </Grid>
+        </Grid> */}
         {/* <Grid item xs={12} md={6} lg={4}>
           <Grid container spacing={6}>
             <Grid item xs={6}>

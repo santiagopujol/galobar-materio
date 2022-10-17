@@ -164,14 +164,16 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
   };
 
   useEffect(() => {
+    updateStateLoading(setting, true)
+
     const asyncUseEffect = async () => {
       const dataCountClientes = await getDataCountClientes()
       setTotalDataClientes(dataCountClientes)
+      updateStateLoading(setting, false)
     }
     asyncUseEffect();
 
 		setDataClientes(newDataMembers);
-    updateStateLoading(setting, false)
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newDataMembers]);

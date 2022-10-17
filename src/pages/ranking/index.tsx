@@ -26,6 +26,9 @@ import moment from 'moment'
 import { ClientesService } from 'src/services/ClientesService';
 import { FirebaseClient } from 'src/services/helpers/FirebaseClient'
 
+import { updateStateLoading } from 'src/@core/utils/common'
+import { useSettings } from 'src/@core/hooks/useSettings'
+
 interface Data {
   id: number
   fullName: string
@@ -199,6 +202,7 @@ function EnhancedTableHead(props: any) {
 }
 
 export default function Ranking() {
+  const setting = useSettings();
   const theme = useTheme()
   const [order, setOrder] = React.useState<Order>('asc')
   const [orderBy, setOrderBy] = React.useState<keyof Data>('ultimaOperacion')
@@ -286,12 +290,16 @@ export default function Ranking() {
   };
 
   useEffect(() => {
+    updateStateLoading(setting, true)
+
     const getData = async () => {
       // temporal se pasa toda la data cliente
       const dataClientes = await getDataClientes()
       getAndSetDataRanking(dataClientes);
+      updateStateLoading(setting, false)
     }
     getData();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

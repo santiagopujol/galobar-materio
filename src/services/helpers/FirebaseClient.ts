@@ -34,6 +34,8 @@ export const FirebaseClient = {
     getMotivosVisita,
     getMotivoVisitaById,
     getPremiosCanjeadosByClienteFirestore,
+    getCountOperaciones,
+    getCountPremiosCanje
 }
 
 //Get Count Data By Col
@@ -199,4 +201,12 @@ async function getMotivoVisitaById(id: any) {
     const snapshot = await getDocs(q);
     const list = snapshot.docs.map(doc => doc.data());
     return list;
+}
+
+async function getCountOperaciones() {
+    return await getCountDataByRef("operaciones_miembros")
+}
+
+async function getCountPremiosCanje() {
+    return await getCountDataByRef("canje_premios")
 }

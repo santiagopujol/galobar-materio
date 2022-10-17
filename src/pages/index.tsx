@@ -113,7 +113,7 @@ const Dashboard = () => {
         })
       })
 
-      const bestClient = arrayRankingTemp.reduce(function(prev, current) {
+      const bestClient = arrayRankingTemp.reduce(function(prev: any, current: any) {
           return (prev.total_puntos_acumulados > current.total_puntos_acumulados) ? prev : current
       }) 
 

@@ -43,7 +43,7 @@ async function getCountDataByRef(colRef: string) {
     const dataResult: any[] = [];
     const col = collection(db, colRef)
     const snapshot = await getDocs(col);
-    return snapshot._snapshot.docChanges.length
+    return snapshot.docChanges.length
 }
 
 // Get all docs by ref to firebase

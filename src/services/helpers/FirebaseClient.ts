@@ -5,13 +5,13 @@ import { getFirestore, collection, getDocs, addDoc, setDoc,
 } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD7pN9OVx55S6a4r3fNUAvdOeju1-AoFD4",
-  authDomain: "club-galo.firebaseapp.com",
-  projectId: "club-galo",
-  storageBucket: "club-galo.appspot.com",
-  messagingSenderId: "1078929646643",
-  appId: "1:1078929646643:web:3de9620273c296f2b9af46",
-  measurementId: "G-C4WYC0PSX7"
+  apiKey: "AIzaSyCx0OONvEoCeWwuKvdOqzd1vzlGh8XWeF0",
+  authDomain: "eighth-orbit-364103.firebaseapp.com",
+  projectId: "eighth-orbit-364103",
+  storageBucket: "eighth-orbit-364103.appspot.com",
+  messagingSenderId: "1086401674359",
+  appId: "1:1086401674359:web:f6734f2b4f589ccd6a9a72",
+  measurementId: "G-ESPDNQP8J8"
 };
 
 const app = initializeApp(firebaseConfig);

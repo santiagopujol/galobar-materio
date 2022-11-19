@@ -9,25 +9,20 @@ import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
 import Badge from '@mui/material/Badge'
 import Avatar from '@mui/material/Avatar'
-import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 
 // ** Icons Imports
-import CogOutline from 'mdi-material-ui/CogOutline'
 import Account from 'mdi-material-ui/Account'
 
-// import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-// import EmailOutline from 'mdi-material-ui/EmailOutline'
+
 import LogoutVariant from 'mdi-material-ui/LogoutVariant'
-import AccountOutline from 'mdi-material-ui/AccountOutline'
+
 import { UserService } from 'src/services'
 import { useSettings } from 'src/@core/hooks/useSettings'
 import { useTheme } from '@mui/material/styles'
 
-// import MessageOutline from 'mdi-material-ui/MessageOutline'
-// import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -41,7 +36,7 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 const UserDropdown = () => {
   // ** States
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
-  
+
   // ** Hooks
   const router = useRouter()
   const theme = useTheme()
@@ -59,20 +54,6 @@ const UserDropdown = () => {
       router.push(url)
     }
     setAnchorEl(null)
-  }
-
-  const styles = {
-    py: 2,
-    px: 4,
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    color: 'text.primary',
-    textDecoration: 'none',
-    '& svg': {
-      fontSize: '1.375rem',
-      color: 'text.secondary'
-    }
   }
 
   return (
@@ -119,45 +100,6 @@ const UserDropdown = () => {
             </Box>
           </Box>
         </Box>
-        <Divider sx={{ mt: 0, mb: 1 }} />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <AccountOutline sx={{ marginRight: 2 }} />
-            Perfil
-          </Box>
-        </MenuItem>
-        {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <EmailOutline sx={{ marginRight: 2 }} />
-            Inbox
-          </Box>
-        </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <MessageOutline sx={{ marginRight: 2 }} />
-            Chat
-          </Box>
-        </MenuItem> */}
-        <Divider />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <CogOutline sx={{ marginRight: 2 }} />
-            Ajustes
-          </Box>
-        </MenuItem>
-        {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <CurrencyUsd sx={{ marginRight: 2 }} />
-            Pricing
-          </Box>
-        </MenuItem> */}
-        {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <HelpCircleOutline sx={{ marginRight: 2 }} />
-            FAQ
-          </Box>
-        </MenuItem> */}
-        <Divider />
         <MenuItem sx={{ py: 2 }} onClick={() => {UserService.logout(); handleDropdownClose('/login')}}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Salir

@@ -69,11 +69,13 @@ async function getListMembersMailchimpWithParams(page: any, count: any, update: 
 
       // Sino viene filter busco por página segun count, por defecto 10
     } else {
-      if (cacheData.get("mailchimp_" + page)) {
-        return cacheData.get("mailchimp_" + page);
+      if (cacheData.get("mailchimp_" + count)) {
+        console.log("devolviendo cache");
+        return cacheData.get("mailchimp_" + count);
       } else {
+        console.log("agregando cache");
         const resultDataMembersByPage = await getDataMembersByPage(count, page)
-        cacheData.put('mailchimp_' + page, resultDataMembersByPage, 86400000);
+        cacheData.put('mailchimp_' + count, resultDataMembersByPage, 86400000);
 
         return resultDataMembersByPage
       }

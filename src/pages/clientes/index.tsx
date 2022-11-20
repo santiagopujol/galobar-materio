@@ -41,19 +41,20 @@ export const getServerSideProps = async (context: any) => {
   const {query} = context;
   const {
     page = 1,
-    count = 10,
+    count = 7,
     update = '0',
     filter = '',
   } = query != null && query;
 
   const baseUrl =
     process.env.NODE_ENV === 'production'
-      ? 'https://galobarclub.vercel.app//api'
+      ? 'http://191.101.71.62/api'
       : 'http://localhost:3000/api';
 
   const res = await fetch(
     `${baseUrl}/getListMembers?page${page}&count=${count}&update=${update}&filter=${filter}`
   );
+
   const newDataMembers = await res.json();
 
   return {

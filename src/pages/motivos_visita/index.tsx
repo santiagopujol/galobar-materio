@@ -27,25 +27,6 @@ import { updateStateLoading,
 import MotivosVisitaList from 'src/components/MotivosVisita/MotivosVisitaList';
 import { MotivosVisitaService } from 'src/services/MotivosVisitaService';
 
-export const getServerSideProps = async (context: any) => {
-  const { query } = context;
-  const {
-    filter = '',
-  } = query != null && query;
-
-  let newData = await MotivosVisitaService.getAll();
-
-  if (filter != '') {
-    newData = await MotivosVisitaService.filterAndOrder(newData, filter);
-  }
-
-  return {
-    props: {
-      newData,
-      filter
-    },
-  };
-};
 
 const MotivosVisitaPage = ({ newData, filter  }: any) => {
 

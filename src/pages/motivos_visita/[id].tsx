@@ -10,14 +10,6 @@ import { MotivosVisitaService } from 'src/services/MotivosVisitaService';
 
 import { useSettings } from 'src/@core/hooks/useSettings'
 
-export const getServerSideProps = async (context: any) => {
-	const data = await MotivosVisitaService.getById(context.query.id);
-	return {
-		props: {
-			data,
-		},
-	};
-};
 
 const MotivosVisitaItemPage = ({ data }: { data: any }) => {
 
@@ -28,7 +20,7 @@ const MotivosVisitaItemPage = ({ data }: { data: any }) => {
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
 	return (
 		<>
       <MotivosVisitaForm data={data} edit={true} />

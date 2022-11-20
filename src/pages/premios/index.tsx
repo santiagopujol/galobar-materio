@@ -21,31 +21,12 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
 // ** Services
 import { updateStateLoading,
-  updateStateHeader, 
-  updateStateModalConfirm 
+  updateStateHeader,
+  updateStateModalConfirm
 } from 'src/@core/utils/common';
 import PremiosList from 'src/components/Premios/PremiosList';
 import { PremiosService } from 'src/services/PremiosService';
 
-export const getServerSideProps = async (context: any) => {
-  const { query } = context;
-  const {
-    filter = '',
-  } = query != null && query;
-
-  let newDataPremios = await PremiosService.getAllPremios();
-
-  if (filter != '') {
-    newDataPremios = await PremiosService.filterAndOrderPremios(newDataPremios, filter);
-  }
-
-  return {
-    props: {
-      newDataPremios,
-      filter
-    },
-  };
-};
 
 const PremiosPage = ({ newDataPremios, filter  }: any) => {
 
@@ -127,7 +108,7 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
               <CardHeader title='Premios'
                 action={
                   <React.Fragment>
-                    <IconButton size='small' aria-label='settings' className='card-more-options' 
+                    <IconButton size='small' aria-label='settings' className='card-more-options'
                       sx={{ color: 'text.secondary'}}>
                       <Filter />
                     </IconButton>
@@ -143,7 +124,7 @@ const PremiosPage = ({ newDataPremios, filter  }: any) => {
               <PremiosList dataPremios={dataPremios} />
             </Card>
           </Grid>
-            
+
         </Grid>
       </ApexChartWrapper>
     </>

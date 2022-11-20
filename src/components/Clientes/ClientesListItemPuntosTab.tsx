@@ -38,8 +38,8 @@ import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import { FirebaseClient } from 'src/services/helpers/FirebaseClient'
 
-import { 
-  updateStateNotificationToast 
+import {
+  updateStateNotificationToast
 } from 'src/@core/utils/common';
 
 interface Data {
@@ -299,7 +299,7 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
       setTotalPuntos(totPuntos)
     });
   };
-  
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   useEffect(() => {
@@ -359,10 +359,6 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
                     {dataMotivosVisitaSinCanje != null && dataMotivosVisitaSinCanje.length > 0 &&
                       dataMotivosVisitaSinCanje.map((element: any) => (
                         <MenuItem key={element.id} value={element.id} >
-                            <Avatar 
-                              alt={element.nombre}
-                              src={element.image64}
-                            />
                           &nbsp;{element.nombre}
                         </MenuItem>
                       )
@@ -391,7 +387,7 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
 
         <Paper sx={{ width: '100%', mb: 2 }}>
         <CardHeader title={`Historial Operaciones ` + "(" + totalPuntos + " Puntos Disponibles)"}/>
-        
+
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle' size={dense ? 'small' : 'medium'}>
             <EnhancedTableHead
@@ -410,11 +406,11 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
                     <TableRow hover role='checkbox' tabIndex={-1} key={index}>
                       <TableCell align='left'>{moment(row.fechaOperacion).format('DD/MM/YYYY HH:MM')}</TableCell>
                       <TableCell align='left'>{row.motivoVisitaNombre}</TableCell>
-                      <TableCell color='error' align='left' sx={{ 
-                          bgcolor: row.tipoOperacion == 'Crédito' ? 
-                          theme.palette.success.dark : 
+                      <TableCell color='error' align='left' sx={{
+                          bgcolor: row.tipoOperacion == 'Crédito' ?
+                          theme.palette.success.dark :
                           theme.palette.error.dark, color: "white"
-                        }} 
+                        }}
                       >
                         {row.tipoOperacion}
                       </TableCell>

@@ -73,6 +73,8 @@ const TabName = styled('span')(({ theme }) => ({
 const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
 
   //Hooks
+
+  console.log(dataCliente);
   const setting = useSettings();
 
   // ** State
@@ -82,26 +84,9 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
     setValue(newValue)
   }
 
-  // const {
-  //   setLoadingState,
-  //   setHeaderComponentState,
-  //   setActiveTabDetalleClientes
-  // } = useAppContext();
-
-  // const [dataPuntosCliente, setDataPuntoscliente] = useState({});
-
-  // const getPuntosCliente = () => {
-  //   getPuntosByClienteFirestore(dataCliente.id).then((result) => {
-  //     setDataPuntoscliente(result[0]);
-  //   });
-  //   // return JSON.stringify(dataOperaciones)
-  // };
 
   useEffect(() => {
     updateStateHeader(setting, true, dataCliente.email_address , "/clientes" )
-    // setLoadingState(false);
-    // setActiveTabDetalleClientes("submenu-tab-clientes-detalle")
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 

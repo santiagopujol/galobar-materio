@@ -37,8 +37,8 @@ import TablePagination from '@mui/material/TablePagination'
 import { FirebaseClient } from 'src/services/helpers/FirebaseClient'
 import { PremiosService } from 'src/services/PremiosService';
 
-import { 
-  updateStateNotificationToast 
+import {
+  updateStateNotificationToast
 } from 'src/@core/utils/common';
 
 interface Data {
@@ -185,7 +185,7 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
 
   const [totalPuntosUsados, setTotalPuntosUsados] = useState(0)
   const [totalPuntosDisponibles, setTotalPuntosDisponibles] = useState(0)
-  
+
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
@@ -209,10 +209,10 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
   }
 
   const handleSelectChange = (prop1: keyof State, prop2: keyof State) => (event: SelectChangeEvent<string>) => {
-    setStateForm({ 
-      ...stateForm, 
-      [prop1]: event.target.value.split("-")[0], 
-      [prop2]: event.target.value.split("-")[1] 
+    setStateForm({
+      ...stateForm,
+      [prop1]: event.target.value.split("-")[0],
+      [prop2]: event.target.value.split("-")[1]
     })
   }
 
@@ -300,7 +300,7 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
       setTotalPuntosDisponibles(totPuntosDisponibles)
     });
   };
-  
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   useEffect(() => {
@@ -332,10 +332,6 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
                     {dataPremios != null && dataPremios.length > 0 &&
                       dataPremios.map((element: any) => (
                         <MenuItem key={element.id} value={element.id+"-"+element.puntos} >
-                            <Avatar 
-                              alt={element.nombre}
-                              src={element.image64}
-                            />
                           &nbsp;{element.nombre} ({element.puntos} puntos)
                         </MenuItem>
                       )
@@ -363,7 +359,7 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
 
         <Paper sx={{ width: '100%', mb: 2 }}>
         <CardHeader title={`Historial Premios Canjeados ` + "(" + totalPuntosUsados + " Puntos Usados)"}/>
-        
+
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle' size={dense ? 'small' : 'medium'}>
             <EnhancedTableHead
@@ -381,11 +377,11 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
                   return (
                     <TableRow hover role='checkbox' tabIndex={-1} key={index}>
                       <TableCell align='left'>{moment(row.fechaOperacion).format('DD/MM/YYYY HH:MM')}</TableCell>
-                      <TableCell align='left' sx={{ 
+                      <TableCell align='left' sx={{
                           bgcolor: theme.palette.primary.dark , color: "white"
-                        }} 
+                        }}
                       >{row.premioNombre}</TableCell>
-                      <TableCell align='left' 
+                      <TableCell align='left'
                       ><b>{row.puntos}</b></TableCell>
                     </TableRow>
                   )

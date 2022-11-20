@@ -99,7 +99,7 @@ const Dashboard = () => {
         })
       })
 
-      const max = arrayRankingTemp.reduce(function(prev, current) {
+      const max = arrayRankingTemp.reduce(function(prev: { total_puntos_acumulados: number }, current: { total_puntos_acumulados: number }) {
         return (prev.total_puntos_acumulados > current.total_puntos_acumulados) ? prev : current
       })
       setDataClienteMes(max)

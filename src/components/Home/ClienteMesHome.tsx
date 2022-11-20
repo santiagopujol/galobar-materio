@@ -26,7 +26,6 @@ const TrophyImg = styled('img')({
 const ClienteMesHome = (dataCliente: any) => {
   // ** Hook
 
-  console.log("asdasdasd ",dataCliente)
   const theme = useTheme()
 
   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'

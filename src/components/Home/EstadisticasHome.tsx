@@ -45,7 +45,7 @@ const EstadisticasHome = ({ porcCrecimiento, operaciones, clientes, premiosCanje
                 sx={{
                   mr: 3,
                   width: 44,
-                  height: 43,
+                  height: 44,
                   boxShadow: 3,
                   color: 'common.white',
                   backgroundColor: `${"success"}.main`

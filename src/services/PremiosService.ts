@@ -1,9 +1,11 @@
-import { FirebaseClient } from "./helpers/FirebaseClient";
+import {FirebaseClient} from "./helpers/FirebaseClient";
+
+import ImageResize from 'image-resize';
 
 const REFMODEL = "premios"
 export const PremiosService = {
-	getAllPremios,
-	getPremioById,
+  getAllPremios,
+  getPremioById,
   savePremio,
   deletePremio,
   filterAndOrderPremios
@@ -19,10 +21,25 @@ async function getPremioById(id: any) {
 
 async function savePremio(data: any) {
   delete data.image
+
+  const imageResize = new ImageResize({
+    width: 150,
+    height: 150,
+    quality: 0.6,
+  });
+
   if (data.id != null) {
-    return await FirebaseClient.updateDocByRefAndId(REFMODEL, data, data.id)
+
+    return await imageResize.play(data.imageUrl).then((resolved) => {
+      data.image64 = resolved;
+      return FirebaseClient.updateDocByRefAndId(REFMODEL, data, data.id)
+    });
+
   } else {
-    return await FirebaseClient.addDocByRef(REFMODEL, data)
+    return await imageResize.play(data.imageUrl).then((resolved) => {
+      data.image64 = resolved;
+      return FirebaseClient.addDocByRef(REFMODEL, data)
+    });
   }
 }
 

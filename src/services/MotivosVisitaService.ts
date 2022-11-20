@@ -1,9 +1,11 @@
-import { FirebaseClient } from "./helpers/FirebaseClient";
+import {FirebaseClient} from "./helpers/FirebaseClient";
+import ImageResize from 'image-resize';
+import {base} from "next/dist/build/webpack/config/blocks/base";
 
 const REFMODEL = "motivos_visita"
 export const MotivosVisitaService = {
-	getAll,
-	getById,
+  getAll,
+  getById,
   save,
   deleteMotivoVisita,
   filterAndOrder
@@ -19,10 +21,27 @@ async function getById(id: any) {
 
 async function save(data: any) {
   delete data.image
+  const imageResize = new ImageResize({
+    width: 150,
+    height: 150,
+    quality: 0.6,
+  });
+
+
   if (data.id != null) {
-    return await FirebaseClient.updateDocByRefAndId(REFMODEL, data, data.id)
+
+    return await imageResize.play(data.imageUrl).then((resolved) => {
+      data.image64 = resolved;
+      return FirebaseClient.updateDocByRefAndId(REFMODEL, data, data.id);
+    });
+
   } else {
-    return await FirebaseClient.addDocByRef(REFMODEL, data)
+
+    return await imageResize.play(data.imageUrl).then((resolved) => {
+      data.image64 = resolved;
+      console.log(data.image64)
+      return FirebaseClient.addDocByRef(REFMODEL, data)
+    });
   }
 }
 

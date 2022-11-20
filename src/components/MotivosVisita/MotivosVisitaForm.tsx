@@ -24,29 +24,29 @@ import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
 
 // ** States
-import { 
-  updateStateLoading, 
-  updateStateModalConfirm, 
-  updateStateNotificationToast 
+import {
+  updateStateLoading,
+  updateStateModalConfirm,
+  updateStateNotificationToast
 } from 'src/@core/utils/common';
 
 const MotivosVisitaForm = ({ data, edit = false }: any) => {
   const setting = useSettings();
-  
+
   const ImgStyled = styled('img')(({ theme }) => ({
     width: 120,
     height: 120,
     marginRight: theme.spacing(6.25),
     borderRadius: theme.shape.borderRadius
   }))
-  
+
   const ButtonStyled = styled(Button)<ButtonProps & { component?: ElementType; htmlFor?: string }>(({ theme }) => ({
     [theme.breakpoints.down('sm')]: {
       width: '100%',
       textAlign: 'center'
     }
   }))
-  
+
   const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
     marginLeft: theme.spacing(4.5),
     [theme.breakpoints.down('sm')]: {
@@ -68,7 +68,7 @@ const MotivosVisitaForm = ({ data, edit = false }: any) => {
   });
 
   const imagenInicial = data.image64 || null
-  const [resetImage, setResetImage] = useState(false) 
+  const [resetImage, setResetImage] = useState(false)
   const { modalConfirmState } = setting.settings
   const router = useRouter()
 
@@ -77,6 +77,7 @@ const MotivosVisitaForm = ({ data, edit = false }: any) => {
       stateForm.imageUrl = URL.createObjectURL(e.target.files[0])
       Common.getBase64(e.target.files[0]).then(data => {
         stateForm.image64 = data
+
         setStateForm({ ...stateForm, [e.target.name]: e.target.files[0] });
       })
       setResetImage(false)
@@ -129,7 +130,7 @@ const MotivosVisitaForm = ({ data, edit = false }: any) => {
     return true
   }
 
-  // Efecto secundario para escuchar la respuesta del modal de confirmacion 
+  // Efecto secundario para escuchar la respuesta del modal de confirmacion
   useEffect(() => {
     if (modalConfirmState.method === "eliminar_motivo_visita" && modalConfirmState.successResult == true) {
       eliminar(stateForm.id)
@@ -222,10 +223,10 @@ const MotivosVisitaForm = ({ data, edit = false }: any) => {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 {(stateForm.imageUrl != null || stateForm.image64 != null) &&
                   <ImgStyled src={
-                    resetImage ? imagenInicial : 
-                      stateForm.image64 != null ? 
-                        stateForm.image64 : 
-                        stateForm.imageUrl} 
+                    resetImage ? imagenInicial :
+                      stateForm.image64 != null ?
+                        stateForm.image64 :
+                        stateForm.imageUrl}
                   alt="image_motivo_visita" />
                 }
                 <Box>
@@ -233,7 +234,7 @@ const MotivosVisitaForm = ({ data, edit = false }: any) => {
                     Agregar Imagen
                     <input
                       hidden
-                      name="image" 
+                      name="image"
                       type='file'
                       onChange={handleChange}
                       accept='image/png, image/jpeg'

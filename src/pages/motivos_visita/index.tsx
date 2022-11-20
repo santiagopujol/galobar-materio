@@ -21,8 +21,8 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
 // ** Services
 import { updateStateLoading,
-  updateStateHeader, 
-  updateStateModalConfirm 
+  updateStateHeader,
+  updateStateModalConfirm
 } from 'src/@core/utils/common';
 import MotivosVisitaList from 'src/components/MotivosVisita/MotivosVisitaList';
 import { MotivosVisitaService } from 'src/services/MotivosVisitaService';
@@ -66,17 +66,8 @@ const MotivosVisitaPage = ({ newData, filter  }: any) => {
     router.push(`/motivos_visita?filter=${searchValue}`);
   }
 
-  // useEffect(() => {
-  //   updateStateHeader(setting, false, "", "/" )
-  //   updateStateModalConfirm(setting, false, "", false)
-
-  // }, [])
-
   useEffect(() => {
     setData(newData);
-    // updateStateLoading(setting, false)
-    // updateStateModalConfirm(setting, false, "", false)
-    // updateStateHeader(setting, false, "", "/" )
 
     setting.saveSettings({
       ...setting.settings,
@@ -127,7 +118,7 @@ const MotivosVisitaPage = ({ newData, filter  }: any) => {
               <CardHeader title='Motivos de visita'
                 action={
                   <React.Fragment>
-                    <IconButton size='small' aria-label='settings' className='card-more-options' 
+                    <IconButton size='small' aria-label='settings' className='card-more-options'
                       sx={{ color: 'text.secondary'}}>
                       <Filter />
                     </IconButton>
@@ -143,7 +134,7 @@ const MotivosVisitaPage = ({ newData, filter  }: any) => {
               <MotivosVisitaList data={data} />
             </Card>
           </Grid>
-            
+
         </Grid>
       </ApexChartWrapper>
     </>

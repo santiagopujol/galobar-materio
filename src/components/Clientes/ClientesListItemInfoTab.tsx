@@ -13,25 +13,38 @@ import moment from 'moment';
 
 const ClientesListItemInfoTab = ({ dataCliente }: { dataCliente: any }) => {
 
+  console.log(dataCliente);
   // ** State
   const {
     merge_fields: { FNAME, LNAME, PHONE, BIRTHDAY },
     email_address,
     vip,
     last_changed,
+    status,
+    location
   } = dataCliente;
+
+  const gender = require('gender-detection');
+
+  let avatar = "/images/avatars/2.png"
+  if (gender.detect(FNAME) === "female"){
+    avatar = "/images/avatars/4.png"
+  }
+  if (gender.detect(FNAME) === "male"){
+    avatar = "/images/avatars/5.png"
+  }
 
   return (
     <CardContent>
       <Card sx={{ position: 'relative' }}>
-        <CardMedia sx={{ height: '5rem' }} image='/images/cards/background-user.png' />
+        <CardMedia sx={{ height: '5rem' }} image='/images/cards/banner.jpg' />
         <Avatar
           alt='Robert Meyer'
-          src='/images/avatars/1.png'
+          src={avatar}
           sx={{
-            width: 75,
-            height: 75,
-            left: '1.313rem',
+            width: 150,
+            height: 150,
+            left: '45%',
             top: '2.28125rem',
             position: 'absolute',
             border: theme => `0.25rem solid ${theme.palette.common.white}`
@@ -51,6 +64,7 @@ const ClientesListItemInfoTab = ({ dataCliente }: { dataCliente: any }) => {
               <Typography variant='h6'>{FNAME.toUpperCase()} {LNAME.toUpperCase()}</Typography>
               <Typography variant='body2'>{email_address != '' ? email_address : '-'}</Typography>
               <br></br>
+              <Typography variant='body2'>Estado: <b>{status}</b></Typography>
               <Typography variant='body2'>Teléfono: <b>{PHONE != '' ? PHONE : '-'}</b></Typography>
               <Typography variant='body2'>Cumpleaños: <b>{BIRTHDAY != '' ?  BIRTHDAY.split('/')[1] + "/" + BIRTHDAY.split('/')[0] : '-'}</b></Typography>
               <Typography variant='body2'>Vip: <b>{!vip ? 'Si' : 'No'}</b></Typography>

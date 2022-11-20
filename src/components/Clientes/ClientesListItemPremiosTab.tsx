@@ -332,6 +332,10 @@ const ClientesListItemPremiosTab = ({ dataCliente }: { dataCliente: any }) => {
                     {dataPremios != null && dataPremios.length > 0 &&
                       dataPremios.map((element: any) => (
                         <MenuItem key={element.id} value={element.id+"-"+element.puntos} >
+                            <Avatar
+                              alt={element.nombre}
+                              src={element.image64}
+                            />
                           &nbsp;{element.nombre} ({element.puntos} puntos)
                         </MenuItem>
                       )

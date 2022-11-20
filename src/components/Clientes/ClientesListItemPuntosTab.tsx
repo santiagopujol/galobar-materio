@@ -359,6 +359,10 @@ const ClientesListItemPuntosTab = ({ dataCliente }: { dataCliente: any }) => {
                     {dataMotivosVisitaSinCanje != null && dataMotivosVisitaSinCanje.length > 0 &&
                       dataMotivosVisitaSinCanje.map((element: any) => (
                         <MenuItem key={element.id} value={element.id} >
+                            <Avatar
+                              alt={element.nombre}
+                              src={element.image64}
+                            />
                           &nbsp;{element.nombre}
                         </MenuItem>
                       )

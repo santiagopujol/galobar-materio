@@ -55,6 +55,7 @@
     "apexcharts-clevision": "3.28.5",
     "clsx": "^1.1.1",
     "firebase": "^9.9.2",
+    "gender-detection": "^0.1.0",
     "get-base-url": "^3.0.2",
     "image-resize": "^1.2.8",
     "mdi-material-ui": "^7.1.0",

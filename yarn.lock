@@ -2751,6 +2751,11 @@
   "resolved" "https://registry.npmjs.org/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz"
   "version" "1.0.1"
 
+"gender-detection@^0.1.0":
+  "integrity" "sha512-Ig/atIboso2IEaZk8JluQO0NzlBgdSXiDtUKpRf4yEh8tBHFVL+BOv1FI3eFTMRuPony7Mca7PnsJifAsfhA3Q=="
+  "resolved" "https://registry.npmjs.org/gender-detection/-/gender-detection-0.1.0.tgz"
+  "version" "0.1.0"
+
 "gensync@^1.0.0-beta.2":
   "integrity" "sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg=="
   "resolved" "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz"

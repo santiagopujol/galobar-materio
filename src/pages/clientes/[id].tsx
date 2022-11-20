@@ -33,20 +33,23 @@ import ClientesListItemPremiosTab from 'src/components/Clientes/ClientesListItem
 // ** Hooks
 import { useSettings } from 'src/@core/hooks/useSettings'
 import { updateStateLoading, updateStateHeader, updateStateNotificationToast } from 'src/@core/utils/common';
+import {FirebaseClient} from "../../services/helpers/FirebaseClient";
+import {ClientesService} from "../../services/ClientesService";
 
 // ** Services
 
 export const getServerSideProps = async (context: any) => {
 
   // Buscar info de cliente
-  const dataCliente = await MailchimpService.getMemberMailchimp(context.query.id);
+  const dataCliente = await ClientesService.getClienteById(context.query.id);
+
 
   //Get data puntos de la base y pasarlo al componente de puntos
   // ...
 
   return {
     props: {
-      dataCliente: JSON.parse(dataCliente),
+      dataCliente: dataCliente,
       // dataOperaciones
     },
   };
@@ -74,7 +77,6 @@ const ClienteItemPage = ({ dataCliente }: { dataCliente: any }) => {
 
   //Hooks
 
-  console.log(dataCliente);
   const setting = useSettings();
 
   // ** State

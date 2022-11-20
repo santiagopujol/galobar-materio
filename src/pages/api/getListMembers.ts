@@ -17,10 +17,8 @@ export default async function handler(
   // Validate User Logged
   // Validate Params XSS
   try {
-    console.log(req.query)
     const { page = 1, count = 5, update = "0", filter = '' } = req.query != null && req.query
     const dataClientes = await MailchimpService.getListMembersMailchimpWithParams(page, count, update, filter);
-
     return res.status(200).json(dataClientes)
   } catch (error: any) {
     console.log(error)

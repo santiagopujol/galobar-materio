@@ -176,6 +176,15 @@ async function getOperacionesByClienteFirestore(id: any) {
     return list;
 }
 
+//Get Operaciones By Cliente
+async function getMiembroByClienteFirestore(id: any) {
+  const colRef = collection(db, 'miembros_clientes');
+  const q = query(colRef, where("clientId", "==", id));
+  const snapshot = await getDocs(q);
+  const list = snapshot.docs.map(doc => doc.data());
+  return list;
+}
+
 // Get Prermios Canjeados By Cliente
 async function getPremiosCanjeadosByClienteFirestore(id: any) {
     const colRef = collection(db, 'canje_premios');

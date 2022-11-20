@@ -10,6 +10,8 @@ import CardContent from '@mui/material/CardContent'
 
 // App Imports
 import moment from 'moment';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const gender = require('gender-detection');
 
 const ClientesListItemInfoTab = ({ dataCliente }: { dataCliente: any }) => {
 
@@ -23,8 +25,6 @@ const ClientesListItemInfoTab = ({ dataCliente }: { dataCliente: any }) => {
     status,
     location
   } = dataCliente;
-
-  const gender = require('gender-detection');
 
   let avatar = "/images/avatars/2.png"
   if (gender.detect(FNAME) === "female"){

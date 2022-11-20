@@ -4,6 +4,7 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import { styled, useTheme } from '@mui/material/styles'
+import {useState} from "react";
 
 // Styled component for the triangle shaped background image
 const TriangleImg = styled('img')({
@@ -21,9 +22,11 @@ const TrophyImg = styled('img')({
   position: 'absolute'
 })
 
+
 const ClienteMesHome = (dataCliente: any) => {
   // ** Hook
-  console.log(dataCliente)
+
+  console.log("asdasdasd ",dataCliente)
   const theme = useTheme()
 
   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
@@ -31,16 +34,13 @@ const ClienteMesHome = (dataCliente: any) => {
   return (
     <Card sx={{ position: 'relative' }}>
       <CardContent>
-        <Typography variant='h6'>Felicitaciones Pedro! 🥳</Typography>
+        <Typography variant='h6'> {dataCliente.cliente ? dataCliente.cliente.fullName : ""} 🥳</Typography>
         <Typography variant='body2' sx={{ letterSpacing: '0.25px' }}>
           Mejor cliente actual
         </Typography>
         <Typography variant='h5' sx={{ my: 4, color: 'success.main' }}>
-          $60000
+          ${dataCliente.cliente ? dataCliente.cliente.total_puntos_acumulados : ""}
         </Typography>
-        <Button size='small' variant='contained'>
-          Ver Operaciones
-        </Button>
         <TriangleImg alt='triangle background' src={`/images/misc/${imageSrc}`} />
         <TrophyImg alt='trophy' src='/images/misc/trophy.png' />
       </CardContent>

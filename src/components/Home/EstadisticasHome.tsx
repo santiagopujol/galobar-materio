@@ -28,19 +28,6 @@ const EstadisticasHome = ({ porcCrecimiento, operaciones, clientes, premiosCanje
     <Card>
       <CardHeader
         title='Estadísticas'
-        action={
-          <IconButton size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
-            <DotsVertical />
-          </IconButton>
-        }
-        subheader={
-          <Typography variant='body2'>
-            <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-              Total {porcCrecimiento} de crecimiento
-            </Box>{' '}
-            😎 este mes
-          </Typography>
-        }
         titleTypographyProps={{
           sx: {
             mb: 2.5,
@@ -58,7 +45,7 @@ const EstadisticasHome = ({ porcCrecimiento, operaciones, clientes, premiosCanje
                 sx={{
                   mr: 3,
                   width: 44,
-                  height: 44,
+                  height: 43,
                   boxShadow: 3,
                   color: 'common.white',
                   backgroundColor: `${"success"}.main`

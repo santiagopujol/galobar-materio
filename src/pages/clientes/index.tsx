@@ -2,23 +2,25 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 
 // ** Hooks
-import { useEffect, useState } from 'react';
-import { useSettings } from 'src/@core/hooks/useSettings'
-import { useTheme } from '@mui/material/styles'
-import { useRouter } from 'next/router'
-import { updateStateLoading,
+import {useEffect, useState} from 'react';
+import {useSettings} from 'src/@core/hooks/useSettings'
+import {useTheme} from '@mui/material/styles'
+import {useRouter} from 'next/router'
+import {
+  updateStateLoading,
   updateStateModalConfirm,
-  updateStateNotificationToast } from 'src/@core/utils/common';
+  updateStateNotificationToast
+} from 'src/@core/utils/common';
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import IconButton from '@mui/material/IconButton'
-import Cached  from 'mdi-material-ui/Cached'
-import { Magnify } from 'mdi-material-ui'
+import Cached from 'mdi-material-ui/Cached'
+import {Magnify} from 'mdi-material-ui'
 import DotsHorizontal from 'mdi-material-ui/DotsHorizontal'
-import { Box, InputAdornment, TextField } from '@mui/material'
+import {Box, InputAdornment, TextField} from '@mui/material'
 
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
@@ -26,53 +28,55 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 // ** Demo Components Imports
 //import ClientesList from 'src/components/Clientes/ClientesList'
 
-import { ClientesService } from 'src/services/ClientesService';
+import {ClientesService} from 'src/services/ClientesService';
 
 // ** Dynamic Components
 const ClientesList = dynamic(() => import('src/components/Clientes/ClientesList'))
 
+import cacheData from "memory-cache";
+
 // ** Services
 
 export const getServerSideProps = async (context: any) => {
-	const { query } = context;
-	const {
-		page = 1,
-		count = 10,
-		update = '0',
-		filter = '',
-	} = query != null && query;
+  const {query} = context;
+  const {
+    page = 1,
+    count = 10,
+    update = '0',
+    filter = '',
+  } = query != null && query;
 
-	const baseUrl =
-		process.env.NODE_ENV === 'production'
-			? 'https://galobarclub.vercel.app//api'
-			: 'http://localhost:3000/api';
+  const baseUrl =
+    process.env.NODE_ENV === 'production'
+      ? 'https://galobarclub.vercel.app//api'
+      : 'http://localhost:3000/api';
 
-	const res = await fetch(
-		`${baseUrl}/getListMembers?page${page}&count=${count}&update=${update}&filter=${filter}`
-	);
+  const res = await fetch(
+    `${baseUrl}/getListMembers?page${page}&count=${count}&update=${update}&filter=${filter}`
+  );
   const newDataMembers = await res.json();
 
-	return {
-		props: {
+  return {
+    props: {
       newDataMembers,
       page,
-			filter,
-			baseUrl,
-		},
-	};
+      filter,
+      baseUrl,
+    },
+  };
 };
 
-const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
+const ClientesPage = ({newDataMembers, page, filter, baseUrl}: any) => {
 
   const setting = useSettings();
   const router = useRouter();
   const theme = useTheme()
 
-	const [dataClientes, setDataClientes]: any = useState([]);
+  const [dataClientes, setDataClientes]: any = useState([]);
   const [searchValue, setSearchValue] = useState(filter ? filter : '');
   const [currentPageClientes, setCurrentPageClientes] = useState(page ? page : 1);
-	const [showResultPagination, setShowResultPagination] = useState(filter != '' ? false : true);
-  const { modalConfirmState } = setting.settings
+  const [showResultPagination, setShowResultPagination] = useState(filter != '' ? false : true);
+  const {modalConfirmState} = setting.settings
   const [totalDataClientes, setTotalDataClientes] = useState(0);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,26 +167,31 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
     });
   };
 
+
   useEffect(() => {
     updateStateLoading(setting, true)
 
     const asyncUseEffect = async () => {
-      const dataCountClientes = await getDataCountClientes()
-      setTotalDataClientes(dataCountClientes)
-      updateStateLoading(setting, false)
+      const memberLength = await cacheData.get("member_length");
+      console.log("miembros totales:" + memberLength)
+
+      if (memberLength) {
+        setTotalDataClientes(memberLength);
+      }
+      updateStateLoading(setting, false);
     }
     asyncUseEffect();
 
-		setDataClientes(newDataMembers);
+    setDataClientes(newDataMembers);
 
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newDataMembers]);
 
   // Efecto Respuesta Confirmacion Modal
   useEffect(() => {
     if (modalConfirmState.method === "actualizar_clientes" && modalConfirmState.successResult === true) {
       getAllDataClientes();
-		}
+    }
   }, [modalConfirmState.successResult == true])
 
   return (
@@ -201,14 +210,15 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
                   type="search"
                   placeholder='Buscar'
                   sx={{
-                      width: '100%',
-                      '& .MuiOutlinedInput-root': {
+                    width: '100%',
+                    '& .MuiOutlinedInput-root': {
                       borderRadius: 4,
-                  }}}
+                    }
+                  }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
-                        <Magnify fontSize='small' />
+                        <Magnify fontSize='small'/>
                       </InputAdornment>
                     )
                   }}
@@ -219,24 +229,25 @@ const ClientesPage = ({ newDataMembers, page, filter, baseUrl }: any) => {
 
           <Grid item xs={12}>
             <Card>
-              <CardHeader title={`Clientes (${totalDataClientes})`}
-                action={
-                  <IconButton onClick={openModalUpdateClientes} size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary'   }}>
-                    <Cached />
-                  </IconButton>
-                }
+              <CardHeader title={`Clientes`}
+                          action={
+                            <IconButton onClick={openModalUpdateClientes} size='small' aria-label='settings'
+                                        className='card-more-options' sx={{color: 'text.secondary'}}>
+                              <Cached/>
+                            </IconButton>
+                          }
               />
-              <ClientesList dataClientsState={dataClientes} />
+              <ClientesList dataClientsState={dataClientes}/>
             </Card>
             {(showResultPagination == true) && (
-              <Box sx={{ display: 'flex', mt: 2, alignItems: 'center', justifyContent: 'center' }}>
+              <Box sx={{display: 'flex', mt: 2, alignItems: 'center', justifyContent: 'center'}}>
                 <IconButton
                   color='inherit'
                   aria-haspopup='true'
                   onClick={paginado}
                   sx={{
                     color: theme.palette.mode === 'light' ? theme.palette.grey[700] : theme.palette.grey[500]
-                }}>
+                  }}>
                   <DotsHorizontal/>
                 </IconButton>
               </Box>

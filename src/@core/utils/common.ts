@@ -72,7 +72,7 @@ export function updateStateNotificationToast(setting: any, status: boolean, type
 }
 
 // Actualizar estado ModalConfirm
-export function updateStateModalConfirm(setting: any, status: boolean, method = "", successResult: boolean = false, title = "", message = "", timeOut = 1) {
+export function updateStateModalConfirm(setting: any, status: boolean, method = "", successResult = false, title = "", message = "", timeOut = 1) {
   setTimeout(() => {
     setting.saveSettings({
       ...setting.settings,

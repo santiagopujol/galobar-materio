@@ -1,4 +1,6 @@
-import { ClientesService } from './ClientesService';
+import {ClientesService} from './ClientesService';
+
+import cacheData from "memory-cache";
 
 // import mailchimp from '@mailchimp/mailchimp_marketing';
 const mailchimp = require("@mailchimp/mailchimp_marketing");
@@ -48,6 +50,8 @@ async function getListMembersMailchimpWithParams(page: any, count: any, update: 
 
     // Si el usuario envia update, actualiza toda la data en firebase
     if (update && update == 1) {
+      console.log("Limpiando la cache")
+      cacheData.clear();
       const dataMembersJson = await getAllDataMembersMailchimp()
       await addUpdateMembersFirebaseDB(dataMembersJson);
     }
@@ -57,17 +61,22 @@ async function getListMembersMailchimpWithParams(page: any, count: any, update: 
       const resultDataMembersFiltered = await ClientesService.getClientesByFilter(filter)
 
       return resultDataMembersFiltered
-      && {
-        members: resultDataMembersFiltered,
-        totalItems: resultDataMembersFiltered.length
-      }
-      || []
+        && {
+          members: resultDataMembersFiltered,
+          totalItems: resultDataMembersFiltered.length,
+        }
+        || []
 
-    // Sino viene filter busco por página segun count, por defecto 10
+      // Sino viene filter busco por página segun count, por defecto 10
     } else {
-      const resultDataMembersByPage = await getDataMembersByPage(count, page)
+      if (cacheData.get("mailchimp_" + page)) {
+        return cacheData.get("mailchimp_" + page);
+      } else {
+        const resultDataMembersByPage = await getDataMembersByPage(count, page)
+        cacheData.put('mailchimp_' + page, resultDataMembersByPage, 86400000);
 
-      return resultDataMembersByPage
+        return resultDataMembersByPage
+      }
     }
 
   } catch (error) {
@@ -82,6 +91,9 @@ async function getAllDataMembersMailchimp() {
   console.log("Obteniendo string de todos los miembros de mailchimp")
   const resultDataAllMembers = await getListMembersMailchimp(9999999)
 
+  const allData = JSON.parse(resultDataAllMembers);
+  console.log("todos los miembros:", allData.members.length);
+  cacheData.put("member_length", allData.members.length);
   return JSON.parse(resultDataAllMembers);
 }
 

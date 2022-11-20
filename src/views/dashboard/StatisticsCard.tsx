@@ -85,14 +85,6 @@ const StatisticsCard = () => {
             <DotsVertical />
           </IconButton>
         }
-        subheader={
-          <Typography variant='body2'>
-            <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-              Total 48.5% de crecimiento
-            </Box>{' '}
-            😎 este mes
-          </Typography>
-        }
         titleTypographyProps={{
           sx: {
             mb: 2.5,

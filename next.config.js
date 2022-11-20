@@ -8,6 +8,7 @@ module.exports = {
     esmExternals: false,
     jsconfigPaths: true, // enables it for both jsconfig.json and tsconfig.json
   },
+  output: 'standalone',
 
   webpack: config => {
     config.resolve.alias = {

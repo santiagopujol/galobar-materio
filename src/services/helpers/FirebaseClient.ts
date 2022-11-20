@@ -40,10 +40,11 @@ export const FirebaseClient = {
 
 //Get Count Data By Col
 async function getCountDataByRef(colRef: string) {
-    const dataResult: any[] = [];
-    const col = collection(db, colRef)
-    const snapshot = await getDocs(col);
-    return snapshot.docChanges.length
+  const dataResult: any[] = [];
+  const query = collection(db, colRef);
+  const snapshot = await getDocs(query);
+  const count = snapshot.size;
+  return count
 }
 
 // Get all docs by ref to firebase

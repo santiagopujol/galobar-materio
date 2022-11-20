@@ -10,6 +10,14 @@ import { PremiosService } from 'src/services/PremiosService';
 
 import { useSettings } from 'src/@core/hooks/useSettings'
 
+export const getServerSideProps = async (context: any) => {
+	const dataPremio = await PremiosService.getPremioById(context.query.id);
+	return {
+		props: {
+			dataPremio,
+		},
+	};
+};
 
 const EditPremioItemPage = ({ dataPremio }: { dataPremio: any }) => {
 

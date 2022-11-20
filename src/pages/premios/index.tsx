@@ -27,6 +27,25 @@ import { updateStateLoading,
 import PremiosList from 'src/components/Premios/PremiosList';
 import { PremiosService } from 'src/services/PremiosService';
 
+export const getServerSideProps = async (context: any) => {
+  const { query } = context;
+  const {
+    filter = '',
+  } = query != null && query;
+
+  let newDataPremios = await PremiosService.getAllPremios();
+
+  if (filter != '') {
+    newDataPremios = await PremiosService.filterAndOrderPremios(newDataPremios, filter);
+  }
+
+  return {
+    props: {
+      newDataPremios,
+      filter
+    },
+  };
+};
 
 const PremiosPage = ({ newDataPremios, filter  }: any) => {
 
